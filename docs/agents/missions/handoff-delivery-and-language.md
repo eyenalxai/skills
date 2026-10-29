@@ -20,7 +20,7 @@ Exit: PR for user review and merge
 | Scope and understanding | grill (grilling only; no GLOSSARY.md or docs/adr) | this document plus grill answers | approved | user | 2026-10-29 |
 | Spec | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
 | Tickets | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
-| PR | code-review | TBD | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/3 | pending | | |
 
 ## Session plan
 
@@ -53,17 +53,18 @@ Exit: PR for user review and merge
 
 - spec: not needed (change)
 - tickets: not needed (change)
-- PRs: TBD
+- PRs: https://github.com/eyenalxai/skills/pull/3
 
 ## Next step
 
-- Skill: `pr`
+- Skill: none until merge
 - Gate: PR
-- Method: code-review passed, three rounds
-- Command: open one PR, then the user reviews and merges
-- Produce: PR URL, head SHA, checks
+- Method: user review
+- Command: review and merge https://github.com/eyenalxai/skills/pull/3
+- Produce: merged PR, then reinstall the global skills
 
 ## Handoff log
 
 - 2026-10-29: session 1, code-review, Standards and Spec, three rounds, no blocking findings.
+- 2026-10-29: session 1, PR, opened https://github.com/eyenalxai/skills/pull/3 at `a17aa47`; no checks configured; mergeable; user review pending.
 - None yet for a handoff. Handoff prompts are delivered in chat, never pasted here.
