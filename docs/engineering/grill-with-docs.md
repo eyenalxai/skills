@@ -6,7 +6,7 @@ It is **[stateful](https://www.aihero.dev/ai-coding-dictionary/stateful)**. Ever
 
 ## When to reach for it
 
-You invoke this by typing `/grill-with-docs`, and the agent won't reach for it on its own.
+You invoke this directly by typing `/grill-with-docs`; inside a mission, the mission runs the same composition automatically.
 
 Reach for it at the start of a change, in a repo, when the plan is still fuzzy and the words for the thing are not settled yet. It is the single-session tool. Which grilling skill you want depends on what is in front of you:
 
@@ -58,7 +58,7 @@ Into the conversation only. This is the most serious open complaint about the sk
 Yes. This is the right skill for a codebase with no ADRs, no domain language and no design principles: invoke it and say "help me document my repo". Users often pair it with [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) for building or repairing a `GLOSSARY.md`. Expect to steer it. It reads code and asks you about what it finds, and you decide which of the words already in the codebase are the right ones.
 
 **What should I do when the session ends?**
-The skill's closing message is often open-ended, which is a known problem. In the main flow the answer is [to-spec](https://aihero.dev/skills-to-spec), in the same conversation. If the change is small enough to build immediately, go straight to [implement](https://aihero.dev/skills-implement) instead.
+The skill's closing message is often open-ended, which is a known problem. In the underlying flow the answer is [to-spec](https://aihero.dev/skills-to-spec), in the same conversation; inside a mission, the mission picks the next stage. If the change is small enough to build immediately, go straight to [implement](https://aihero.dev/skills-implement) instead.
 
 **Why is it called that?**
 Nobody is happy with the name. There is an open suggestion to rename it `grill-domain-model`, which describes the behaviour more accurately. Nothing has moved on it. If a rename ever lands, the docs page moves with it and the URL changes.
@@ -73,7 +73,7 @@ Nobody is happy with the name. There is an open suggestion to rename it `grill-d
 
 ## Where it fits
 
-`grill-with-docs` is the head of the main build chain:
+`grill-with-docs` is the standalone front door to the grill step that begins the underlying build chain. Inside a mission, the mission runs the same `grilling` + `domain-modeling` composition.
 
 ```txt
 grill-with-docs → to-spec → to-tickets → implement → code-review → retro

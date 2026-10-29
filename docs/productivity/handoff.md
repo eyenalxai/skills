@@ -2,13 +2,15 @@
 
 `handoff` compacts the conversation you are in into a **handoff document**: one markdown file, written to your OS's temporary directory rather than into the workspace, that a fresh [agent](https://www.aihero.dev/ai-coding-dictionary/agent) can read to pick the work up.
 
+It also returns the next-session prompt. The document is the durable copy; the prompt is the thing you paste into the fresh session.
+
 What it gives you is **portability**, not compression, so the skill is narrower than it sounds. You need a file only when the work has to *travel*: to a new [harness](https://www.aihero.dev/ai-coding-dictionary/harness), a new directory, a colleague, or a side task you want to fork off. If nothing is travelling, you do not need a handoff. Staying in the [session](https://www.aihero.dev/ai-coding-dictionary/session), `/clear`, a [subagent](https://www.aihero.dev/ai-coding-dictionary/subagent) and `/compact` cover the ordinary end-of-phase case, and `/compact` covers it more often than this skill does.
 
 ## When to reach for it
 
-You invoke this by typing `/handoff`; the agent won't reach for it on its own. Pass a note about what the next session is for, and the skill writes the document for that purpose.
+You invoke this directly by typing `/handoff`; inside a mission, the mission skill uses the same contract automatically. Pass a note about what the next session is for, and the skill writes the document for that purpose.
 
-There are four triggers, and only four:
+As a standalone, there are four triggers:
 
 | Situation | Why a file |
 | --- | --- |
@@ -16,6 +18,8 @@ There are four triggers, and only four:
 | Moving to a different directory or repo | A prototype directory is the common case |
 | Sending the work to a colleague | They need something they can read |
 | Forking a side task found mid-phase | You keep working; a second agent takes the fork |
+
+Inside a mission, the mission skill adds planned session boundaries: after the tickets, before each implementation, after each PR, and when a gate is pending.
 
 For anything else (same harness, same directory, you are done [grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) and moving to implementation), use `/compact`. [ask-matt](https://aihero.dev/skills-ask-matt) has the ordered tree over all five options at a phase boundary.
 
@@ -31,15 +35,17 @@ Three of the five options at a phase boundary preserve different things: `/compa
 
 The document carries the live thread (what's in flight, why, and what's next) plus a **suggested skills** section naming what the next agent should reach for. The skill redacts secrets before it writes the file.
 
+The prompt is the deliverable. The chat reply ends with one fenced `text` block; the document carries the same block. When a [mission](https://aihero.dev/skills-mission) artifact exists, the prompt points at it first, so the next session resumes the route and its gates.
+
 It deliberately does not carry anything already written down. The document references specs, plans, ADRs, issues, commits and diffs by path or URL, and never copies them. That keeps the file small, and it keeps the settled detail in one place instead of two copies that drift apart.
 
 ## Common questions
 
 **Handoff or compact?**
-`/compact` unless something is travelling. Staying on the same task is a compact, not a handoff. When the harness and directory stay the same and you need to stay in the loop, the phase-boundary tree ends at `/compact` most days. `/handoff` does not summarise better. Its advantage is that the result is a file you can carry somewhere `/compact` can't reach.
+`/compact` unless something is travelling. Staying on the same task is a compact, not a handoff. Inside a mission the mission chooses; a new ticket is a new task, so it gets a handoff. When the harness and directory stay the same and you need to stay in the loop, the phase-boundary tree ends at `/compact` most days. `/handoff` does not summarise better. Its advantage is that the result is a file you can carry somewhere `/compact` can't reach.
 
 **So what's the actual difference between compact, clear and handoff?**
-Each one preserves something different. `/compact` compresses this context and continues in a fresh window, so your intent survives. `/clear` empties the window and starts from nothing. That is correct when everything behind you is disposable, and you cannot undo it if it isn't. `/handoff` writes a portable file, so the work survives the move to somewhere else. All three turn a **[primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source)** (the conversation as it happened) into a **[secondary source](https://www.aihero.dev/ai-coding-dictionary/secondary-source)** (a summary of it). Continuing is the only option that doesn't, which is why you rule it out first.
+Each one preserves something different. `/compact` compresses this context and continues in a fresh window, so your intent survives. `/clear` empties the window and starts from nothing. That is correct when everything behind you is disposable, and you cannot undo it if it isn't. `/handoff` writes a portable file and a prompt, so the work survives the move to somewhere else. All three turn a **[primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source)** (the conversation as it happened) into a **[secondary source](https://www.aihero.dev/ai-coding-dictionary/secondary-source)** (a summary of it). Continuing is the only option that doesn't, which is why you rule it out first.
 
 **Where did my handoff file go?**
 It goes to the temp directory, which is the most-reported problem with the skill. The skill resolves it as `$TMPDIR`, else `/tmp` (`%TEMP%` on Windows), but the paths are long. Ask for the path back and keep it before you move on. Temp is deliberate, because a handoff is a document in transit, not an artifact you maintain. Temp is also not durable, as the next question explains.
@@ -47,8 +53,11 @@ It goes to the temp directory, which is the most-reported problem with the skill
 **My handoff vanished between sessions.**
 Some environments clear temp between sessions (Codex is the reported case), and a reboot empties `/private/tmp`. If the next session isn't starting within the hour, or is starting under a different harness, copy the file somewhere durable yourself as soon as it's written. The same applies to anything the document *points at*: if a dispatch references other files in temp, the next agent can't follow it.
 
+**Why does it return a prompt as well as a file?**
+The file is the durable copy. The prompt is the thing you paste into the next session. The prompt points at the file, so the next agent reads the source rather than a paraphrase.
+
 **How do I actually hand it to the next agent?**
-Open the fresh session and point it at the path: read this file, then continue. Point at the file rather than pasting the summary into a shell command. The shell mangles a summary that contains backticks or `$(...)` when you interpolate it into `claude "<summary>"`. The usual result is silent truncation rather than an error, so the new agent starts with an incomplete brief and nothing tells you.
+Paste the prompt the skill returns. It points at the path or mission artifact and carries the route, the current gate when a mission is active, the references, and the exit. Keep the file as the durable copy. Paste the prompt into the chat, rather than interpolating it into a shell command: the shell mangles backticks and `$(...)`, and the new agent starts with an incomplete brief.
 
 **Is this the same as `/branch`, `--fork-session`, or the built-in `/handoff`?**
 They are similar, not identical. `/branch` isn't a shipped skill here; `/handoff` is the canonical name. A fork inherits an exact copy of the context; this skill produces a *targeted* compression aimed at a stated next task, in a file. Where a fork will do (same machine, same harness, same directory), a fork is less work. The file is the better choice when the destination is somewhere the fork can't go.
@@ -65,6 +74,7 @@ Both work; they suit different situations. As a skill, it ships and updates thro
 ## It's working if
 
 - The document is a small fraction of the conversation, and the specs, issues and diffs appear in it as paths and URLs rather than as copied text.
+- The chat ends with a fenced `text` block you can paste into a fresh session.
 - You can read it cold, without the original session open, and know what to do next.
 - The fresh agent starts working instead of asking you to re-explain the setup.
 - In the fork case, your original session is unchanged when you come back to it.
@@ -73,4 +83,6 @@ Both work; they suit different situations. As a skill, it ships and updates thro
 
 ## Where it fits
 
-`handoff` is a **reach-for-it-anytime standalone**. It works between sessions rather than inside a build chain. It is a narrow one, and you'll use it less often than the other four options at a phase boundary. Its closest neighbour is [prototype](https://aihero.dev/skills-prototype), because a prototype lives in its own directory and the round trip out and back is the move this skill is for. When you're at a boundary and unsure whether to continue, clear, hand off, delegate or compact, [ask-matt](https://aihero.dev/skills-ask-matt) has the tree that orders those five, and routes you across the rest of the set.
+`handoff` is a **reach-for-it-anytime standalone**. As a standalone it is narrow: it runs when something travels. Inside a mission it also runs at every planned session boundary. Its closest neighbour is [prototype](https://aihero.dev/skills-prototype), because a prototype lives in its own directory and the round trip out and back is the move this skill is for. When you're at a boundary and unsure whether to continue, clear, hand off, delegate or compact, [ask-matt](https://aihero.dev/skills-ask-matt) has the tree that orders those five, and routes you across the rest of the set.
+
+Inside a [mission](https://aihero.dev/skills-mission), the mission skill makes the handoff decision and uses this skill for the prompt format.
