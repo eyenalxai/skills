@@ -26,7 +26,7 @@ Each skill owns its own procedure. Read the skill's `SKILL.md` and follow it.
 pass.
 
 A skill named here is a file to load, not a label to perform. Load it with the
-Skill tool before you produce its artifact. The summaries in this skill are
+Skill tool before you produce its output. The summaries in this skill are
 orientation; the procedure lives in the named skill. If a named skill will not
 load, stop and say which one failed. Never simulate its output.
 
@@ -50,8 +50,7 @@ load, stop and say which one failed. Never simulate its output.
    `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When an
    existing spec, ticket, or direct instruction already holds the understanding,
    run a short grill to confirm the frontier is empty and record that source.
-   Do not write a round from the summary below. If a named skill will not load,
-   stop and say which one failed.
+   Do not write a round from this summary.
 5. Record the scope and understanding gate. Present the problem, constraints,
    approach, flow, and the method. Wait for the user's approval.
 6. Only after approval, name the next phase.
@@ -60,8 +59,8 @@ load, stop and say which one failed. Never simulate its output.
 
 `grilling` owns the round format, the frontier, and the wait. `domain-modeling`
 owns the glossary and the ADRs. `mission` owns the gate: when the grill opens,
-what it produces, and whether a short grill is enough. Load both skills before
-the first round; the summary here is not the procedure.
+what it produces, and whether a short grill is enough. Load `grilling`, and
+`domain-modeling` when the repo has docs, before the first round.
 
 The depth comes from the frontier, not from the scope. A clear bug may have one
 question about the repro and the expected behavior. A foggy idea may take many
@@ -199,8 +198,9 @@ A starting shape:
 Read the mission at <path or URL>. Run /mission continue.
 The current gate is <gate>, <approved or pending>, reached with <method>.
 The blocking PRs are merged: <urls>. The merge commit is <sha>. The next ticket is <id>.
-Read the mission references for <phase>, then load <skill> with the Skill tool.
-If a skill will not load, stop and say which one.
+Read the mission references for <phase>, then load <skills> in order with the
+Skill tool. If a skill will not load, stop and say which one, and do not
+simulate its output.
 Run <checks>. Open one PR. Report the PR URL, head SHA, checks, and the next
 ready ticket. The user reviews and merges.
 ```
@@ -241,8 +241,7 @@ Produce: <output>
 Next step: <exact command>
 ```
 
-A next skill is a load, not a phase to perform. If the named skill will not
-load, stop and say which one failed.
+A next skill is a load, not a phase to perform.
 
 At a pending gate, the next step is the user's approval of the named document.
 At a handoff, the prompt follows in chat. At a PR, the line is the PR URL, head

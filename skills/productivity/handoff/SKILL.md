@@ -44,4 +44,6 @@ The prompt is self-contained:
   merges.
 
 Write the prompt in the user's language and keep it positive: state the
-desired end state and the user's merge step.
+desired end state and the user's merge step. Name the load chain in order, for
+example `wayfinder`, then `grilling` and `domain-modeling`, or `implement`, then
+`tdd` and `code-review`.

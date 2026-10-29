@@ -1,8 +1,8 @@
-# Mission: Load a skill before producing its artifact
+# Mission: Load a skill before producing its output
 
 Status: active
 Scope: change
-Phase: implement
+Phase: review
 Goal: Every phase starts by loading the skill that owns its procedure, so no agent improvises a round, a review, or a spec from a summary.
 Exit: PR for user review and merge
 
@@ -10,7 +10,7 @@ Exit: PR for user review and merge
 
 - [x] grill: diagnosis accepted; A, A, A approved
 - [x] implement: mission, router, handoff, template
-- [ ] code-review: Standards and Spec
+- [x] code-review: Standards and Spec, findings fixed
 - [ ] PR: user review and merge
 
 ## Gates
@@ -20,7 +20,7 @@ Exit: PR for user review and merge
 | Scope and understanding | grilling (no GLOSSARY.md or docs/adr) | this document plus the answers | approved | user | 2026-10-29 |
 | Spec | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
 | Tickets | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
-| PR | code-review | <PR> | pending | | |
+| PR | code-review | not opened yet | pending | | |
 
 ## Session plan
 
@@ -37,7 +37,7 @@ Exit: PR for user review and merge
 | Router skill | Required reading a SKILL.md only before stating what a skill does | skills/engineering/router/SKILL.md | grill, implement |
 | Handoff skill | Named "the skill to call first" and the suggested skills | skills/productivity/handoff/SKILL.md | implement |
 | Wayfinder skill | The correct phrasing: "Call the Skill tool twice" | skills/engineering/wayfinder/SKILL.md | implement |
-| Grilling skill | Owns the round format, the frontier, and the wait | /home/ulezot/.agents/skills/grilling/SKILL.md | implement |
+| Grilling skill | Owns the round format, the frontier, and the wait | skills/productivity/grilling/SKILL.md | implement |
 | Repo rules | No em-dashes, concise skills, README sync | AGENTS.md | all |
 
 ## Decisions
@@ -49,6 +49,7 @@ Exit: PR for user review and merge
 - Scope is the entry skills and the prompt they write, not every skill in the repo. The others already say "Call the Skill tool".
 - No README change: no skill added, renamed, or removed. No GLOSSARY or ADR: the wording fix is reversible.
 - Verification: grep for the old phrases, read the diff, then replay the failing prompt after merge and reinstall.
+- Code-review findings fixed: `domain-modeling` is conditional in every file; "artifact" became "output"; the stop rule has one canonical statement per entry skill plus the prompt; the router keeps the skip guard; the prompt names the chain in order and forbids simulation; the mission document no longer names an absolute skill path or an empty PR token.
 
 ## Outputs
 
@@ -58,11 +59,11 @@ Exit: PR for user review and merge
 
 ## Next step
 
-- Skill to load: code-review
+- Skill to load: pr
 - Gate: PR
-- Method: Standards and Spec
-- Command: code-review the diff on fix/load-skill-before-perform
-- Produce: findings, then the PR
+- Method: user review
+- Command: open the PR on fix/load-skill-before-perform
+- Produce: PR URL, head SHA, checks
 
 ## Handoff log
 
