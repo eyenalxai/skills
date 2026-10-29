@@ -2,7 +2,7 @@
 
 Status: active
 Scope: change
-Phase: code-review
+Phase: PR
 Goal: Handoff prompts are delivered in chat only, never in an issue, PR, commit, repo, or mission document, and the fork preserves the upstream author's language in the skills it adapts.
 Exit: PR for user review and merge
 
@@ -10,7 +10,7 @@ Exit: PR for user review and merge
 
 - [x] grill: one PR; preserve upstream wording and voice; fork-changed files only; prompt delivered in chat; no hotfix and no tracker edit before the PR
 - [x] implement: mission, handoff, router, template, AGENTS.md, README; setup reviewed, no wording change
-- [ ] code-review: Standards and Spec
+- [x] code-review: Standards and Spec, three rounds, no blocking findings
 - [ ] PR: user review and merge
 
 ## Gates
@@ -57,12 +57,13 @@ Exit: PR for user review and merge
 
 ## Next step
 
-- Skill: code-review
-- Gate: Scope and understanding approved
-- Method: two-axis review, findings fixed
-- Command: commit the review fixes, then open the PR
-- Produce: one PR for review
+- Skill: `pr`
+- Gate: PR
+- Method: code-review passed, three rounds
+- Command: open one PR, then the user reviews and merges
+- Produce: PR URL, head SHA, checks
 
 ## Handoff log
 
-- None yet. Handoff prompts are delivered in chat, never pasted here.
+- 2026-10-29: session 1, code-review, Standards and Spec, three rounds, no blocking findings.
+- None yet for a handoff. Handoff prompts are delivered in chat, never pasted here.
