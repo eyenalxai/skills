@@ -1,8 +1,8 @@
 # Skills
 
-A personal skill set centered on one guided flow: from a request, through grilling, docs, research, specs, tickets, implementation, and review, to pull requests you can review and merge.
+My agent skills for one guided flow: from a request, through grilling, docs, research, specs, tickets, implementation, and review, to pull requests you can review and merge.
 
-This fork keeps the mission flow, its direct dependencies, and a small set of utilities. It has no plugin, no release tooling, and no upstream contribution scaffolding.
+This fork keeps the mission flow, its direct dependencies, and a small set of utilities. No plugin, no release tooling, no upstream contribution scaffolding.
 
 ## Install
 
@@ -23,13 +23,15 @@ Run `/setup-agent-skills` once per repo before the first mission. It records the
 The mission:
 
 - classifies the scope with `router`;
-- runs the process grill with `grilling` and `domain-modeling`;
-- gates scope and understanding, spec, tickets, and PR on your approval;
-- plans the sessions and hands off to fresh sessions with a prompt;
-- keeps the mission artifact and its reference index across sessions;
+- runs the grill with `grilling` and `domain-modeling`;
+- gates scope and understanding, spec, tickets, and the PR on your approval;
+- plans the sessions and hands off with a prompt you can copy;
+- keeps the mission document and its reference index across sessions;
 - ends at one PR per ticket for you to review and merge.
 
 Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission done`.
+
+Handoff prompts are delivered in chat. They are never pasted into an issue, a PR, or the mission document.
 
 ## Skills
 
@@ -39,7 +41,7 @@ Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission 
 
 ### Mission
 
-- **mission**: Drive one piece of work from a request to reviewable PRs, with the process grill, approval gates, session plan, references, and automatic handoffs.
+- **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, session plan, references, and automatic handoffs.
 - **router**: Name the skill or flow that fits, check the state when asked what's next, and return the next step. The mission calls it to classify.
 
 ### Flow
