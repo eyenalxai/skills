@@ -31,7 +31,7 @@ The mission:
 
 Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission done`.
 
-Handoff prompts are delivered in chat. They are never pasted into an issue, a PR, a commit, the repo, or the mission document.
+Handoff prompts are delivered in chat. A delivered prompt is never pasted into an issue, a PR, a commit, the repo, or the mission document.
 
 ## Skills
 

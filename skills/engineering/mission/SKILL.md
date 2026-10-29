@@ -65,7 +65,7 @@ the questions inside the mission.
 `GLOSSARY.md`, and ADRs for decisions that are hard to reverse, surprising, and a
 real tradeoff. A short grill can write nothing.
 
-## Scope flows
+## Scope paths
 
 Wayfinder is for fog, not size. A clear but large feature goes through spec and
 tickets; a foggy idea goes through the map first.
@@ -78,7 +78,7 @@ Ask, in order:
 - Is the change small and clear? -> change.
 - Is it one obvious edit? -> trivial.
 
-| Scope | Signal | Entry | Flow | Exit |
+| Scope | Signal | Entry | Path | Exit |
 | --- | --- | --- | --- | --- |
 | Fog | destination or key decisions unknown | `wayfinder` plus the grill | map -> decisions -> spec -> tickets -> implement | PRs |
 | Feature | multi-session, shape known | grill, then `to-spec` | grill -> spec -> tickets -> implement | one PR per ticket |
@@ -86,7 +86,7 @@ Ask, in order:
 | Bug | something broken | `diagnosing-bugs` plus the grill | repro -> issue -> implement | one PR |
 | Trivial | one obvious edit | short grill plus the tracker issue | issue -> implement | one PR |
 
-Every flow ends at a PR with `code-review` and `pr`.
+Every path ends at a PR with `code-review` and `pr`.
 The user reviews and merges.
 
 ## Gates
@@ -138,7 +138,7 @@ document:
 
 | Session | Work | Exit |
 | --- | --- | --- |
-| 1 | classify, grill, flow | prompt for the first phase |
+| 1 | classify, grill, choose the path | prompt for the first phase |
 | 2 | implement <ticket>, review, PR | merged PR, then prompt for the next ticket |
 
 Replan when the scope changes. The user sees the whole flow and where the
@@ -160,12 +160,12 @@ handoffs fall before the work starts.
 
 At the boundary:
 
-1. Update the mission phase, gates, session plan, and handoff log.
+1. Update the mission phase, gates, and session plan.
 2. Generate the prompt with the `handoff` contract.
 3. Deliver one fenced `text` block in the chat. That is the only copy of the
-   prompt. Never put it in an issue, a PR, a commit, the repo, or the mission
-   document. Add one line to the handoff log: date, session, phase, gate,
-   method, `prompt delivered in chat`.
+   prompt. Never put the delivered prompt in an issue, a PR, a commit, the repo,
+   or the mission document. Add one line to the handoff log: date, session,
+   phase, gate, method, `prompt delivered in chat`.
 4. Stop editing. The new session starts with `/mission continue`.
 
 A single-session change or bug stays in one session through the PR. Handoff is
@@ -254,6 +254,9 @@ PR. With no tracker, use `docs/agents/missions/<slug>.md`.
 The mission document is the issue, project, or file. Keep the flow, gates,
 session plan, references, decisions, outputs, and next step in that one place.
 Keep the handoff log there too, but never the prompt itself.
+
+Older mission documents use the previous headings. Read `Stage` as `Phase`,
+`Route` as `Flow`, and `Artifacts` as `Outputs`.
 
 ## Scope changes
 

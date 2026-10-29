@@ -30,7 +30,7 @@ Exit: PR for user review and merge
 
 | Session | Work | Exit |
 | --- | --- | --- |
-| 1 | classify, grill, flow | prompt for the first phase |
+| 1 | classify, grill, choose the path | prompt for the first phase |
 
 ## References
 

@@ -38,8 +38,8 @@ Next step: `/handoff` for ticket 123. It produces the prompt for a fresh session
 Next step: `/code-review` the open PR. It produces findings to fix before the user merges.
 
 When the next step is `/handoff`, the prompt is the deliverable: one fenced
-`text` block in chat that the user can copy with one click. Never put it in an
-issue, a PR, a commit, the repo, or the mission document.
+`text` block in chat that the user can copy with one click. Never put the
+delivered prompt in an issue, a PR, a commit, the repo, or the mission document.
 
 ## When asked what's next
 

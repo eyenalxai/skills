@@ -3,7 +3,7 @@
 Status: active
 Scope: change
 Phase: code-review
-Goal: Handoff prompts are delivered in chat only, never in an issue or PR, and the fork preserves the upstream author's language in the skills it adapts.
+Goal: Handoff prompts are delivered in chat only, never in an issue, PR, commit, repo, or mission document, and the fork preserves the upstream author's language in the skills it adapts.
 Exit: PR for user review and merge
 
 ## Flow
@@ -43,13 +43,13 @@ Exit: PR for user review and merge
 ## Decisions
 
 - One PR covers both fixes. They touch the same files and share one review.
-- Preserve the upstream wording verbatim wherever a skill is copied. Write only new text in the same direct, second-person voice. The language pass rewrites the fork's new prose in `mission`, `router`, `README`, and the handoff additions; it does not rewrite untouched upstream skills.
-- Limit the language pass to the files this fork changed: `mission`, `router`, `handoff`, `README`, `AGENTS.md`, and `setup-agent-skills`. `setup-agent-skills` was reviewed and needs no wording change because its differences are the fork's names and label vocabulary.
+- Preserve the upstream wording verbatim wherever a skill is copied. Write only new text in the same direct, second-person voice. The language pass covers the fork's new prose in `mission`, `router`, `README`, the handoff additions, and `mission-template.md`; it does not rewrite untouched upstream skills. `setup-agent-skills` was reviewed and needs no wording change because its differences are the fork's names and label vocabulary.
+- Align the fork's vocabulary with the upstream author's: user instead of owner, phase instead of stage, document instead of artifact, flow instead of route, grill instead of process grill. A per-scope path is a path; the whole mission path is the flow.
 - The prompt is delivered in chat. The mission document records a one-line log entry only.
 - No global skill hotfix and no JYO-33 edit before the PR. Follow the process: implement, review, PR, user merge, then reinstall.
 - Keep the optional handoff summary in `$TMPDIR`. It is not the mission document and it never carries the prompt.
 
-## Artifacts
+## Outputs
 
 - spec: not needed (change)
 - tickets: not needed (change)
