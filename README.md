@@ -1,6 +1,6 @@
 # Skills
 
-A personal skill set for one guided flow: from a request, through grilling, docs, research, specs, tickets, implementation, and review, to pull requests you can review and merge.
+A personal skill set centered on one guided flow: from a request, through grilling, docs, research, specs, tickets, implementation, and review, to pull requests you can review and merge.
 
 This fork keeps the mission flow, its direct dependencies, and a small set of utilities. It has no plugin, no release tooling, and no upstream contribution scaffolding.
 
@@ -14,7 +14,7 @@ bunx --bun skills add eyenalxai/skills -g -s '*' -a universal -y
 
 ## Entry point
 
-Run `/setup-agent-skills` once per repo before the first mission. It records the issue tracker, triage labels, and domain docs under `docs/agents/`.
+Run `/setup-agent-skills` once per repo before the first mission. It records the issue tracker, triage labels, and domain docs under `docs/agents/`, and adds an `## Agent skills` pointer block to `AGENTS.md` or `CLAUDE.md`.
 
 ```text
 /mission <request>

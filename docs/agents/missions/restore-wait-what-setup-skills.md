@@ -18,8 +18,8 @@ Exit: PR for owner review and merge
 | Gate | Method | Artifact | Status | Approved by | Date |
 | --- | --- | --- | --- | --- | --- |
 | Scope and understanding | process grill (grilling only; no GLOSSARY.md or docs/adr) | this artifact plus grill answers | approved | owner | 2026-10-29 |
-| Spec | owner review | not needed for a change | n/a | | |
-| Tickets | owner review | not needed for a change | n/a | | |
+| Spec | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
+| Tickets | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
 | PR | code-review | PR | pending | | |
 
 ## Session plan
@@ -36,6 +36,11 @@ Exit: PR for owner review and merge
 - The setup skill is named `setup-agent-skills` and lives at `skills/engineering/setup-agent-skills/`.
 - Setup skill replaces every upstream-author mention with this fork's repo, and names only skills that exist here.
 - Setup skill does not seed `docs/agents/references.md`.
+- Triage labels cover the two category roles and five state roles that the `triage` skill uses.
+- `triage` points at `/setup-agent-skills` for its label mapping.
+- The mission reads repo agent docs, not a repo-level references file.
+- `AGENTS.md` scope sentence now names the small utilities set, because `wait-what` is a utility and not a mission dependency.
+- The `LICENSE` keeps its MIT copyright notice by owner decision.
 
 ## Artifacts
 
