@@ -2,7 +2,7 @@
 
 Status: active
 Scope: change
-Stage: code-review
+Stage: PR
 Goal: Make the router answer "what's next" from state, gate the next ticket on merged blocking PRs, and hand off at ticket boundaries.
 Exit: PR for owner review and merge
 
@@ -10,8 +10,8 @@ Exit: PR for owner review and merge
 
 - [x] grill: scope change, mission deferral, merge gate, handoff timing approved
 - [x] implement: router, mission, handoff, README, and this artifact updated
-- [ ] code-review: Standards and Spec review, fix findings
-- [ ] owner merge: PR
+- [x] code-review: Standards and Spec review, findings fixed in `b77f659`
+- [ ] owner merge: https://github.com/eyenalxai/skills/pull/2
 
 ## Gates
 
@@ -20,7 +20,7 @@ Exit: PR for owner review and merge
 | Scope and understanding | process grill (grilling only; no GLOSSARY.md or docs/adr) | this artifact plus grill answers | approved | owner | 2026-10-29 |
 | Spec | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
 | Tickets | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
-| PR | code-review | pending | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/2 | pending | | |
 
 ## Session plan
 
@@ -52,19 +52,20 @@ Exit: PR for owner review and merge
 
 - spec: not needed (change)
 - tickets: not needed (change)
-- PRs: pending
+- PRs: https://github.com/eyenalxai/skills/pull/2
 
 ## Next step
 
-- Skill: `code-review`, then `pr`
+- Skill: none (owner review)
 - Gate: PR
-- Method: two-axis review
-- Command: run `code-review`, fix the findings, open one PR
-- Produce: reviewable PR
+- Method: owner review in GitHub
+- Command: review and merge https://github.com/eyenalxai/skills/pull/2
+- Produce: merged PR
 
 ## Handoff log
 
 - 2026-10-29: session 1, classify, scope change, router, no handoff
 - 2026-10-29: session 1, grill, four questions answered yes, scope and understanding gate approved by owner
 - 2026-10-29: session 1, implement, committed `d4cfe76`
-- 2026-10-29: session 1, code-review, Standards and Spec findings received, fixes applied
+- 2026-10-29: session 1, code-review, Standards and Spec findings received, fixes applied in `b77f659`
+- 2026-10-29: session 1, PR, opened https://github.com/eyenalxai/skills/pull/2 at `b77f659`, no checks configured, mergeable, owner review pending
