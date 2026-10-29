@@ -2,7 +2,7 @@
 
 A personal skill set for one guided flow: from a request, through grilling, docs, research, specs, tickets, implementation, and review, to pull requests you can review and merge.
 
-This fork keeps only the skills that flow needs. It has no plugin, no release tooling, and no upstream contribution scaffolding.
+This fork keeps the mission flow, its direct dependencies, and a small set of utilities. It has no plugin, no release tooling, and no upstream contribution scaffolding.
 
 ## Install
 
@@ -13,6 +13,8 @@ bunx --bun skills add eyenalxai/skills -g -s '*' -a universal -y
 ```
 
 ## Entry point
+
+Run `/setup-agent-skills` once per repo before the first mission. It records the issue tracker, triage labels, and domain docs under `docs/agents/`.
 
 ```text
 /mission <request>
@@ -30,6 +32,10 @@ The mission:
 Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission done`.
 
 ## Skills
+
+### Setup
+
+- **setup-agent-skills**: Configure a repo for the agent skills: issue tracker, triage labels, and domain docs. Run once before the first mission.
 
 ### Mission
 
@@ -59,3 +65,7 @@ Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission 
 ### Handoff
 
 - **handoff**: Write the handoff document and the next-session prompt.
+
+### Utilities
+
+- **wait-what**: Stop and re-pitch the last message: simpler, with the context you were missing.

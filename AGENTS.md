@@ -12,4 +12,4 @@ A personal skill set for the mission flow.
 
 ## Scope
 
-This fork is the mission flow and its direct dependencies. Keep it to the skills listed in `README.md`.
+This fork is the mission flow, its direct dependencies, and a small set of utilities. Keep it to the skills listed in `README.md`.
