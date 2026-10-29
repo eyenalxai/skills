@@ -41,20 +41,23 @@ pass.
 2. Classify the scope with the table below.
 3. Find the mission document. Create it from `./mission-template.md` when none
    exists.
-4. Run the grill. `grilling` and `domain-modeling` are model-invoked;
-   call them. When the repo has `GLOSSARY.md` or `docs/adr/`, call both. When it
-   has no docs, call `grilling`. When an existing spec, ticket, or direct
-   instruction already holds the understanding, run a short grill to confirm
-   the frontier is empty and record that source.
+4. Run the grill. Load `grilling` with the skill tool, and `domain-modeling` too
+   when the repo has `GLOSSARY.md` or `docs/adr/`. Do not write a round until
+   `grilling`'s `SKILL.md` is in context; this skill does not restate its format.
+   When an existing spec, ticket, or direct instruction already holds the
+   understanding, run a short grill to confirm the frontier is empty and record
+   that source.
 5. Record the scope and understanding gate. Present the problem, constraints,
    approach, flow, and the method. Wait for the user's approval.
 6. Only after approval, name the next phase.
 
 ## The grill
 
-`grilling` and `domain-modeling` are model-invoked, so `mission` runs them as
-part of the flow. `grill-with-docs` is the user-invoked shortcut that calls the
-same two skills; it is the standalone command, not the process dependency.
+Load `grilling` with the skill tool, and `domain-modeling` when the repo has
+docs. `mission` runs both as part of the flow; the round format and the
+recommendation rule come from `grilling`. `grill-with-docs` is the user-invoked
+shortcut that loads the same two skills; it is the standalone command, not the
+process dependency.
 
 The depth comes from the frontier, not from the scope. A clear bug may have one
 question about the repro and the expected behavior. A foggy idea may take many
@@ -121,9 +124,9 @@ at a pending gate is the approval itself, not the next phase.
 | Handoff | `handoff` | next-session prompt | Current gate | new session |
 | Done | none | merged PRs | none | close the mission |
 
-The grill phase uses the two model-invoked skills that `grill-with-docs` wraps.
-The wrapper remains the standalone shortcut for a user who wants to start a
-grill outside a mission.
+The grill phase loads the same two skills that `grill-with-docs` wraps. The
+wrapper remains the standalone shortcut for a user who wants to start a grill
+outside a mission.
 
 Optional detours: `research` when facts are missing,
 `prototype` when a question needs runnable code,
@@ -268,6 +271,8 @@ next step in the mission document.
 ## It is working if
 
 - The grill runs at every scope, and its depth follows the frontier.
+- A grill round follows `grilling`'s format, which means the skill was loaded
+  and not summarized.
 - Every gate is recorded with its method and approved before the next phase.
 - The user always knows the scope, phase, gate, method, next skill, and next
   command.

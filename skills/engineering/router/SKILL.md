@@ -78,7 +78,7 @@ The same check applies before you recommend any phase that starts new work.
 
 `mission` drives this flow. The phases below are the underlying map.
 
-1. **The grill.** `grilling` and `domain-modeling` build shared understanding. In a working directory, the grill calls both. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
+1. **The grill.** Load `grilling` and `domain-modeling` with the skill tool; they build shared understanding. In a repo, load both. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
 2. **The plan.** Use `to-spec` to record the agreed spec and `to-tickets` to cut it into tickets with blocking edges. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
 3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` works the whole ticket graph. Both close with `code-review`. `pr` shapes the body. The user reviews and merges.
 
