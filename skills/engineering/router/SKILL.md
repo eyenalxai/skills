@@ -17,11 +17,58 @@ Before stating what a skill does or recommending a step be skipped, read that sk
 End every routing reply with a **Next step** line that names the exact skill or
 command, the ticket or artifact, and what it produces.
 
-Next step: `/implement` ticket 123. It produces a reviewable PR, then `/code-review`.
-Next step: `/handoff`. It produces the next-session prompt for the next ticket.
+The next step is the action that unblocks the work now, not the stage after it:
+
+| Situation | Next step |
+| --- | --- |
+| A gate is pending | the owner approves the named artifact |
+| A blocking PR is open with failing checks | fix the checks |
+| A blocking PR is open and green | the owner merges it |
+| The next ticket starts a fresh session | `/handoff` |
+| The work stays inside the current session | the stage skill |
+
+A pending gate or an open blocking PR outranks a ready ticket. The next ticket
+waits. These are the standalone answers. If an active mission artifact exists,
+the next step is `/mission continue`; the mission owns the stage and handoff
+decision.
+
+Next step: `/handoff` for ticket 123. It produces the prompt for a fresh session that runs `/implement` and `/code-review` to a reviewable PR.
+Next step: `/code-review` the open PR. It produces findings to fix before the owner merges.
 
 When the next step is `/handoff`, the prompt is the deliverable: one fenced
 `text` block the owner can copy with one click.
+
+## When asked what's next
+
+"What's next", "what now", and "continue" are state questions, not
+classification questions. Read the state in this order before you name a step.
+The same check applies before you recommend any stage that starts new work.
+
+1. **Check for a mission.** If an active mission artifact exists, the next step
+   is `/mission continue`; the mission owns the stage, gate, and handoff
+   decision. Stop here. The rest of this procedure is the standalone path.
+2. **Read the standalone state.** Read the ticket graph, the current branch, and
+   the latest PR. Use the configured tracker, not memory.
+3. **Check the blocking PRs.** Resolve each blocking ticket to its PR and read
+   its state, merge commit, checks, and head SHA. On GitHub, use
+   `gh pr view <n> --json state,mergeCommit,statusCheckRollup,headRefOid`;
+   on GitLab, use `glab mr view <n>`. A blocking ticket with no PR is done when
+   it is closed. A ticket does not hand over to the next ticket until its
+   blocking PRs are merged, unless the owner asks for a stacked PR. If a PR is
+   open, the next step is that PR, not the next ticket: report the URL, head
+   SHA, and check state, and say it must merge before the next ticket starts.
+   If it is a draft, mark it ready. If checks fail, the next step is the fix. If
+   checks pass, the next step is the owner's merge. If the PR is closed unmerged,
+   the next step is the owner's decision. After a merge, confirm the ticket is
+   done, fetch `origin`, and branch from the merge commit.
+4. **Choose the session.** Continue here when the next step stays inside the
+   current ticket or session: a review, a fix, the PR, a pending gate. Hand off
+   when the next step starts a new ticket, a fresh worktree or directory, a new
+   harness, or a side task, or when the context is full. In a multi-ticket
+   effort, each ticket starts in a fresh session.
+5. **Answer once.** Name the gate or PR that decides the step, then one Next
+   step line. If the choice is handoff, name `/handoff`, not the stage it will
+   run, and produce the prompt with `handoff`; the prompt is the deliverable.
 
 ## The main flow: idea to reviewable PR
 
@@ -54,14 +101,15 @@ A single-session change skips the spec and tickets and goes from the grill to `i
 
 ## Phase boundary
 
-At a boundary, the options are continue, clear, handoff, subagent, and compact. `mission` plans the handoff points and produces the prompt. Outside a mission, use `handoff` when the work travels to a new session, a new directory, a new harness, or another agent.
+At a boundary, the options are continue, clear, handoff, subagent, and compact. Continue only when the next step stays inside the current ticket or session. Hand off when the work travels to a new session, a new directory, a new harness, or another agent. `mission` plans the handoff points and produces the prompt. Outside a mission, `handoff` produces it.
 
 ## Ticket handback
 
 A ticket ends with a reviewable PR. The implementer opens one PR, runs
 `code-review`, fixes the findings, and reports the PR URL, head SHA, checks,
-and the next ready ticket. The owner reviews and merges. When the owner asks
-the agent to merge, use a merge commit.
+and the next ready ticket. The owner reviews and merges. The next ticket starts
+only after that merge, unless the owner asks for a stacked PR. When the owner
+asks the agent to merge, use a merge commit.
 
 ## Context hygiene
 
