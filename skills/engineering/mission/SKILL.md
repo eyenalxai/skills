@@ -15,7 +15,7 @@ stage until every ticket has a pull request the owner can review and merge.
 
 It owns five things:
 
-- the scope decision, made with `ask-matt`;
+- the scope decision, made with `router`;
 - the process grill and the approval gates;
 - the mission artifact, the only state that survives a session;
 - the route and the session plan;
@@ -37,8 +37,7 @@ and which gate it must pass.
 
 ## Start
 
-1. Read `AGENTS.md` or `CLAUDE.md`, the tracker doc, and
-   `../ask-matt/SKILL.md`.
+1. Read `AGENTS.md`, the tracker doc, and `../router/SKILL.md`.
 2. Classify the scope with the table below.
 3. Find the mission artifact. Create it from `./mission-template.md` when none
    exists.
@@ -110,7 +109,7 @@ at a pending gate is the approval itself, not the next stage.
 
 | Stage | Skill | Produces | Gate | Next |
 | --- | --- | --- | --- | --- |
-| Classify | `../ask-matt/SKILL.md` | scope and route | Scope and understanding | process grill |
+| Classify | `../router/SKILL.md` | scope and route | Scope and understanding | process grill |
 | Map | `../wayfinder/SKILL.md` | decision map | Decision gates | spec or research |
 | Research | `../research/SKILL.md` | cited markdown | Scope and understanding | spec or implement |
 | Grill | `../../productivity/grilling/SKILL.md` and `../domain-modeling/SKILL.md` with docs; `../../productivity/grilling/SKILL.md` without | shared understanding, GLOSSARY, ADR when warranted | Scope and understanding | spec or implement |

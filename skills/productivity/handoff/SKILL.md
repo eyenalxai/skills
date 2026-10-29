@@ -29,7 +29,7 @@ The prompt is self-contained:
 - the fixed point and the next ready ticket, plus the blocking edges after it;
 - the current gate, the method that reached it, and its status when a mission
   is active;
-- the skill to call first (the mission, the next stage, or `ask-matt` for a
+- the skill to call first (the mission, the next stage, or `router` for a
   standalone route), then `code-review` and `pr` per PR;
 - the build and check commands;
 - the handback: open one PR, run `code-review`, fix the findings, report the PR
