@@ -2,7 +2,7 @@
 
 Status: active
 Scope: change
-Phase: review
+Phase: PR
 Goal: Every phase starts by loading the skill that owns its procedure, so no agent improvises a round, a review, or a spec from a summary.
 Exit: PR for user review and merge
 
@@ -20,7 +20,7 @@ Exit: PR for user review and merge
 | Scope and understanding | grilling (no GLOSSARY.md or docs/adr) | this document plus the answers | approved | user | 2026-10-29 |
 | Spec | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
 | Tickets | user review | not needed for a change | skipped | user (scope gate) | 2026-10-29 |
-| PR | code-review | not opened yet | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/5 | pending | | |
 
 ## Session plan
 
@@ -55,16 +55,16 @@ Exit: PR for user review and merge
 
 - spec: not needed (change)
 - tickets: not needed (change)
-- PRs: none yet
+- PRs: https://github.com/eyenalxai/skills/pull/5
 
 ## Next step
 
-- Skill to load: pr
+- Skill to load: none until user review
 - Gate: PR
 - Method: user review
-- Command: open the PR on fix/load-skill-before-perform
-- Produce: PR URL, head SHA, checks
+- Command: review and merge https://github.com/eyenalxai/skills/pull/5
+- Produce: merged PR, then reinstall the global skills
 
 ## Handoff log
 
-- None yet.
+- 2026-10-29: session 1, PR, opened https://github.com/eyenalxai/skills/pull/5 at `b123f74`; user review pending.
