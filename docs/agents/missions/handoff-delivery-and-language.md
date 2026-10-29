@@ -9,7 +9,7 @@ Exit: PR for user review and merge
 ## Flow
 
 - [x] grill: one PR; preserve upstream wording and voice; fork-changed files only; prompt delivered in chat; no hotfix and no tracker edit before the PR
-- [x] implement: mission, handoff, router, template, AGENTS.md, README
+- [x] implement: mission, handoff, router, template, AGENTS.md, README; setup reviewed, no wording change
 - [ ] code-review: Standards and Spec
 - [ ] PR: user review and merge
 
@@ -43,8 +43,8 @@ Exit: PR for user review and merge
 ## Decisions
 
 - One PR covers both fixes. They touch the same files and share one review.
-- Preserve the upstream wording verbatim wherever a skill is copied. Write only new text in the same direct, second-person voice.
-- Limit the language pass to the files this fork changed: `mission`, `router`, `handoff`, `README`, `AGENTS.md`, and `setup-agent-skills`.
+- Preserve the upstream wording verbatim wherever a skill is copied. Write only new text in the same direct, second-person voice. The language pass rewrites the fork's new prose in `mission`, `router`, `README`, and the handoff additions; it does not rewrite untouched upstream skills.
+- Limit the language pass to the files this fork changed: `mission`, `router`, `handoff`, `README`, `AGENTS.md`, and `setup-agent-skills`. `setup-agent-skills` was reviewed and needs no wording change because its differences are the fork's names and label vocabulary.
 - The prompt is delivered in chat. The mission document records a one-line log entry only.
 - No global skill hotfix and no JYO-33 edit before the PR. Follow the process: implement, review, PR, user merge, then reinstall.
 - Keep the optional handoff summary in `$TMPDIR`. It is not the mission document and it never carries the prompt.
@@ -59,9 +59,9 @@ Exit: PR for user review and merge
 
 - Skill: code-review
 - Gate: Scope and understanding approved
-- Method: two-axis review
-- Command: run `code-review` against `cad4d38`
-- Produce: Standards and Spec findings
+- Method: two-axis review, findings fixed
+- Command: commit the review fixes, then open the PR
+- Produce: one PR for review
 
 ## Handoff log
 

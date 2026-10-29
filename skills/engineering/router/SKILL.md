@@ -39,7 +39,7 @@ Next step: `/code-review` the open PR. It produces findings to fix before the us
 
 When the next step is `/handoff`, the prompt is the deliverable: one fenced
 `text` block in chat that the user can copy with one click. Never put it in an
-issue, a PR, a commit, or the mission document.
+issue, a PR, a commit, the repo, or the mission document.
 
 ## When asked what's next
 

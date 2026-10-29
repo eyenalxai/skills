@@ -59,4 +59,4 @@ Exit: PR for user review and merge
 
 - <date and time>: <session>, <phase>, <gate>, <method>, prompt delivered in chat
 
-Never paste the prompt here. The prompt is delivered in chat.
+Never paste the prompt anywhere in this document. The prompt is delivered in chat.

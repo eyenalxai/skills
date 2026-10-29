@@ -163,9 +163,9 @@ At the boundary:
 1. Update the mission phase, gates, session plan, and handoff log.
 2. Generate the prompt with the `handoff` contract.
 3. Deliver one fenced `text` block in the chat. That is the only copy of the
-   prompt. Never put it in the mission document, the tracker issue, a PR, or a
-   commit. Add one line to the handoff log: date, session, phase, gate, method,
-   `prompt delivered in chat`.
+   prompt. Never put it in an issue, a PR, a commit, the repo, or the mission
+   document. Add one line to the handoff log: date, session, phase, gate,
+   method, `prompt delivered in chat`.
 4. Stop editing. The new session starts with `/mission continue`.
 
 A single-session change or bug stays in one session through the PR. Handoff is
@@ -173,10 +173,6 @@ for travel: a new session, a new ticket, a new directory, a new harness, or a
 side task.
 
 ## The handoff prompt
-
-The prompt is chat-only. The mission document records that the handoff happened,
-not the prompt text. Deliver one fenced `text` block in the chat, and nowhere
-else.
 
 The prompt is self-contained:
 

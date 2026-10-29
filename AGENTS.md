@@ -6,7 +6,7 @@ A personal skill set for the mission flow.
 
 - Skills are markdown. Keep `SKILL.md` concise and process-driven.
 - No em-dashes.
-- Handoff prompts are delivered in chat. Never put one in an issue, a PR, a commit, or a mission document. The mission document records a one-line log entry.
+- Handoff prompts are delivered in chat. Never put one in an issue, a PR, a commit, the repo, or a mission document. The mission document records a one-line log entry.
 - Keep the README skill list in sync when a skill is added, renamed, or removed.
 - Install with `bunx --bun skills add eyenalxai/skills -g -s '*' -a universal -y`.
 - This fork targets the universal agent.
