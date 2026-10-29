@@ -12,12 +12,6 @@ Universal agent only:
 bunx --bun skills add eyenalxai/skills -g -s '*' -a universal -y
 ```
 
-Install selected skills:
-
-```sh
-bunx --bun skills add eyenalxai/skills -g -s mission router handoff -a universal -y
-```
-
 ## Entry point
 
 ```text

@@ -37,7 +37,7 @@ and which gate it must pass.
 
 ## Start
 
-1. Read `AGENTS.md`, the tracker doc, and `../router/SKILL.md`.
+1. Read `AGENTS.md`, the tracker doc, and `router`.
 2. Classify the scope with the table below.
 3. Find the mission artifact. Create it from `./mission-template.md` when none
    exists.
@@ -80,13 +80,13 @@ Ask, in order:
 
 | Scope | Signal | Entry | Route | Exit |
 | --- | --- | --- | --- | --- |
-| Fog | destination or key decisions unknown | `../wayfinder/SKILL.md` plus the process grill | map -> decisions -> spec -> tickets -> implement | PRs |
-| Feature | multi-session, shape known | process grill, then `../to-spec/SKILL.md` | grill -> spec -> tickets -> implement | one PR per ticket |
-| Change | one session, clear outcome | process grill, then `../implement/SKILL.md` | grill -> implement | one PR |
-| Bug | something broken | `../diagnosing-bugs/SKILL.md` plus the process grill | repro -> issue -> implement | one PR |
+| Fog | destination or key decisions unknown | `wayfinder` plus the process grill | map -> decisions -> spec -> tickets -> implement | PRs |
+| Feature | multi-session, shape known | process grill, then `to-spec` | grill -> spec -> tickets -> implement | one PR per ticket |
+| Change | one session, clear outcome | process grill, then `implement` | grill -> implement | one PR |
+| Bug | something broken | `diagnosing-bugs` plus the process grill | repro -> issue -> implement | one PR |
 | Trivial | one obvious edit | short process grill plus the tracker issue | issue -> implement | one PR |
 
-Every route ends at a PR with `../code-review/SKILL.md` and `../pr/SKILL.md`.
+Every route ends at a PR with `code-review` and `pr`.
 The owner reviews and merges.
 
 ## Gates
@@ -109,27 +109,27 @@ at a pending gate is the approval itself, not the next stage.
 
 | Stage | Skill | Produces | Gate | Next |
 | --- | --- | --- | --- | --- |
-| Classify | `../router/SKILL.md` | scope and route | Scope and understanding | process grill |
-| Map | `../wayfinder/SKILL.md` | decision map | Decision gates | spec or research |
-| Research | `../research/SKILL.md` | cited markdown | Scope and understanding | spec or implement |
-| Grill | `../../productivity/grilling/SKILL.md` and `../domain-modeling/SKILL.md` with docs; `../../productivity/grilling/SKILL.md` without | shared understanding, GLOSSARY, ADR when warranted | Scope and understanding | spec or implement |
-| Prototype | `../prototype/SKILL.md` | answer to a runnable question | Scope and understanding | spec or implement |
-| Spec | `../to-spec/SKILL.md` | spec | Spec | tickets |
-| Tickets | `../to-tickets/SKILL.md` | tickets with blocking edges | Tickets | implement |
-| Implement | `../implement/SKILL.md` or `../implement-spec/SKILL.md` | code and PRs | PR | code-review |
-| Review | `../code-review/SKILL.md` | Standards and Spec findings | PR | fix or PR |
-| PR | `../pr/SKILL.md` | PR body, evidence, merge danger | PR | owner review and merge |
-| Handoff | `../../productivity/handoff/SKILL.md` | next-session prompt | Current gate | new session |
+| Classify | `router` | scope and route | Scope and understanding | process grill |
+| Map | `wayfinder` | decision map | Decision gates | spec or research |
+| Research | `research` | cited markdown | Scope and understanding | spec or implement |
+| Grill | `grilling` and `domain-modeling` with docs; `grilling` without | shared understanding, GLOSSARY, ADR when warranted | Scope and understanding | spec or implement |
+| Prototype | `prototype` | answer to a runnable question | Scope and understanding | spec or implement |
+| Spec | `to-spec` | spec | Spec | tickets |
+| Tickets | `to-tickets` | tickets with blocking edges | Tickets | implement |
+| Implement | `implement` or `implement-spec` | code and PRs | PR | code-review |
+| Review | `code-review` | Standards and Spec findings | PR | fix or PR |
+| PR | `pr` | PR body, evidence, merge danger | PR | owner review and merge |
+| Handoff | `handoff` | next-session prompt | Current gate | new session |
 | Done | none | merged PRs | none | close the mission |
 
 The grill stage uses the two model-invoked skills that `grill-with-docs` wraps.
 The wrapper remains the standalone shortcut for a user who wants to start a
 grill outside a mission.
 
-Optional detours: `../research/SKILL.md` when facts are missing,
-`../prototype/SKILL.md` when a question needs runnable code,
-`../domain-modeling/SKILL.md` when a decision is hard to reverse,
-`../diagnosing-bugs/SKILL.md` when the cause is unclear.
+Optional detours: `research` when facts are missing,
+`prototype` when a question needs runnable code,
+`domain-modeling` when a decision is hard to reverse,
+`diagnosing-bugs` when the cause is unclear.
 
 ## The session plan
 
