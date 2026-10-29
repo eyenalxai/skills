@@ -2,7 +2,7 @@
 
 Status: active
 Scope: change
-Stage: review
+Stage: PR
 Goal: Restore `wait-what` and the upstream setup skill, adapted to this fork with no mentions of its original author.
 Exit: PR for owner review and merge
 
@@ -10,7 +10,7 @@ Exit: PR for owner review and merge
 
 - [x] grill: restore both named skills only; setup skill named `setup-agent-skills`; `wait-what` unchanged; adapt all author and removed-skill mentions; no references doc
 - [x] implement: restore `wait-what` and `setup-agent-skills`, update README
-- [ ] code-review: review the diff
+- [x] code-review: Standards and Spec review, findings fixed in `cb06d5a`
 - [ ] owner merge: PR
 
 ## Gates
@@ -20,7 +20,7 @@ Exit: PR for owner review and merge
 | Scope and understanding | process grill (grilling only; no GLOSSARY.md or docs/adr) | this artifact plus grill answers | approved | owner | 2026-10-29 |
 | Spec | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
 | Tickets | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
-| PR | code-review | PR | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/1 | pending | | |
 
 ## Session plan
 
@@ -46,17 +46,18 @@ Exit: PR for owner review and merge
 
 - spec: not needed (change)
 - tickets: not needed (change)
-- PRs: pending
+- PRs: https://github.com/eyenalxai/skills/pull/1
 
 ## Next step
 
-- Skill: `code-review`
+- Skill: none
 - Gate: PR
-- Method: Standards and Spec review of the diff
-- Command: `/code-review` against `0b1110f`
-- Produce: review findings, then one PR
+- Method: owner review in GitHub
+- Command: review and merge https://github.com/eyenalxai/skills/pull/1
+- Produce: merged PR
 
 ## Handoff log
 
 - 2026-10-29: session 1, grill, scope and understanding gate, process grill, approved by owner
 - 2026-10-29: session 1, implement, implementation done, next is code-review
+- 2026-10-29: session 1, PR, code-review done, PR opened, owner review pending
