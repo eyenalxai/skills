@@ -40,7 +40,7 @@ Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission 
 ### Mission
 
 - **mission**: Drive one piece of work from a request to reviewable PRs, with the process grill, approval gates, session plan, references, and automatic handoffs.
-- **router**: Name the skill or flow that fits, and return the next step. The mission calls it to classify.
+- **router**: Name the skill or flow that fits, check the state when asked what's next, and return the next step. The mission calls it to classify.
 
 ### Flow
 
