@@ -2,14 +2,14 @@
 
 Status: active
 Scope: change
-Stage: implement
+Stage: code-review
 Goal: Make the router answer "what's next" from state, gate the next ticket on merged blocking PRs, and hand off at ticket boundaries.
 Exit: PR for owner review and merge
 
 ## Route
 
 - [x] grill: scope change, mission deferral, merge gate, handoff timing approved
-- [ ] implement: update router, mission, handoff, and README
+- [x] implement: router, mission, handoff, README, and this artifact updated
 - [ ] code-review: Standards and Spec review, fix findings
 - [ ] owner merge: PR
 
@@ -32,10 +32,10 @@ Exit: PR for owner review and merge
 
 | Reference | Why | Path or URL | Stage |
 | --- | --- | --- | --- |
-| Repo agent rules | No em-dashes, concise process-driven skills, README sync | AGENTS.md | grill, implement |
-| Router skill | The behavior under change | skills/engineering/router/SKILL.md | grill, implement |
-| Mission skill | Session boundaries and handoff contract | skills/engineering/mission/SKILL.md | grill, implement |
-| Handoff skill | Prompt format | skills/productivity/handoff/SKILL.md | implement |
+| Repo agent rules | No em-dashes, concise process-driven skills, README sync | AGENTS.md | all stages |
+| Router skill | The behavior under change | skills/engineering/router/SKILL.md | grill, implement, review |
+| Mission skill | Session boundaries and handoff contract | skills/engineering/mission/SKILL.md | grill, implement, review |
+| Handoff skill | Prompt format | skills/productivity/handoff/SKILL.md | implement, review |
 | Existing mission artifact | Local format precedent | docs/agents/missions/restore-wait-what-setup-skills.md | grill |
 
 ## Decisions
@@ -46,6 +46,7 @@ Exit: PR for owner review and merge
 - When an active mission artifact exists, the router hands the next step to `/mission continue`. The router answers standalone when there is no mission.
 - The merge gate covers every PR that blocks the next ticket, not just the immediately previous PR. It reads draft, check, and merge state. A stacked PR is allowed only on an explicit owner request.
 - The handoff prompt waits until the blocking PR is merged, so it can name the merge commit and start the next ticket from it.
+- Code-review refinements: plural blocking PRs, the merge commit in the handoff prompt, an explicit stacked-PR request, completed-only no-PR blockers, and mergeability in the PR read.
 
 ## Artifacts
 
@@ -55,14 +56,15 @@ Exit: PR for owner review and merge
 
 ## Next step
 
-- Skill: `implement`, then `code-review`
+- Skill: `code-review`, then `pr`
 - Gate: PR
-- Method: implementation, then two-axis review
-- Command: implement the approved change, run `code-review`, fix the findings, open one PR
+- Method: two-axis review
+- Command: run `code-review`, fix the findings, open one PR
 - Produce: reviewable PR
 
 ## Handoff log
 
 - 2026-10-29: session 1, classify, scope change, router, no handoff
 - 2026-10-29: session 1, grill, four questions answered yes, scope and understanding gate approved by owner
-- 2026-10-29: session 1, implement, started
+- 2026-10-29: session 1, implement, committed `d4cfe76`
+- 2026-10-29: session 1, code-review, Standards and Spec findings received, fixes applied

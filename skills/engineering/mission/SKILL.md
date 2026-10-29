@@ -174,8 +174,8 @@ side task.
 The prompt is self-contained:
 
 - the mission path or URL;
-- the fixed point and the next ready ticket, plus the blocking PRs and the
-  blocking edges after it;
+- the fixed point (the merge commit), the next ready ticket, and the blocking
+  PRs, plus the blocking edges after it;
 - the current gate, its method, and its status;
 - the next skill to read;
 - the references for that stage;
@@ -188,7 +188,7 @@ A starting shape:
 ```text
 Read the mission at <path or URL>. Run /mission continue.
 The current gate is <gate>, <approved or pending>, reached with <method>.
-The previous PR is merged: <url>. The next ticket is <id>.
+The blocking PRs are merged: <urls>. The merge commit is <sha>. The next ticket is <id>.
 Read the mission references for <stage>, then <skill>.
 Run <checks>. Open one PR. Report the PR URL, head SHA, checks, and the next
 ready ticket. The owner reviews and merges.
@@ -239,8 +239,8 @@ check state, and the owner review and merge.
 A ticket ends with a reviewable PR. Open one PR, run `code-review`, fix the
 findings, and report the PR URL, head SHA, checks, and the next ready ticket.
 The owner reviews and merges. The next ticket starts only after that merge,
-unless the owner asks for a stacked PR. When the owner asks the mission skill to
-merge, use a merge commit.
+unless the owner explicitly asks for a stacked PR. When the owner asks the
+mission skill to merge, use a merge commit.
 
 ## Trackers
 
