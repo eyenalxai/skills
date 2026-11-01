@@ -10,8 +10,9 @@ maps those roles to the label strings used in team SKILL.
 | `bug`          | `Bug`                | Something is broken        |
 | `enhancement`  | `Improvement`        | New feature or improvement |
 
-`Bug` is the workspace-level label (capitalized); do not create a second `bug`.
-`Feature` exists in the team but is not one of the triage category roles.
+`Bug`, `Improvement`, and `Feature` are workspace-level labels. Do not create a
+second `bug` or `enhancement`. `Feature` is not one of the triage category
+roles.
 
 ## State roles
 

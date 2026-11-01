@@ -34,6 +34,11 @@ An issue reference accepts an identifier (`SKILL-42`), a UUID, or a
 `linear.app` issue URL. List commands return one page; continue with
 `--after <pageInfo.endCursor>` while `pageInfo.hasNextPage` is true.
 
+## Pull requests as a triage surface
+
+**PRs as a request surface: no.** _(Set to `yes` if this repo treats external
+PRs as feature requests; `/triage` reads this flag.)_
+
 ## Pull requests
 
 Issues describe the work; PRs deliver it. Linear's GitHub integration links a PR
@@ -73,9 +78,8 @@ request and commit automations**. The intended mapping:
 A non-closing word still moves the issue on other events but skips the merge
 destination. A relation word links the PR without changing status.
 
-Autolink references are configured on the repository, so `SKILL-42` written in
-a PR, issue, comment, or commit renders as
-`https://linear.app/utbetdix/issue/SKILL-42`.
+Repository autolinks are not configured. Linear URLs still work directly. Add a
+GitHub autolink for `SKILL-` if you want bare identifiers to render as links.
 
 Linear connects one GitHub account to one Linear workspace. The SKILL team
 lives in the personal workspace; if the GitHub app is already bound to another
@@ -121,7 +125,7 @@ Every issue carries a priority:
 ## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is a single issue labelled `wayfinder:map`,
-with **child** issues as tickets.
+with **child** issues as tickets. Team SKILL carries the `wayfinder:*` labels.
 
 - **Map**: `rata issue create --title "..." --label wayfinder:map --body-file -`.
 - **Child ticket**: `rata issue create --title "..." --parent <map-ref> --label wayfinder:<type> --body-file -`.
@@ -130,6 +134,6 @@ with **child** issues as tickets.
 - **Blocking**: `rata issue link <child-ref> --blocked-by <blocker-ref>`, or the
   inverse with `--blocks`.
 - **Frontier query**: `rata issue list --parent <map-ref> --unblocked --unassigned --json`.
-- **Claim**: `rata issue assign me <ref>`, the session's first write.
+- **Claim**: `rata issue assign --assignee me <ref>`, the session's first write.
 - **Resolve**: comment, close, then append a context pointer to the map's
   Decisions-so-far with `rata issue update <map-ref> --body-file -`.
