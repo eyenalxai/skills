@@ -1,8 +1,8 @@
 # Mission: Restore wait-what and the setup skill
 
-Status: active
+Status: done
 Scope: change
-Stage: PR
+Stage: done
 Goal: Restore `wait-what` and the upstream setup skill, adapted to this fork with no mentions of its original author.
 Exit: PR for owner review and merge
 
@@ -11,7 +11,7 @@ Exit: PR for owner review and merge
 - [x] grill: restore both named skills only; setup skill named `setup-agent-skills`; `wait-what` unchanged; adapt all author and removed-skill mentions; no references doc
 - [x] implement: restore `wait-what` and `setup-agent-skills`, update README
 - [x] code-review: Standards and Spec review, findings fixed in `cb06d5a`
-- [ ] owner merge: PR
+- [x] owner merge: PR
 
 ## Gates
 
@@ -20,7 +20,7 @@ Exit: PR for owner review and merge
 | Scope and understanding | process grill (grilling only; no GLOSSARY.md or docs/adr) | this artifact plus grill answers | approved | owner | 2026-10-29 |
 | Spec | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
 | Tickets | owner review | not needed for a change | skipped | owner (scope gate) | 2026-10-29 |
-| PR | code-review | https://github.com/eyenalxai/skills/pull/1 | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/1 | merged | owner | 2026-10-29 |
 
 ## Session plan
 
@@ -51,13 +51,14 @@ Exit: PR for owner review and merge
 ## Next step
 
 - Skill: none
-- Gate: PR
-- Method: owner review in GitHub
-- Command: review and merge https://github.com/eyenalxai/skills/pull/1
-- Produce: merged PR
+- Gate: none
+- Method: none
+- Command: none
+- Produce: mission closed; the merged PR is https://github.com/eyenalxai/skills/pull/1 at merge commit `54d955f`
 
 ## Handoff log
 
 - 2026-10-29: session 1, grill, scope and understanding gate, process grill, approved by owner
 - 2026-10-29: session 1, implement, implementation done, next is code-review
 - 2026-10-29: session 1, PR, code-review done, PR opened, owner review pending
+- 2026-10-29: session 1, done, PR merged by owner at `54d955f`
