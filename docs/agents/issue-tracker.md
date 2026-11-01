@@ -47,8 +47,8 @@ issue by the magic word used:
 
 - **Branch**: `feat/SKILL-42-short-slug`. The issue ID in the branch name links
   the PR automatically.
-- **Title**: `SKILL-42 <type>(<scope>): <summary>`. The ID may also trail as
-  `(<SKILL-42>)`, but not both.
+- **Title**: `<type>(<scope>): <summary>`. Do not prefix the issue ID; the
+  branch and body already link it.
 - **Body**: `Closes SKILL-42` for a PR that completes the issue. Use
   `Refs SKILL-42` or `Part of SKILL-42` when the issue stays open.
 - **One issue per PR.** When a PR really spans issues, name each one after
