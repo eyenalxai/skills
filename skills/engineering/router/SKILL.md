@@ -17,6 +17,10 @@ Before performing a skill, stating what it does, or recommending a step be skipp
 End every routing reply with a **Next step** line that names the exact skill or
 command, the ticket or document, why it is next, and what it unlocks.
 
+Inside a mission, the mission output contract owns the full reply: progress
+trail, Doing, Why now, Why this way, Unlocks, Gate, Next step. Standalone, the
+Next step line carries the why and the unlock.
+
 The next step is the action that unblocks the work now, not the phase after it.
 For a pending gate or an open blocking PR, use this table:
 
@@ -35,7 +39,7 @@ the next step is `/mission continue`; the mission owns the phase and handoff
 decision.
 
 Next step: `/handoff` for ticket 123, because its blockers are merged and it is the next slice. It produces the prompt for a fresh session that runs `/implement` and `/code-review` to a reviewable PR, which unblocks ticket 124.
-Next step: `/code-review` the open PR, because its checks are green and the diff is the last gate. It produces findings to fix before the user merges.
+Next step: `/code-review` the open PR, because its checks are green and the diff is the last gate. It produces findings to fix before the user merges, which clears the last gate.
 
 When the next step is `/handoff`, the prompt is the deliverable: one fenced
 `text` block in chat that the user can copy with one click. Never put the

@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
 
-Inside a mission, the mission skill uses this contract automatically at planned session boundaries.
+Inside a mission, the mission skill uses this contract automatically at planned session boundaries. When a mission is active, the mission output contract owns the reply around the prompt.
 
 A next-ticket prompt waits until its blocking PRs are merged. If a blocking PR is open, the handoff is premature: report the PR URL, head SHA, and check state instead.
 

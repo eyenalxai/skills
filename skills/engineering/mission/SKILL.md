@@ -37,7 +37,7 @@ load, stop and say which one failed. Never simulate its output.
 | --- | --- |
 | `/mission <request>` | Start a mission, or attach to the matching one |
 | `/mission continue` | Read the mission, verify references, name the next step |
-| `/mission status` | Show scope, phase, gate, method, references, and next step |
+| `/mission status` | Show the progress trail, the why for the current step, the unlock, the gate, and the next step |
 | `/mission handoff` | Force a handoff prompt at the current boundary |
 | `/mission done` | Close a mission whose PRs are merged |
 
@@ -192,8 +192,7 @@ The prompt is self-contained:
 - the skills to load, in order;
 - the references for that phase;
 - the build and check commands;
-- the output contract: progress trail, Doing, Why now, Why this way, Unlocks,
-  Gate, Next step;
+- the output contract for the next session;
 - the exit: open one PR, run `code-review`, fix the findings, report the PR URL,
   head SHA, checks, the next ready ticket, the why, and the unlock. The user
   reviews and merges.

@@ -47,8 +47,8 @@ Skip all preambles and keep prose brief. Use the user's domain language from `GL
 ### Why
 
 State the problem in the user's terms, the route taken, and the alternative
-rejected. When there was no real alternative, say why. Link the originating
-issue or mission document.
+rejected. When there was no real alternative, write `no alternative: <reason>`
+in one clause. Link the originating issue or mission document.
 
 ### Summary
 

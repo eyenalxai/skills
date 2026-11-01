@@ -39,7 +39,7 @@ Exit: PR for user review and merge
 
 ## Decisions
 
-- <decision>: <why>: <alternative rejected>: <ADR or issue>
+- <decision>. Why: <why>. Alternative: <rejected alternative, or "no alternative: <reason>">. Record: <ADR or issue>.
 
 ## Outputs
 

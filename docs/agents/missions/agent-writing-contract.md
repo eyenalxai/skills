@@ -2,24 +2,24 @@
 
 Status: active
 Scope: change
-Phase: implement
-Goal: Every mission reply states why the step exists, why this route, what it unlocks, and where it sits in the flow, so the owner can judge progress without decoding labels.
-Exit: PR for owner review and merge
+Phase: PR
+Goal: Every mission reply states why the step exists, why this route, what it unlocks, and where it sits in the flow, so the user can judge progress without decoding labels.
+Exit: PR for user review and merge
 
 ## Flow
 
-- [x] grill: scope change, placement A, depth A, trail A; owner approved
-- [ ] implement: mission, template, handoff, implement, pr, router updated
-- [ ] code-review: Standards and Spec, findings fixed
-- [ ] PR: owner review and merge
+- [x] grill: scope change, placement A, depth A, trail A; user approved
+- [x] implement: mission, template, handoff, implement, pr, router updated
+- [x] code-review: Standards and Spec, findings fixed
+- [ ] PR: user review and merge
 
 ## Gates
 
 | Gate | Method | Document | Status | Approved by | Date |
 | --- | --- | --- | --- | --- | --- |
-| Scope and understanding | grilling plus domain-modeling (repo has docs) | this document plus the answers | approved | owner | 2026-11-01 |
-| Spec | owner review | not needed for a change | skipped | owner (scope gate) | 2026-11-01 |
-| Tickets | owner review | not needed for a change | skipped | owner (scope gate) | 2026-11-01 |
+| Scope and understanding | grilling plus domain-modeling (repo has docs) | this document plus the answers | approved | user | 2026-11-01 |
+| Spec | user review | not needed for a change | skipped | user (scope gate) | 2026-11-01 |
+| Tickets | user review | not needed for a change | skipped | user (scope gate) | 2026-11-01 |
 | PR | code-review | not opened | pending | | |
 
 ## Session plan
@@ -54,6 +54,8 @@ Exit: PR for owner review and merge
 - No README change: no skill is added, renamed, or removed.
 - The global copies under ~/.agents/skills are copies, not symlinks. Reinstall after merge.
 - Branch `feat/agent-writing-contract` is cut from `origin/main` at `a6cb988`.
+- Code-review findings fixed: the handoff bullet no longer repeats the field list; `implement` defers the ask rule to the mission contract and drops the tdd exception; the template's decision line has a no-alternative fallback; `router` states the standalone contract and its second example names the unlock; `handoff` defers its reply to the mission contract; `/mission status` shows the trail, why, and unlock; `pr` uses the one-clause no-alternative shape.
+- Accepted from code-review: the five-surface spread (approved Q2), the `Unlocks` label (Q3), the replaced header with `Method` and `Read` removed (Q4), and "plain words before labels" (the defect being fixed).
 
 ## Outputs
 
@@ -63,15 +65,17 @@ Exit: PR for owner review and merge
 
 ## Next step
 
-- Skill to load: implement
-- Gate: Scope and understanding approved
-- Method: grilling plus domain-modeling
-- Why: the approved contract must live in the skill files, because a fresh session reloads them and forgets this chat.
-- Unlocks: code-review can check the diff against the agreed contract.
-- Command: load implement, then edit the six files
-- Produce: the updated skills, one commit
+- Skill to load: pr
+- Gate: PR pending
+- Method: code-review
+- Why: the diff is reviewed and the findings are fixed, so the next step is the reviewable PR the user merges.
+- Unlocks: the user can merge, then reinstall the global skills so the new contract is live.
+- Command: load pr, write the body, open the PR
+- Produce: PR URL, head SHA, checks
 
 ## Handoff log
 
 - 2026-11-01: session 1, classify, scope change, no handoff
-- 2026-11-01: session 1, grill, four questions answered yes, scope and understanding gate approved by owner
+- 2026-11-01: session 1, grill, four questions answered yes, scope and understanding gate approved by user
+- 2026-11-01: session 1, implement, committed `142ac4e`
+- 2026-11-01: session 1, code-review, Standards and Spec findings, fixes applied

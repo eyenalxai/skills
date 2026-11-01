@@ -12,17 +12,13 @@ If the user passes a ticket reference, fetch it from the issue tracker and state
 
 Before each step, say what you are about to do, why now, why this way, and what
 it unlocks. After it, say what changed and what the next step can now do. Scale
-the detail to the step; never drop the why. Inside a mission, use the mission
-output contract.
-
-When the ticket, the spec, and the code do not say why a step is needed, stop
-and ask. Record the answer in the ticket or the mission document. Never invent
-a reason.
+the detail to the step; never drop the why. Inside a mission, the mission
+output contract owns the reply shape and the ask-don't-invent rule. Outside a
+mission, ask when the why is missing and record the answer in the ticket.
 
 ## Seams and checks
 
-Call the Skill tool with "tdd" where possible, at pre-agreed seams. When the
-work has no testable seam, say so and skip it.
+Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
