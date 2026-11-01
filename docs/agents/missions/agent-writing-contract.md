@@ -20,7 +20,7 @@ Exit: PR for user review and merge
 | Scope and understanding | grilling plus domain-modeling (repo has docs) | this document plus the answers | approved | user | 2026-11-01 |
 | Spec | user review | not needed for a change | skipped | user (scope gate) | 2026-11-01 |
 | Tickets | user review | not needed for a change | skipped | user (scope gate) | 2026-11-01 |
-| PR | code-review | not opened | pending | | |
+| PR | code-review | https://github.com/eyenalxai/skills/pull/6 | pending | | |
 
 ## Session plan
 
@@ -61,17 +61,17 @@ Exit: PR for user review and merge
 
 - spec: not needed (change)
 - tickets: not needed (change)
-- PRs: not opened
+- PRs: https://github.com/eyenalxai/skills/pull/6
 
 ## Next step
 
-- Skill to load: pr
+- Skill to load: none; user review
 - Gate: PR pending
-- Method: code-review
-- Why: the diff is reviewed and the findings are fixed, so the next step is the reviewable PR the user merges.
+- Method: user review
+- Why: the diff is reviewed and the findings are fixed, so the next step is the user's merge decision.
 - Unlocks: the user can merge, then reinstall the global skills so the new contract is live.
-- Command: load pr, write the body, open the PR
-- Produce: PR URL, head SHA, checks
+- Command: review and merge https://github.com/eyenalxai/skills/pull/6
+- Produce: merged PR, then reinstall
 
 ## Handoff log
 
@@ -79,3 +79,4 @@ Exit: PR for user review and merge
 - 2026-11-01: session 1, grill, four questions answered yes, scope and understanding gate approved by user
 - 2026-11-01: session 1, implement, committed `142ac4e`
 - 2026-11-01: session 1, code-review, Standards and Spec findings, fixes applied
+- 2026-11-01: session 1, PR, opened https://github.com/eyenalxai/skills/pull/6 at `9135c69`; user review pending
