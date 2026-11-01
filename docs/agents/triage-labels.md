@@ -1,0 +1,27 @@
+# Triage Labels
+
+The skills speak in terms of two category roles and five state roles. This file
+maps those roles to the label strings used in team SKILL.
+
+## Category roles
+
+| Canonical role | Label in our tracker | Meaning                    |
+| -------------- | -------------------- | -------------------------- |
+| `bug`          | `Bug`                | Something is broken        |
+| `enhancement`  | `Improvement`        | New feature or improvement |
+
+`Bug`, `Improvement`, and `Feature` are workspace-level labels. Use `Bug` for
+the bug role and `Improvement` for the enhancement role. `Feature` sits outside
+triage.
+
+## State roles
+
+| Canonical role    | Label in our tracker | Meaning                                  |
+| ----------------- | -------------------- | ---------------------------------------- |
+| `needs-triage`    | `needs-triage`       | Maintainer needs to evaluate this issue  |
+| `needs-info`      | `needs-info`         | Waiting on reporter for more information |
+| `ready-for-agent` | `ready-for-agent`    | Fully specified, ready for an AFK agent  |
+| `ready-for-human` | `ready-for-human`    | Requires human implementation            |
+| `wontfix`         | `wontfix`            | Will not be actioned                     |
+
+A live, triaged issue carries exactly one category role and one state role.

@@ -14,7 +14,7 @@ bunx --bun skills add eyenalxai/skills -g -s '*' -a universal -y
 
 ## Entry point
 
-Run `/setup-agent-skills` once per repo before the first mission. It records the issue tracker, triage labels, and domain docs under `docs/agents/`, and adds an `## Agent skills` pointer block to `AGENTS.md` or `CLAUDE.md`.
+Run `/setup-agent-skills` once per repo before the first mission. It records the issue tracker, triage labels, and domain docs under `docs/agents/`, and adds an `## Agent skills` pointer block to `AGENTS.md`.
 
 ```text
 /mission <request>

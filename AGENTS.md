@@ -14,3 +14,17 @@ A personal skill set for the mission flow.
 ## Scope
 
 This fork is the mission flow, its direct dependencies, and a small set of utilities. Keep it to the skills listed in `README.md`.
+
+## Agent skills
+
+### Issue tracker
+
+Linear, team SKILL, personal workspace, via `rata`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default state labels; `bug` maps to `Bug` and `enhancement` maps to `Improvement`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` and `docs/adr/` at the root. See `docs/agents/domain.md`.
