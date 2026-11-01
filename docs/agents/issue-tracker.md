@@ -1,8 +1,7 @@
 # Issue tracker: Linear
 
 Issues and specs for this repository live in Linear, team **SKILL** (`Skills`)
-in the **personal** workspace. Use the `rata` CLI for all operations. GitHub
-Issues is not the tracker.
+in the **personal** workspace. Use the `rata` CLI for all operations.
 
 ## Repository link
 
@@ -47,13 +46,11 @@ issue by the magic word used:
 
 - **Branch**: `feat/SKILL-42-short-slug`. The issue ID in the branch name links
   the PR automatically.
-- **Title**: `<type>(<scope>): <summary>`. Do not prefix the issue ID; the
-  branch and body already link it.
+- **Title**: `<type>(<scope>): <summary>`.
 - **Body**: `Closes SKILL-42` for a PR that completes the issue. Use
   `Refs SKILL-42` or `Part of SKILL-42` when the issue stays open.
 - **One issue per PR.** When a PR really spans issues, name each one after
-  `Closes`. Never put an issue ID you do not mean to touch in the branch name:
-  the branch name links the PR even if the body does not.
+  `Closes`.
 
 Closing magic words: `close`, `closes`, `closed`, `closing`, `fix`, `fixes`,
 `fixed`, `fixing`, `resolve`, `resolves`, `resolved`, `resolving`, `complete`,
@@ -61,8 +58,6 @@ Closing magic words: `close`, `closes`, `closed`, `closing`, `fix`, `fixes`,
 `implemented`, `implementing`, `linear issue`. Non-closing: `ref`, `refs`,
 `references`, `part of`, `contributes to`, `toward`, `towards`. Relation only:
 `relates to`, `related to`.
-
-The PR body carries `Closes SKILL-<n>` for the issue it completes.
 
 ## GitHub integration
 
@@ -92,8 +87,8 @@ delegated child returns the PR URL, head SHA, and check state to its parent.
 ## When a skill says "publish to the issue tracker"
 
 Create a Linear issue with `rata issue create`, set its priority, and assign it
-to the owner (`--assignee me`). A spec is an issue too: do not create a project
-and do not put `Spec:` in the title; its tickets are its child issues.
+to the owner (`--assignee me`). A spec is an issue; its tickets are its child
+issues.
 
 ## When a skill says "fetch the relevant ticket"
 
