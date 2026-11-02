@@ -45,8 +45,9 @@ load, stop and say which one failed. Never simulate its output.
 
 1. Read `AGENTS.md`, the tracker doc, and `router`.
 2. Classify the scope with the table below.
-3. Find the mission document. Create it from `./mission-template.md` when none
-   exists.
+3. Find the mission document in the configured tracker. Create it from
+   `./mission-template.md` when none exists. If no tracker is configured, stop
+   and ask the user to set one up.
 4. Load the grill. Call the Skill tool for `grilling`, and for
    `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When an
    existing spec, ticket, or direct instruction already holds the understanding,
@@ -281,15 +282,12 @@ merge, use a merge commit.
 ## Trackers
 
 Use the configured tracker. Linear: `rata` creates and updates the mission
-issue or project and the wayfinder map. GitHub: `gh` creates the issue and the
-PR. With no tracker, use `docs/agents/missions/<slug>.md`.
+issue and the wayfinder map. GitHub: `gh` creates the issue and the PR. If no
+tracker is configured, stop and ask the user to set one up.
 
-The mission document is the issue, project, or file. Keep the flow, gates,
+The mission document is the configured tracker issue. Keep the flow, gates,
 session plan, references, decisions, outputs, and next step in that one place.
 Keep the handoff log there too, but never the prompt itself.
-
-Older mission documents use the previous headings. Read `Stage` as `Phase`,
-`Route` as `Flow`, and `Artifacts` as `Outputs`.
 
 ## Scope changes
 
