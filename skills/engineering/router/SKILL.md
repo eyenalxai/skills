@@ -108,6 +108,7 @@ A single-session change skips the spec and tickets and goes from the grill to `i
 - `grilling` is the interview primitive underneath every grill.
 - `prototype` answers a design question with throwaway code.
 - `research` investigates a question against primary sources and leaves a cited markdown file.
+- `to-questionnaire` turns a decision someone else holds into a questionnaire.
 - `handoff` writes the handoff document and gives you the next-session prompt in chat.
 
 ## Phase boundary

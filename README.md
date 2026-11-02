@@ -70,4 +70,5 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Utilities
 
+- **to-questionnaire**: Turn a decision you can't answer alone into a questionnaire for the one person who can fill it in.
 - **wait-what**: Stop and re-pitch the last message: simpler, with the context you were missing.
