@@ -11,7 +11,7 @@ Exit: PR for user review and merge
 - [ ] grill: <notes>
 - [ ] map: <url>
 - [ ] decisions: <adr or issue>
-- [ ] spec: <path>
+- [ ] spec: <issue or URL>
 - [ ] tickets: <urls>
 - [ ] implement <ticket>: <PR url>
 - [ ] code-review <PR>: <findings>
@@ -43,7 +43,7 @@ Exit: PR for user review and merge
 
 ## Outputs
 
-- spec: <path>
+- spec: <issue or URL>
 - tickets: <urls>
 - PRs: <urls>
 

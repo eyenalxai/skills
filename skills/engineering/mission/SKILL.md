@@ -46,8 +46,7 @@ load, stop and say which one failed. Never simulate its output.
 1. Read `AGENTS.md`, the tracker doc, and `router`.
 2. Classify the scope with the table below.
 3. Find the mission document in the configured tracker. Create it from
-   `./mission-template.md` when none exists. If no tracker is configured, stop
-   and ask the user to set one up.
+   `./mission-template.md` when none exists.
 4. Load the grill. Call the Skill tool for `grilling`, and for
    `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When an
    existing spec, ticket, or direct instruction already holds the understanding,
@@ -185,7 +184,7 @@ side task.
 
 The prompt is self-contained:
 
-- the mission path or URL;
+- the mission issue URL;
 - the goal, why this ticket is next, and what it unlocks;
 - the fixed point (the merge commit), the next ready ticket, and the blocking
   PRs, plus the blocking edges after it;
@@ -201,7 +200,7 @@ The prompt is self-contained:
 A starting shape:
 
 ```text
-Read the mission at <path or URL>. Run /mission continue.
+Read the mission issue at <URL>. Run /mission continue.
 The goal is <goal>. The current gate is <gate>, <approved or pending>, reached
 with <method>.
 The blocking PRs are merged: <urls>. The merge commit is <sha>. The next ticket
@@ -234,7 +233,8 @@ At each phase:
 - at session start, check each path or URL and mark stale entries.
 
 The `research` output and the `domain-modeling` ADRs are references. The
-handoff prompt carries the mission path and the next phase's top references.
+handoff prompt carries the mission issue URL and the next phase's top
+references.
 
 ## Output contract
 
@@ -279,7 +279,7 @@ reviews and merges. The next ticket starts only after that merge, unless the
 user explicitly asks for a stacked PR. When the user asks the mission skill to
 merge, use a merge commit.
 
-## Trackers
+## Tracker
 
 Use the configured tracker. Linear: `rata` creates and updates the mission
 issue and the wayfinder map. GitHub: `gh` creates the issue and the PR. If no
