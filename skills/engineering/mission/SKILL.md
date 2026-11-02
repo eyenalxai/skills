@@ -45,8 +45,8 @@ load, stop and say which one failed. Never simulate its output.
 
 1. Read `AGENTS.md`, the tracker doc, and `router`.
 2. Classify the scope with the table below.
-3. Find the mission document in the configured tracker. Create it from
-   `./mission-template.md` when none exists.
+3. Find the mission document in the configured tracker (see the Tracker section).
+   Create it from `./mission-template.md` when none exists.
 4. Load the grill. Call the Skill tool for `grilling`, and for
    `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When an
    existing spec, ticket, or direct instruction already holds the understanding,
