@@ -24,12 +24,12 @@ If the user passed arguments, treat them as a description of what the next sessi
 The document is the handoff summary; the prompt is the deliverable. End the
 chat reply with one fenced `text` block the user can copy with one click. That
 is the only copy of the prompt. Never put the delivered prompt in an issue, a
-PR, a commit, the repo, or the mission document. If the mission document is an
-issue, the issue gets the log line, not the prompt.
+PR, a commit, the repo, or the mission document. The mission document gets the
+log line, not the prompt.
 
 The prompt is self-contained:
 
-- the handoff path or mission document;
+- the handoff path or mission issue URL;
 - the goal, why the next step is next, and what it unlocks;
 - the fixed point (the merge commit), the next ready ticket, and the blocking
   PRs, plus the blocking edges after it;
