@@ -20,7 +20,7 @@ It does six things:
 - the mission document, the only state that survives a session;
 - the flow and the session plan;
 - the reference index and the handoff prompt;
-- the progress trail and the why for every step you see.
+- the answer-first reply, with the state kept out of it.
 
 Each skill owns its own procedure. Read the skill's `SKILL.md` and follow it.
 `mission` decides what happens next, what it produces, and which gate it must
@@ -37,7 +37,7 @@ load, stop and say which one failed. Never simulate its output.
 | --- | --- |
 | `/mission <request>` | Start a mission, or attach to the matching one |
 | `/mission continue` | Read the mission, verify references, name the next step |
-| `/mission status` | Show the progress trail, the why for the current step, the unlock, the gate, and the next step |
+| `/mission status` | Show the state from the mission document: flow, current phase, gate, decisions, and next step |
 | `/mission handoff` | Force a handoff prompt at the current boundary |
 | `/mission done` | Close a mission whose PRs are merged |
 
@@ -185,32 +185,31 @@ side task.
 The prompt is self-contained:
 
 - the mission issue URL;
-- the goal, why this ticket is next, and what it unlocks;
-- the fixed point (the merge commit), the next ready ticket, and the blocking
-  PRs, plus the blocking edges after it;
+- the goal, why this work is next, and what it unlocks;
+- the fixed point (the merge commit), the next ready work in plain words, and
+  the blocking PRs, plus the blocking edges after it;
 - the current gate, its method, and its status;
 - the skills to load, in order;
 - the references for that phase;
 - the build and check commands;
 - the output contract for the next session;
 - the exit: open one PR, run `code-review`, fix the findings, report the PR URL,
-  head SHA, checks, the next ready ticket, the why, and the unlock. The user
-  reviews and merges.
+  head SHA, checks, and what the PR unlocks. The user reviews and merges.
 
 A starting shape:
 
 ```text
-Read the mission issue at <URL>. Run /mission continue.
-The goal is <goal>. The current gate is <gate>, <approved or pending>, reached
-with <method>.
-The blocking PRs are merged: <urls>. The merge commit is <sha>. The next ticket
-is <id>: <why it is next, and what it unlocks>.
+Find the mission issue in team <team> by its title: <title>. Run /mission
+continue. The goal is <goal>. The current gate is <gate>, <approved or
+pending>, reached with <method>.
+The blocking PRs are merged: <urls>. The merge commit is <sha>. The next work
+is <plain name>: <why it is next, and what it unlocks>. Its tracking key is in
+the mission document.
 Read the mission references for <phase>, then load <skills> in order with the
 Skill tool. If a skill will not load, stop and say which one, and do not
 simulate its output.
-Run <checks>. Open one PR. Report the PR URL, head SHA, checks, the progress
-line, the why, the unlock, and the next ready ticket. The user reviews and
-merges.
+Run <checks>. Open one PR. Report the PR URL, head SHA, checks, and what the PR
+unlocks. Name the next ready work in plain words. The user reviews and merges.
 ```
 
 Write the prompt in the user's language. The `mission` skill owns the decision
@@ -238,46 +237,41 @@ references.
 
 ## Output contract
 
-Every mission reply opens with the progress line and the reasoning for the
-current step:
+The reply is the answer, not a status report. The mission document holds the
+state; read it and update it, but do not repeat it in every reply.
 
-```text
-Progress: <mission> > <node> ✓ > <node> [now] > <node> > ...
-Doing: <the step in plain words>
-Why now: <the problem it solves, or what breaks without it>
-Why this way: <the route taken; the alternative rejected and why>
-Unlocks: <what becomes possible only after this step>
-Gate: <gate> <approved or pending>
-Next step: <exact command or approval, in plain words>
-```
+- Put the answer first, and name the work in plain words.
+- Do not open with a progress trail, mission name, gate, or labeled reasoning.
+  Explain the why in the body when it helps the decision.
+- Do not put a ticket id, mission id, issue key, or tracker link in a reply.
+  Give one only when the user asks for it. Those keys belong in the mission
+  document, the tracker, the branch, the commit, and the PR body.
+- When the user must act, end with one plain sentence:
+  `Next step: <the action>`. Do not add a trail, a gate block, or repeated
+  context around it.
+- The full state, the why, the unlock, and the gate belong in the handoff
+  prompt, when the work moves to a new session, a new thread, or another agent.
+  That is where context is lost. The handoff prompt is the one place that
+  carries the mission state; it names the mission issue by title and team, not
+  by id or URL.
 
-The trail follows the mission's Flow. Mark done nodes with ✓, the current node
-with `[now]`, and leave pending nodes plain. A ticket trail uses ticket ids.
+When the reason for a step is not in the mission, the ticket, the spec, or the
+code, stop and ask the user. Record the answer in the mission document's
+Decisions. Never invent a rationale. A next skill is a load, not a phase to
+perform.
 
-- Plain words before labels. An id, PR, branch, file, or skill name never
-  stands alone. It gets a clause that says what it is and why it matters.
-- `Why this way` names the alternative that was rejected. When there was no
-  real alternative, write `no alternative: <reason>` in one clause. Do not
-  invent a rejected option.
-- When the reason for a step is not in the mission, the ticket, the spec, or
-  the code, stop and ask the user. Record the answer in the mission document's
-  Decisions. Never invent a rationale.
-- The trail and the reasoning lines appear on every reply, including a status
-  check and a one-line step. Scale the prose to the step; never drop the why.
-- A next skill is a load, not a phase to perform.
-
-At a pending gate, the next step is the user's approval of the named document.
-At a handoff, the prompt follows in chat. At a PR, the line is the PR URL, head
-SHA, check state, and the user review and merge.
+At a pending gate, the reply presents the problem, the options, and the
+recommendation. The next step is the user's approval of the named document. At
+a handoff, the prompt follows in chat. At a PR, report the PR URL, head SHA,
+check state, and the user review and merge.
 
 ## Handback
 
 A ticket ends with a reviewable PR. Open one PR, run `code-review`, fix the
-findings, and report the PR URL, head SHA, checks, and the next ready ticket,
-with the progress line, the why for the step, and what the PR unlocks. The user
-reviews and merges. The next ticket starts only after that merge, unless the
-user explicitly asks for a stacked PR. When the user asks the mission skill to
-merge, use a merge commit.
+findings, and report the PR URL, head SHA, checks, and what the PR unlocks.
+Name the next ready work in plain words. The user reviews and merges. The next
+ticket starts only after that merge, unless the user explicitly asks for a
+stacked PR. When the user asks the mission skill to merge, use a merge commit.
 
 ## Tracker
 
@@ -302,8 +296,8 @@ next step in the mission document.
 - Every phase starts with its skill loaded, and a missing skill stops the
   session instead of producing a substitute.
 - Every gate is recorded with its method and approved before the next phase.
-- The user always sees the progress trail, the why for the current step, what
-  it unlocks, the gate, and the next command.
+- The reply starts with the answer, and the mission document plus the handoff
+  carry the state and the why.
 - A fresh session resumes from the mission document without re-explaining.
 - Every load-bearing reference is a path or URL in the mission, and stale
   references are flagged at session start.
