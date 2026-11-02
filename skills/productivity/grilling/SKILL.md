@@ -12,16 +12,24 @@ Format a round like so:
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
+Why this question: <the decision it settles and what breaks without it>
+Why I cannot answer it myself: <the missing fact, or why the choice is the user's>
+
 ➡️ <your recommended answer>
 
 ---
 
 ❓ **Q2** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
+Why this question: <the decision it settles and what breaks without it>
+Why I cannot answer it myself: <the missing fact, or why the choice is the user's>
+
 ➡️ <your recommended answer>
 ```
 
-Word each question so "yes" accepts your recommended answer.
+Word each question so "yes" accepts your recommended answer. Every question
+carries both why lines. If the answer is a fact you can find, find it. If it is
+the user's decision, say why it cannot be answered from the environment.
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
 

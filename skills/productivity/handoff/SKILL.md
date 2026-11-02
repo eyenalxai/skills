@@ -29,10 +29,13 @@ log line, not the prompt.
 
 The prompt is self-contained:
 
-- the handoff path or mission issue URL;
+- the mission issue title and team, not its id or URL. The prompt carries the
+  state, so the next session can start without opening the issue;
 - the goal, why the next step is next, and what it unlocks;
-- the fixed point (the merge commit), the next ready ticket, and the blocking
-  PRs, plus the blocking edges after it;
+- the mission flow, the decisions that constrain the work, and the session
+  plan;
+- the fixed point (the merge commit), the next ready work in plain words, and
+  the blocking PRs, plus the blocking edges after it;
 - the current gate, the method that reached it, and its status when a mission
   is active;
 - the skills to load first, in order (the mission, the next phase, or `router`
@@ -40,11 +43,17 @@ The prompt is self-contained:
 - the stop: if a named skill will not load, stop and say which one failed; do
   not simulate its output;
 - the build and check commands;
-- the output contract the next session must use: progress trail, Doing, Why
-  now, Why this way, Unlocks, Gate, Next step;
+- the output contract the next session must use: answer first, no status block,
+  state in the mission document, one plain Next step sentence when the user
+  must act;
 - the handback: open one PR, run `code-review`, fix the findings, report the PR
-  URL, head SHA, checks, the next ready ticket, the why, and the unlock. The
-  user reviews and merges.
+  URL, head SHA, checks, and what the PR unlocks. Name the next ready work in
+  plain words. The user reviews and merges.
+
+The prompt is the one place that carries the full mission state. It names the
+mission issue by title and team, not by id or URL. The reply around it does not
+repeat the state, and it does not print a ticket id, mission id, or issue key in
+the prose.
 
 Write the prompt in the user's language and keep it positive: state the
 desired end state and the user's merge step. Name the load chain in order, for
