@@ -12,6 +12,10 @@ _Avoid_: Job, project
 The tracker issue that holds a mission's flow, gates, decisions, session plan, and handoff log. It is the only state that survives a session.
 _Avoid_: Mission file, plan
 
+**Owner**:
+The person whose words approve a gate and whose merge accepts a PR. The owner is not the agent, the tracker, or the handoff prompt.
+_Avoid_: User, maintainer, stakeholder
+
 **Ticket**:
 One unit of work in a mission that ends with a reviewable PR.
 _Avoid_: Task, job
@@ -33,9 +37,12 @@ The phase-by-phase state of a mission. It lives in the mission document and appe
 _Avoid_: Status header, context block
 
 **Gate**:
-A decision point where the user approves the named document before the next phase.
+A decision point where the owner approves the named document with their own
+words. A record, a handoff prompt, a tracker status, or a program cannot approve
+it.
 _Avoid_: Checkpoint, approval step
 
 **Handoff**:
 The prompt that carries the mission state to a new session when context is lost.
+It carries state, not authority; it reports a gate and never grants it.
 _Avoid_: Summary, continuation

@@ -12,7 +12,7 @@ Scaffold the per-repo configuration that the agent skills assume:
 - **Triage labels**: the strings used for the two category roles and the five state roles
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 
-This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
+This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the owner, then write. Why: the tracker and labels are owner decisions, and a script that guesses them writes a wrong config.
 
 ## Process
 
@@ -31,7 +31,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 
 ### 2. Present findings and ask
 
-Summarise what's present and what's missing. Then take the sections in order. One section, one answer, then the next.
+Summarise what's present and what's missing. Then take the sections in order. One section, one answer, then the next. Why: a batch of questions hides which answer changed the config.
 
 Lead each section with the recommended answer so the user can accept it in a word. Give a one-line explainer only when the choice genuinely branches; skip the section entirely when exploration already settled it (Section B when `triage` isn't installed, Section C when there's no monorepo).
 
@@ -69,7 +69,7 @@ Show the user a draft of:
 - The `## Agent skills` block to add to `AGENTS.md`
 - The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, and `docs/agents/triage-labels.md` (the last only when `triage` is installed)
 
-Let them edit before writing.
+Let them edit before writing. Why: the config is durable, and the owner is the one who reads it later.
 
 ### 4. Write
 

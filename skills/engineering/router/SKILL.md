@@ -14,12 +14,12 @@ Before performing a skill, stating what it does, or recommending a step be skipp
 
 ## Answer shape
 
-When the user must act, end with one plain sentence: `Next step: <the action>`.
+When the owner must act, end with one plain sentence: `Next step: <the action>`.
 Name the exact skill or command, the work or document, why it is next, and what
 it unlocks. Name the work in plain words, never by a ticket id or issue key.
 
 Inside a mission, the mission output contract owns the reply: answer first, no
-status block, and one plain Next step sentence when the user must act. The
+status block, and one plain Next step sentence when the owner must act. The
 mission document holds the state. Standalone, the Next step line carries the
 why and the unlock.
 
@@ -28,12 +28,12 @@ For a pending gate or an open blocking PR, use this table:
 
 | Situation | Next step |
 | --- | --- |
-| A gate is pending | the user approves the named document |
+| A gate is pending | the owner approves the named document |
 | A blocking PR is a draft | the next step is to make it ready for review |
 | A blocking PR has failing checks | the next step is the fix |
 | A blocking PR is open and not mergeable | the next step is to make it mergeable |
-| A blocking PR is green and mergeable | the user merges it |
-| A blocking PR is closed unmerged | the user decides |
+| A blocking PR is green and mergeable | the owner merges it |
+| A blocking PR is closed unmerged | the owner decides |
 
 A pending gate or an open blocking PR outranks a ready ticket. The next ticket
 waits. These are the standalone answers. If an active mission document exists,
@@ -44,7 +44,7 @@ Next step: `/handoff` for the dependency bump, because its blockers are merged a
 Next step: `/code-review` the open PR, because its checks are green and it is the last gate before your merge.
 
 When the next step is `/handoff`, the prompt is the deliverable: one fenced
-`text` block in chat that the user can copy with one click. Never put the
+`text` block in chat that the owner can copy with one click. Never put the
 delivered prompt in an issue, a PR, a commit, the repo, or the mission document.
 
 ## When asked what's next
@@ -55,7 +55,8 @@ The same check applies before you recommend any phase that starts new work.
 
 1. **Check for a mission.** If an active mission document exists, the next step
    is `/mission continue`; the mission owns the phase, gate, and handoff
-   decision. Stop here. The rest of this procedure is the standalone path.
+   decision. The gate is the owner's words in the conversation; do not infer it
+   from a record. Stop here. The rest of this procedure is the standalone path.
 2. **Read the standalone state.** Read the ticket graph, the current branch, and
    the latest PR. Use the configured tracker, not memory.
 3. **Check the blocking PRs.** Resolve each blocking ticket to its PR and read
@@ -65,11 +66,13 @@ The same check applies before you recommend any phase that starts new work.
    status. A blocking ticket with no PR is done only when the tracker marks it
    completed; a cancelled or duplicate ticket does not satisfy the gate. A
    ticket does not hand over to the next ticket until its blocking PRs are
-   merged, unless the user explicitly asks for a stacked PR. If any blocking
+   merged, unless the owner explicitly asks for a stacked PR. If any blocking
    PR is open, the next step is that PR, not the next ticket: report each open
-   PR's URL, head SHA, and check state, and say they must merge before the next
-   ticket starts. Use the table above for the branch. After a merge, confirm the
-   ticket is done, fetch `origin`, and branch from the merge commit.
+   PR's URL, check state, what changed, what it unlocks, and the merge danger,
+   and say they must merge before the next ticket starts. The head SHA stays in
+   the PR and the handoff log. Use the table above for the branch. After a
+   merge, confirm the ticket is done, fetch `origin`, and branch from the merge
+   commit.
 4. **Choose the session.** Continue here when the next step stays inside the
    current ticket or session: a review, a fix, the PR, a pending gate. Hand off
    when the next step starts a new ticket, a fresh worktree or directory, a new
@@ -87,7 +90,7 @@ The same check applies before you recommend any phase that starts new work.
 
 1. **The grill.** Load `grilling`, and `domain-modeling` when the repo has docs, with the Skill tool. They build shared understanding. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
 2. **The plan.** Use `to-spec` to record the agreed spec and `to-tickets` to cut it into tickets with blocking edges. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
-3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` works the whole ticket graph. Both close with `code-review`. `pr` shapes the body. The user reviews and merges.
+3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` works the whole ticket graph. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges.
 
 A single-session change skips the spec and tickets and goes from the grill to `implement`. A bug goes through `diagnosing-bugs` and a short grill before the issue and the PR.
 
@@ -118,11 +121,12 @@ At a boundary, the options are continue, clear, handoff, subagent, and compact. 
 ## Ticket handback
 
 A ticket ends with a reviewable PR. The implementer opens one PR, runs
-`code-review`, fixes the findings, and reports the PR URL, head SHA, checks,
-and what the PR unlocks. The reply names the next ready work in plain words.
-The user reviews and merges. The next ticket starts only after that merge,
-unless the user explicitly asks for a stacked PR. When the user asks the agent
-to merge, use a merge commit.
+`code-review`, fixes the findings, and reports the PR URL, check state, what
+changed, what it unlocks, and the merge danger. The head SHA stays in the PR
+and the handoff log. The reply names the next ready work in plain words. The
+owner reviews and merges. The next ticket starts only after that merge, unless
+the owner explicitly asks for a stacked PR. When the owner asks the agent to
+merge, use a merge commit.
 
 ## Context hygiene
 
