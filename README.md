@@ -26,8 +26,10 @@ The mission:
 - runs the grill with `grilling` and `domain-modeling`;
 - gates scope and understanding, spec, tickets, and the PR on your approval;
 - plans the sessions and hands off with a prompt you can copy;
-- keeps the mission document and its reference index across sessions;
-- ends at one PR per ticket for you to review and merge.
+- keeps one work item record and its reference index across sessions, updated
+  only at boundaries;
+- records current state in neutral language, without quotes, names, or history;
+- ends at one PR per ticket for review and merge.
 
 Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission done`.
 

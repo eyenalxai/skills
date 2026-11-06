@@ -9,8 +9,12 @@ A bounded piece of work with a flow, approval gates, and one reviewable PR at th
 _Avoid_: Job, project
 
 **Mission document**:
-The tracker issue that holds a mission's flow, gates, decisions, session plan, and handoff log. It is the only state that survives a session.
-_Avoid_: Mission file, plan
+The work item issue that holds a mission's current state: flow, gates, decisions, session plan, and outputs. It is created or claimed after the scope gate and updated only at a boundary. It carries no history and no handoff log.
+_Avoid_: Mission issue, mission file, plan
+
+**Record**:
+The short form of mission document. It is the same work item issue, not a second artifact.
+_Avoid_: Mission issue, mission file
 
 **Owner**:
 The person whose words approve a gate and whose merge accepts a PR. The owner is not the agent, the tracker, or the handoff prompt.
