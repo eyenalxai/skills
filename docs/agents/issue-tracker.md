@@ -17,6 +17,18 @@ The link is per clone, so every worktree of this repository shares it. When
 
 ## Conventions
 
+- **One record per mission**: the work item issue is the mission document. Create
+  or claim it after the scope gate. Never a separate `Mission:` issue. Update it
+  at the gate, at a handoff, on a scope change, or when a false record would
+  mislead, not after each decision. Why: a second issue duplicates the work, and
+  per-decision updates bury the current state.
+- **Neutral language**: never reproduce the user's words, mention the user, or
+  name who decided in an issue, a comment, or a PR. State the decision in
+  neutral, general language. Why: a quote or a name turns one message into
+  durable text the next session can read as authority.
+- **Current state only**: no prior attempts, prior sessions, prior issues, prior
+  missions, or earlier versions in the record. Why: history invites the next
+  session to reopen a settled decision.
 - **Create**: `rata issue create --title "..." --body-file - --assignee me`.
 - **Read**: `rata issue show <ref> --comments --json`.
 - **List**: `rata issue list --team SKILL` with the filters you need: `--state`,
