@@ -25,11 +25,13 @@ The mission:
 - classifies the scope with `router`;
 - runs the grill with `grilling` and `domain-modeling`;
 - gates scope and understanding, spec, tickets, and the PR on your approval;
+- computes the ready frontier at every phase and runs up to ten tickets, stacking
+  dependent tickets by blocking edge;
 - plans the sessions and hands off with a prompt you can copy;
 - keeps one work item record and its reference index across sessions, updated
   only at boundaries;
 - records current state in neutral language, without quotes, names, or history;
-- ends at one PR per ticket for review and merge.
+- ends at one PR per ticket for review and merge, bottom-up for a stack.
 
 Commands: `/mission continue`, `/mission status`, `/mission handoff`, `/mission done`.
 
@@ -43,8 +45,8 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Mission
 
-- **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, session plan, references, and automatic handoffs.
-- **router**: Name the skill or flow that fits, check the state when asked what's next, and return the next step. The mission calls it to classify.
+- **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, frontier plan, references, and automatic handoffs.
+- **router**: Name the skill or flow that fits, check the state when asked what's next, including a stack's bottom PR, and return the next step. The mission calls it to classify.
 
 ### Flow
 
@@ -53,14 +55,14 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 - **grill-with-docs**: The standalone grill that also writes `GLOSSARY.md` and ADRs.
 - **domain-modeling**: Sharpen the project's language and write the glossary and hard decisions.
 - **wayfinder**: Chart a huge, foggy effort as decision tickets and resolve the way to the destination.
-- **research**: Investigate a question against primary sources and leave a cited markdown file.
+- **research**: Investigate a question against primary sources and leave a cited markdown file, or fan out independent questions in parallel.
 - **prototype**: Answer a design question with throwaway code.
 - **to-spec**: Record the agreed spec without re-interviewing.
-- **to-tickets**: Cut a spec into tickets with blocking edges.
+- **to-tickets**: Cut a spec into tickets with surface ownership and blocking edges.
 - **implement**: Build one ticket and drive `tdd` at the agreed seams.
-- **implement-spec**: Work the whole ticket graph on one integration branch.
+- **implement-spec**: Run the ticket frontier as a crew chief: one worker per ticket, one PR per ticket, stacked by blocking edge.
 - **tdd**: The red-green-refactor loop used by `implement`.
-- **code-review**: Two-axis review of a diff: Standards and Spec.
+- **code-review**: Two-axis review of a diff, or of each layer in a stack: Standards and Spec.
 - **pr**: Shape the pull request body, evidence, and merge danger.
 - **diagnosing-bugs**: Build a tight feedback loop before fixing a hard bug.
 - **triage**: Verify an incoming request and write an agent-ready issue.
@@ -68,7 +70,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Handoff
 
-- **handoff**: Write the handoff document and give you the next-session prompt in chat.
+- **handoff**: Write the handoff document and give you the next-session prompt in chat, with the stack order and the merge order.
 
 ### Utilities
 

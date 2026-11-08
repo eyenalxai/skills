@@ -9,6 +9,10 @@ disable-model-invocation: true
 Implement the work the owner approved. The approved work is the rule changes and
 the file scope in the mission document, not a proposal and not a draft PR.
 
+This skill builds one ticket. A frontier of two or more ready tickets routes to
+`implement-spec` as the crew chief. Why: the crew chief owns the graph and the
+stack; one session per ticket would spread the graph across contexts.
+
 If the owner passes a ticket reference, fetch it from the issue tracker and state
 its title before starting. Use the title in replies, not the id. If the
 reference is ambiguous, ask.
@@ -37,6 +41,12 @@ level the owner approved: a list for a small change, a pattern plus exceptions
 for a large one. The plan's length follows the number of decisions, not the
 number of files. Why: per-file approval is a chore and does not scale; the PR is
 the detailed review.
+
+One ticket, one PR. A stacked ticket branches from its blocker's branch, and its
+PR base is that branch. A ticket with several blockers stacks on the last one
+after the others merge. The owner merges bottom-up. Why: the stack is the
+approved model for dependent tickets, and a PR based on `main` would show the
+blocker's diff again.
 
 If the work needs a new decision, stop and ask. Do not add a file, a skill, a
 script, or a test harness the owner did not approve. Why: the prior session added
@@ -67,5 +77,5 @@ The handback report carries the PR URL, the check state, what changed, what it
 unlocks, and the merge danger. The head SHA stays in the PR.
 Why: a SHA is a machine identifier; the owner's decision is the merge.
 
-Commit your work to the current branch. Open one PR. The owner reviews and
-merges.
+Commit your work to the current branch. Open one PR. If the ticket is stacked,
+open it against its blocker's branch. The owner reviews and merges bottom-up.

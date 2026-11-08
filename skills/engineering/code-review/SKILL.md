@@ -28,6 +28,8 @@ decision.
 
 Whatever the owner said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). If they didn't specify one, ask for it.
 
+For a stacked ticket, the fixed point is the PR's base branch, so the diff is the ticket's layer, not the whole stack. Why: the layer is the change under review, and the blocker's diff was reviewed below it.
+
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
 Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside two parallel sub-agents.
@@ -41,7 +43,9 @@ Look for the originating spec, in this order:
 3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
 4. For a change or bug, the mission document is the spec source. Use its
    problem, constraints, rule changes, and file scope.
-5. If nothing is found, ask the owner where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+5. For a feature ticket, the ticket is the spec source. Use its body and
+   acceptance criteria; the parent spec is context.
+6. If nothing is found, ask the owner where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
 
 ### 3. Identify the standards sources
 

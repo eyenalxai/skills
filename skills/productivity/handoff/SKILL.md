@@ -17,11 +17,13 @@ Inside a mission, the mission skill uses this contract automatically at planned
 session boundaries. When a mission is active, the mission output contract owns
 the reply around the prompt.
 
-A next-ticket prompt waits until its blocking PRs are merged. If a blocking PR
-is open, the handoff is premature: report the PR URL, check state, what changed,
-what it unlocks, and the merge danger instead. Why: a handoff that starts the
-next ticket while its blocker is open creates a stacked PR the owner did not ask
-for.
+A stack handback reports the stack's open PRs and stops. The next frontier waits
+until merges unblock it. A stacked ticket may start when its blocker's branch
+has the interface it needs, even if the blocker's PR is open; the prompt carries
+the stack order and the merge order. A ticket with several blockers waits for
+all but one to merge, then stacks on the last. A ticket that cannot stack waits
+for all its blockers' PRs to merge. Why: a stack that is not reported as a stack
+looks like a queue, and the owner cannot see the merge order.
 
 Include a "suggested skills" section in the document, naming which skills the
 next agent should load with the Skill tool, in order.
@@ -75,8 +77,8 @@ The prompt is self-contained:
 - the goal, why the next step is next, and what it unlocks;
 - the mission flow, the decisions that constrain the work, and the session
   plan;
-- the fixed point (the merge commit), the next ready work in plain words, and
-  the blocking PRs, plus the blocking edges after it;
+- the base commit, the stack order, the open PRs, and the next frontier in plain
+  words, plus the blocking edges after it;
 - the current gate, the method that reached it, and whether it is approved or
   pending, stated neutrally and never with words or a name;
 - the current state only, with no prior attempts, sessions, issues, or versions;
@@ -91,9 +93,10 @@ The prompt is self-contained:
 - the output contract the next session must use: answer first, no status block,
   state in the mission document, one plain Next step sentence when the owner
   must act;
-- the handback: open one PR, run `code-review`, fix the findings, report the PR
-  URL, check state, what changed, what it unlocks, and the merge danger. Name
-  the next ready work in plain words. The owner reviews and merges.
+- the handback: the crew chief opens one PR per ticket, stacked by edge; run
+  `code-review` on each and fix the findings; report the stack bottom-up with
+  each PR URL, check state, what changed, what it unlocks, and the merge danger.
+  Name the next frontier in plain words. The owner merges bottom-up.
 
 The prompt is the one place that carries the full mission state. It names the
 work item issue by title and team, not by id or URL. The reply around it does not
@@ -102,8 +105,8 @@ the prose.
 
 Write the prompt in the owner's language and keep it positive: state the
 desired end state and the owner's merge step. Name the load chain in order, for
-example `wayfinder`, then `grilling` and `domain-modeling`, or `implement`, then
-`tdd` and `code-review`.
+example `wayfinder`, then `grilling` and `domain-modeling`, or `implement` for
+one ticket, or `implement-spec` for a frontier, then `tdd` and `code-review`.
 
 ## What the prompt must not carry
 
@@ -142,6 +145,8 @@ Read the prompt as the next session would.
    the human report carries the decision.
 7. Does it quote, mention the user, name who decided, or carry history? If yes,
    rewrite it as neutral current state.
+8. Does it treat a stack as a queue? If yes, state the stack order and the merge
+   order. Why: the owner merges bottom-up, and a queue hides the layers.
 
 This is a reading, not a program. There is no build command for a prompt. Why:
 the gate is the owner's words, and a program can only check the agent's text
