@@ -17,7 +17,7 @@ Status: active
 Scope: fog | feature | change | bug | trivial
 Phase: classify
 Goal: <one sentence>
-Exit: PR for review and merge
+Exit: PRs for review and merge
 
 ## Problem
 
@@ -30,9 +30,9 @@ Exit: PR for review and merge
 - [ ] decisions: <adr or issue>
 - [ ] spec: <issue or URL>
 - [ ] tickets: <urls>
-- [ ] implement <ticket>: <PR url>
-- [ ] code-review <PR>: <findings>
-- [ ] merge <PR>: <commit>
+- [ ] implement <ticket or frontier>: <PR urls>
+- [ ] code-review <PR or stack>: <findings>
+- [ ] merge <PR or stack>: <commit>
 
 ## Gates
 
@@ -57,10 +57,12 @@ agent against itself.
 | Session | Work | Why | Exit |
 | --- | --- | --- | --- |
 | 1 | classify, grill, choose the path, present the gate | the scope and the frontier decide the path | the gate decision |
-| 2 | implement the approved rule changes and file scope, review, PR | the gate is approved | PR for review and merge |
+| 2 | implement the frontier as a stack (up to the cap), review each PR | the gate is approved | the stack's PRs are open; the owner merges |
+| 3 | after merges unblock it, implement the next frontier | the merges unblocked it | the next stack's PRs are open |
 
-Replan when the scope changes. The whole flow and the handoff points are visible
-before the work starts. Do not narrate the old scope.
+For a change, bug, or trivial, the frontier is one ticket; use one implement
+row. Replan when the scope changes. The whole flow and the handoff points are
+visible before the work starts. Do not narrate the old scope.
 
 ## References
 

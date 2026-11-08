@@ -25,7 +25,7 @@ before the gate, the conversation holds it. Standalone, the Next step line
 carries the why and the unlock.
 
 The next step is the action that unblocks the work now, not the phase after it.
-For a pending gate or an open blocking PR, use this table:
+For a pending gate or an open PR in a stack, use this table:
 
 | Situation | Next step |
 | --- | --- |
@@ -35,11 +35,12 @@ For a pending gate or an open blocking PR, use this table:
 | A blocking PR is open and not mergeable | the next step is to make it mergeable |
 | A blocking PR is green and mergeable | the owner merges it |
 | A blocking PR is closed unmerged | the owner decides |
+| A stack has an unmerged bottom PR | the owner merges the bottom, then the next layer |
 
-A pending gate or an open blocking PR outranks a ready ticket. The next ticket
-waits. These are the standalone answers. If an active mission document exists,
-the next step is `/mission continue`; the mission owns the phase and handoff
-decision.
+A pending gate or an open stack outranks the next frontier. The next frontier
+waits until merges unblock it. These are the standalone answers. If an active
+mission document exists, the next step is `/mission continue`; the mission owns
+the phase and handoff decision.
 
 Next step: `/handoff` for the dependency bump, because its blockers are merged and it unblocks the release note.
 Next step: `/code-review` the open PR, because its checks are green and it is the last gate before your merge.
@@ -62,25 +63,27 @@ The same check applies before you recommend any phase that starts new work.
    of this procedure is the standalone path.
 2. **Read the standalone state.** Read the ticket graph, the current branch, and
    the latest PR. Use the configured tracker, not memory.
-3. **Check the blocking PRs.** Resolve each blocking ticket to its PR and read
-   its state, merge commit, checks, mergeability, and head SHA. On GitHub, use
-   `gh pr view <n> --json state,isDraft,mergeable,mergeStateStatus,statusCheckRollup,mergeCommit,headRefOid`;
-   on GitLab, use `glab mr view <n>` and read the draft, pipeline, and merge
-   status. A blocking ticket with no PR is done only when the tracker marks it
-   completed; a cancelled or duplicate ticket does not satisfy the gate. A
-   ticket does not hand over to the next ticket until its blocking PRs are
-   merged, unless the owner explicitly asks for a stacked PR. If any blocking
-   PR is open, the next step is that PR, not the next ticket: report each open
-   PR's URL, check state, what changed, what it unlocks, and the merge danger,
-   and say they must merge before the next ticket starts. The head SHA stays in
-   the PR. Use the table above for the branch. After a
-   merge, confirm the ticket is done, fetch `origin`, and branch from the merge
-   commit.
+3. **Check the stack.** Resolve each ticket in the frontier to its PR and read
+   its state, base branch, checks, mergeability, and head SHA. On GitHub, use
+   `gh pr view <n> --json state,isDraft,baseRefName,mergeable,mergeStateStatus,statusCheckRollup,mergeCommit,headRefOid`;
+   on GitLab, use `glab mr view <n>` and read the draft, pipeline, base, and
+   merge status. A ticket with no PR is done only when the tracker marks it
+   completed; a cancelled or duplicate ticket does not satisfy the graph.
+   A dependent ticket stacks on its blocker's branch, so it may be built before
+   the blocker merges. A ticket with several blockers waits for all but one to
+   merge, then stacks on the last. The next step is the bottom unmerged PR, not
+   the next layer. Report each open PR's URL, base, check state, what changed,
+   what it unlocks, and the merge danger. The owner merges bottom-up. The head
+   SHA stays in the PR. After a merge, retarget the next layer to `main`,
+   confirm the ticket is done, fetch `origin`, and rebase the next layer on the
+   merge commit. A ticket that cannot stack waits for all its blockers' PRs to
+   merge.
 4. **Choose the session.** Continue here when the next step stays inside the
-   current ticket or session: a review, a fix, the PR, a pending gate. Hand off
-   when the next step starts a new ticket, a fresh worktree or directory, a new
-   harness, or a side task, or when the context is full. In a multi-ticket
-   effort, each ticket starts in a fresh session.
+   current frontier or session: a review, a fix, the PR, a pending gate. Hand
+   off when the next step starts a new frontier, a fresh worktree or directory,
+   a new harness, or a side task, or when the context is full. In a multi-ticket
+   effort, each frontier starts in a fresh crew chief session; each worker gets
+   its own subagent context.
 5. **Answer once.** Name the gate or PR that decides the step, then one Next
    step line with the why and the unlock. Name a skill to load, not a phase to
    perform. If the choice is handoff, name `/handoff`, not the phase it will
@@ -93,7 +96,7 @@ The same check applies before you recommend any phase that starts new work.
 
 1. **The grill.** Load `grilling`, and `domain-modeling` when the repo has docs, with the Skill tool. They build shared understanding. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
 2. **The plan.** Use `to-spec` to record the agreed spec and `to-tickets` to cut it into tickets with blocking edges. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
-3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` works the whole ticket graph. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges.
+3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` is the crew chief for the frontier: it claims the ready tickets, runs one worker per ticket in its own worktree, and opens one PR per ticket, stacked by edge. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges bottom-up.
 
 A single-session change skips the spec and tickets and goes from the grill to `implement`. A bug goes through `diagnosing-bugs` and a short grill before the issue and the PR.
 
@@ -119,19 +122,21 @@ A single-session change skips the spec and tickets and goes from the grill to `i
 
 ## Phase boundary
 
-At a boundary, the options are continue, clear, handoff, subagent, and compact. Continue only when the next step stays inside the current ticket or session. Hand off when the work travels to a new session, a new directory, a new harness, or another agent. `mission` plans the handoff points and produces the prompt in chat. Outside a mission, `handoff` produces it.
+At a boundary, the options are continue, clear, handoff, subagent, and compact. Continue only when the next step stays inside the current frontier or session. Hand off when the work travels to a new session, a new frontier, a new directory, a new harness, or another agent. `mission` plans the handoff points and produces the prompt in chat. Outside a mission, `handoff` produces it.
 
 ## Ticket handback
 
-A ticket ends with a reviewable PR. The implementer opens one PR, runs
-`code-review`, fixes the findings, and reports the PR URL, check state, what
+A ticket ends with a reviewable PR. In a frontier, the crew chief opens one PR
+per ticket, stacked by blocking edge, runs `code-review` on each, and fixes the
+findings. It reports the stack bottom-up: each PR URL, check state, what
 changed, what it unlocks, and the merge danger. The head SHA stays in the PR.
-The reply names the next ready work in plain words. The
-owner reviews and merges. The next ticket starts only after that merge, unless
-the owner explicitly asks for a stacked PR. When the owner asks the agent to
-merge, use a merge commit.
+The reply names the next frontier in plain words. The owner merges bottom-up. A
+dependent ticket starts when its blocker's branch has the interface it needs,
+not when the blocker's PR merges. When the owner asks the agent to merge, use a
+merge commit.
 
 ## Context hygiene
 
-Keep the grill, spec, and tickets in one unbroken context window so they build
-on the same thinking. Each implementation then starts fresh from the ticket.
+Keep the grill, spec, tickets, wayfinder decisions, and the mission record in
+one unbroken context window so they build on the same thinking. Each worker then
+starts fresh from its ticket; the crew chief keeps the graph.
