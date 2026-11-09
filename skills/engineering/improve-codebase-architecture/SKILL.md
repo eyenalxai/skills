@@ -1,18 +1,18 @@
 ---
 name: improve-codebase-architecture
-description: Survey a codebase for implicit state machines, unenforced invariants, and deepening opportunities, present a visual HTML report with a structured candidate index, then grill the chosen candidate or hand the index to the mission. Use when asked to audit architecture, find state machines or invariants, or run a full architecture pass.
+description: Survey a codebase for implicit state machines, unenforced invariants, and deepening opportunities, present a visual HTML report with a structured candidate index, then grill the chosen candidate or hand the index to the mission. Use when the owner asks to audit architecture, find state machines or invariants, or run a full architecture pass.
 disable-model-invocation: true
 ---
 
-# Improve Codebase Architecture
+# Improve codebase architecture
 
-Surface architectural friction and propose **deepening opportunities**, after modelling the lifecycles and invariants the code already relies on. The aim is testability, locality, and AI-navigability.
+Surface architectural friction and propose **deepening opportunities** after modeling the lifecycles and invariants the code already relies on. The aim is testability, locality, and AI-navigability.
 
-The survey is read-only on source code. It writes two files to the OS temp directory: a single-file HTML report for the owner, and a compact candidate index for the mission. It never edits the audited code. The standalone grill may update `GLOSSARY.md` and ADRs through `domain-modeling`.
+The survey is read-only on source code. It writes two files to the OS temp directory: a single-file HTML report for the owner and a compact candidate index for the mission. It never edits the audited code. The standalone grill may update `GLOSSARY.md` and ADRs through `domain-modeling`.
 
 Load `codebase-design` with the Skill tool before the first candidate. Use its vocabulary exactly: **module**, **interface**, **implementation**, **depth**, **seam**, **adapter**, **leverage**, **locality**. Why: the terms are the report's precision, and synonyms drift the scan.
 
-Read `GLOSSARY.md` and the ADRs in the scan area first. The domain language names good seams, and an ADR settles a decision the survey must not re-litigate.
+Read `GLOSSARY.md` and the ADRs in the scan area first. The domain language names the seams, and an ADR settles a decision the survey must not reopen.
 
 ## Process
 
@@ -27,7 +27,7 @@ Decide where to look before looking. YAGNI: a deepening pays back where the code
 
 ### 2. Model
 
-Build the conceptual model before judging the structure. Read [MODEL-AUDIT.md](MODEL-AUDIT.md) now. It owns the state-machine, invariant, and abstraction procedures, the evidence rules, and the coverage table.
+Build the conceptual model before judging the structure. Read [MODEL-AUDIT.md](MODEL-AUDIT.md) now. It owns the state machine, invariant, and abstraction procedures, the evidence rules, and the coverage table.
 
 The model has three inventories:
 
@@ -44,11 +44,11 @@ Walk the codebase and note where the model meets friction. Use the codebase-desi
 - Where does understanding one concept require bouncing between many small modules?
 - Where are modules **shallow**, with an interface nearly as complex as the implementation?
 - Where have pure functions been extracted for testability while the real bugs hide in how they are called (no **locality**)?
-- Where do tightly-coupled modules leak across their **seams**?
+- Where do tightly coupled modules leak across their **seams**?
 - Which parts are untested, or hard to test through the current interface?
 - Which missing abstraction would collapse the most call sites behind one interface?
 
-Apply the **deletion test** to every suspected shallow module. Deleting it concentrates complexity behind a smaller interface (deepen), or spreads it across callers (leave it). A candidate that fails the test is not a candidate. Classify a deepening's dependency with the categories in [DEEPENING.md](../codebase-design/DEEPENING.md): in-process, local-substitutable, ports and adapters, or mock.
+Apply the **deletion test** to every suspected shallow module. Deleting it either concentrates complexity behind a smaller interface (deepen) or spreads it across callers (leave it). A candidate that fails the test is not a candidate. Classify a deepening's dependency with the categories in [DEEPENING.md](../codebase-design/DEEPENING.md): in-process, local-substitutable, ports and adapters, or mock.
 
 ### 4. Report
 
@@ -60,12 +60,12 @@ Write two files to the OS temp directory. Resolve the temp dir from `$TMPDIR`, f
 The report carries, in this order:
 
 1. **Coverage**: what was audited, what was not, and why. The completeness claim lives here.
-2. **State machines**: one card per lifecycle entity, with the implicit states and transitions, the failure modes, the explicit representation to adopt, the illegal states and transitions it removes, and the test that proves it. Use a before/after diagram.
+2. **State machines**: one card per lifecycle entity, with the implicit states and transitions, the failure modes, the explicit representation to adopt, the illegal states and transitions it removes, and the test that proves it. Use a before and after diagram.
 3. **Invariants**: a table with the invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, and evidence. Mark `none` where the code only assumes it.
-4. **Deepening candidates**: one card per candidate, with evidence, problem, solution, the deletion test, the dependency category, and a before/after diagram.
+4. **Deepening candidates**: one card per candidate, with evidence, problem, solution, the deletion test, the dependency category, and a before and after diagram.
 5. **Top recommendation**: one candidate first, with the sequence after it.
 
-Every candidate gets a one-line **interface change**: what the caller stops knowing. The top candidate gets a before/after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Do not write a full interface for every candidate. The grill designs the chosen one. Why: the report ranks the work, and an interface written before the decision hardens a guess.
+Every candidate gets a one-line **interface change**: what the caller stops knowing. The top candidate gets a before and after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Do not write a full interface for every candidate; the grill designs the chosen one. Why: the report ranks the work, and an interface written before the decision hardens a guess.
 
 The candidate index is a JSON object:
 
@@ -98,7 +98,7 @@ Open the HTML report (`xdg-open`, `open`, or `start`) and tell the owner the abs
 
 Ask whether this is a standalone survey or a mission survey when the invocation does not say.
 
-**Standalone**: load `grilling` and walk the chosen candidate: constraints, dependencies, the shape of the deepened module, what sits behind the seam, which tests survive. Load `codebase-design` and use design-it-twice when the candidate has more than one credible interface shape or two or more callers with different needs. Why: a single guess hardens before the alternatives are compared. Name the deepened module from the glossary; add a missing term through `domain-modeling`. Record a rejected candidate with a lasting reason as an ADR through `domain-modeling`.
+**Standalone**: load `grilling` and walk the chosen candidate: constraints, dependencies, the shape of the deepened module, what sits behind the seam, and which tests survive. Load `codebase-design` and use design-it-twice when the candidate has more than one credible interface shape or two or more callers with different needs. Why: a single guess hardens before the alternatives are compared. Name the deepened module from the glossary; add a missing term through `domain-modeling`. Record a rejected candidate with a lasting reason as an ADR through `domain-modeling`.
 
 **Mission**: stop after the report and return the candidate index. The mission's grill owns the decision, and the mission's spec and tickets own the fix. Why: two grills and two specs produce two sources of truth.
 
@@ -107,9 +107,10 @@ The output is a decision, not a diff. In mission mode, the mission owns the spec
 ## It is working if
 
 - The coverage table names the audited paths and the paths left out.
-- Every lifecycle entity has a state card, and every invariant in scope has a row.
+- Every lifecycle entity in scope has a state card, and every invariant in scope has a row.
 - No state or invariant is invented. Unknown edges and unenforced facts are marked.
-- Every deepening candidate passes the deletion test and has evidence at `file:line`.
+- Every deepening candidate passes the deletion test and carries evidence at `file:line`.
 - The report gives one top recommendation and a sequence, not a menu.
-- The source tree is untouched by the survey. The standalone grill may update `GLOSSARY.md` and ADRs through `domain-modeling`; the mission mode stops after the report and index.
-- In mission mode, the mission receives the index and owns the grill, spec, and fix.
+- The survey leaves the source tree untouched. Standalone mode may update `GLOSSARY.md` and ADRs through `domain-modeling`; mission mode stops after the report and index.
+
+When the owner challenges a finding, a recommendation, or a fact, load `pushback` before you reply.

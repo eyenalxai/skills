@@ -1,10 +1,10 @@
-# Model Audit
+# Model audit
 
-How to build the lifecycle, invariant, and abstraction inventories before the deepening scan. Assumes the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
+How to build the lifecycle, invariant, and abstraction inventories before the deepening scan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
 
 ## Why the model comes first
 
-A shallow-module scan sees files. A state machine and an invariant are facts about behaviour that cross files. Without the model, the scan finds style and misses the bugs: a status field with no transition table, a uniqueness rule enforced only by check-then-insert, a balance updated in two places. The model gives the scan a target.
+A shallow-module scan sees files. A state machine and an invariant are facts about behavior that cross files. Without the model, the scan finds style and misses the bugs: a status field with no transition table, a uniqueness rule enforced only by check-then-insert, a balance updated in two places. The model gives the scan a target.
 
 ## 1. Lifecycles: find the state machines
 
@@ -17,7 +17,7 @@ A lifecycle-bearing entity has more than one state and a rule about which state 
 - timestamps that imply phases (`createdAt`, `paidAt`, `shippedAt`, `expiresAt`);
 - queues, jobs, sessions, subscriptions, orders, payments, documents, accounts, invitations, and drafts;
 - event handlers, reducers, webhooks, and cron jobs that move a record;
-- comments and docs that use lifecycle words such as pending, active, expired, or cancelled.
+- comments and docs that use lifecycle words such as pending, active, expired, or canceled.
 
 ### Reconstruct the machine
 
@@ -29,10 +29,10 @@ For each entity, write a table:
 Then answer:
 
 - What are the states, including the implicit ones such as draft, pending, active, suspended, expired, and deleted?
-- What events move it? Which are external (API, webhook, user) and which are internal (job, timer)?
-- What guards decide the transition? Where are they enforced?
-- What side effects run (email, payment, inventory, audit log)? Are they inside the transition or after it?
-- What is the persistence model? Is the state one column, several flags, or derived from timestamps?
+- Which events move the entity? Which are external (API, webhook, client action) and which are internal (job, timer)?
+- Which guards decide the transition, and where are they enforced?
+- Which side effects run (email, payment, inventory, audit log), and do they run inside the transition or after it?
+- What is the persistence model: one column, several flags, or a value derived from timestamps?
 - Which transitions are illegal but currently representable? Which are legal but unreachable?
 - What happens on retry, concurrent transition, or out-of-order event?
 
@@ -40,16 +40,16 @@ Mark an edge `unknown` when the code does not decide it. Do not fill the gap wit
 
 ### Render the diagram
 
-One Mermaid `stateDiagram-v2` per entity. Show the states and transitions the code supports. Use dashed edges for unknown or unenforced transitions. Keep it small enough to read. Why: a diagram that needs scrolling hides the illegal edge.
+Write one Mermaid `stateDiagram-v2` per entity. Show the states and transitions the code supports. Use dashed edges for unknown or unenforced transitions. Keep it small enough to read. Why: a diagram that needs scrolling hides the illegal edge.
 
 ### Recommend the explicit form
 
 Choose the smallest representation that makes illegal states unrepresentable:
 
-- **Typed states plus a pure transition function**: the default for in-process logic. A union of states, a union of events, and a `transition(state, event)` that returns the next state or an error. Tests exercise the table.
-- **A transition table or reducer**: when the machine has many states or the product needs to inspect it. Keep the table as data; the reducer walks it.
-- **A persisted status column plus a check constraint and a transaction**: when the state lives in a database. The constraint rejects unknown states; the transaction makes the transition and its side effects atomic.
-- **A workflow engine or statechart library**: only when the machine has parallel regions, history, or long-running timers. A library is a cost; do not reach for it for a four-state flow.
+- **Typed states plus a pure transition function**: the default for in-process logic. Use a union of states, a union of events, and a `transition(state, event)` that returns the next state or an error. Tests exercise the table.
+- **A transition table or reducer**: use it when the machine has many states or the product needs to inspect it. Keep the table as data; the reducer walks it.
+- **A persisted status column plus a check constraint and a transaction**: use it when the state lives in a database. The constraint rejects unknown states; the transaction makes the transition and its side effects atomic.
+- **A workflow engine or statechart library**: use it only when the machine has parallel regions, history, or long-running timers. A library is a cost; do not reach for it for a four-state flow.
 
 Every recommendation names the illegal states it removes, the illegal transitions it rejects, and the test that proves it. Why: a recommendation without a removed state and a test is a preference.
 
@@ -59,12 +59,12 @@ Every recommendation names the illegal states it removes, the illegal transition
 
 An invariant is a fact that must stay true across every operation. The common families:
 
-- **Uniqueness**: one email per account, one active subscription per customer, one draft per user.
-- **Cardinality**: an order has at least one line; a team has at most one owner.
+- **Uniqueness**: one email per account, one active subscription per customer, one draft per author.
+- **Cardinality**: an order has at least one line; a team has at most one lead.
 - **Ordering**: payment before shipment; a webhook after its event; a step after its prerequisite.
-- **Ownership and tenancy**: a record belongs to one tenant; only the owner can mutate it.
+- **Ownership and tenancy**: a record belongs to one tenant; only its owner can mutate it.
 - **Balance and totals**: the sum of line items equals the order total; the ledger balances; the counter matches the rows.
-- **Temporal**: an expiry is after its creation; a booking does not overlap; a retry happens after the timeout.
+- **Temporal**: an expiry is after its creation; a booking does not overlap another; a retry happens after the timeout.
 - **Referential**: a foreign key points to a live row; a deleted parent has no live children.
 - **Idempotency**: the same request applied twice has one effect.
 - **Concurrency**: two writers cannot both win; the read-modify-write is atomic.
@@ -81,14 +81,14 @@ For each invariant, add a row:
 
 The layers, in order of preference:
 
-1. **Type**: make the illegal value unrepresentable. A branded ID, a non-empty list, a discriminated union.
-2. **Schema**: validate at the boundary. Zod, JSON Schema, or a parser at the API edge.
-3. **Database constraint**: unique index, foreign key, check constraint, exclusion constraint. The database is the last writer; a rule enforced only in the app loses under concurrency.
-4. **Transaction**: the read-modify-write is atomic; the invariant and its side effects commit together.
-5. **Runtime guard**: an assertion at the point of mutation when the type and schema cannot express the rule.
-6. **Test**: a property or integration test that proves the rule holds across operations. A test documents and detects; it does not prevent production writes by itself.
+1. **Type**: make the illegal value unrepresentable. Use a branded ID, a non-empty list, or a discriminated union.
+2. **Schema**: validate at the boundary. Use Zod, JSON Schema, or a parser at the API edge.
+3. **Database constraint**: use a unique index, foreign key, check constraint, or exclusion constraint. The database is the last writer; a rule enforced only in the app loses under concurrency.
+4. **Transaction**: make the read-modify-write atomic; the invariant and its side effects commit together.
+5. **Runtime guard**: assert at the point of mutation when the type and schema cannot express the rule.
+6. **Test**: write a property or integration test that proves the rule holds across operations. A test documents and detects; it does not prevent production writes.
 
-Prefer the earliest layer that can express the rule. A rule enforced in the UI only is a `none` finding with a UI costume. Why: the next client, job, or webhook bypasses the UI.
+Prefer the earliest layer that can express the rule. A rule enforced only in the UI is a `none` finding; the UI is not an enforcement layer. Why: the next client, job, or webhook bypasses the UI.
 
 ### Mark the unknowns
 
@@ -125,7 +125,7 @@ Every state, invariant, and abstraction finding comes back in this shape:
 - **Recommended form**: the explicit states or the enforcement layer.
 - **Interface change**: what the caller stops knowing.
 - **Strength**: `strong` (the evidence is real and the failure mode is consequential; for a deepening, the deletion test passes), `worth exploring` (plausible, and the payoff depends on the direction), or `speculative` (weak evidence).
-- **Confidence**: HIGH (read the code), MED (strong signal), LOW (needs investigation).
+- **Confidence**: high (read the code), med (strong signal), low (needs investigation).
 - **Fix effort**: S (hours), M (a day), L (multi-day), including tests.
 - **Fix risk**: LOW, MED, or HIGH, with one line why.
 
