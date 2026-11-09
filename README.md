@@ -74,5 +74,6 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Utilities
 
+- **improve-codebase-architecture**: Survey a codebase for implicit state machines, unenforced invariants, and deepening opportunities, then grill the chosen candidate or hand the candidates to the mission.
 - **to-questionnaire**: Turn a decision you can't answer alone into a questionnaire for the one person who can fill it in.
 - **wait-what**: Stop and re-pitch the last message: simpler, with the context you were missing.

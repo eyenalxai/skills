@@ -114,6 +114,7 @@ Good interfaces make testing natural:
 
 ## Going deeper
 
+- **Surveying a codebase for deepening candidates**, see [improve-codebase-architecture](../improve-codebase-architecture/SKILL.md): a read-only full pass that also models state machines and unenforced invariants.
 - **Deepening a cluster given its dependencies**, see [DEEPENING.md](DEEPENING.md): dependency categories, seam discipline, and replace-don't-layer testing.
 - **Exploring alternative interfaces**, see [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md): spin up parallel sub-agents to design the interface several radically different ways, then compare on depth, locality, and seam placement.
 

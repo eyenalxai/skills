@@ -56,12 +56,15 @@ load, stop and say which one failed. Never simulate its output.
    conversation holds the state. After approval, create or claim the one work
    item issue (see The record).
 4. Load the grill. Call the Skill tool for `grilling`, and for
-   `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`.
-5. Run the grill. The grill builds the fact base, asks the question frontier, and
-   ends when the owner confirms shared understanding. When an existing spec,
-   ticket, or direct instruction already holds the understanding, run a short
-   grill to confirm the question frontier is empty and record that source. Do
-   not write a round from a summary.
+   `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When the
+   work is a full architecture pass, also load `improve-codebase-architecture`.
+5. Run the survey and the grill. When the work is a full architecture pass, run
+   the survey first and carry its report and candidate index into the grill. The
+   grill builds the fact base, asks the question frontier, and ends when the
+   owner confirms shared understanding. When an existing spec, ticket, or direct
+   instruction already holds the understanding, run a short grill to confirm the
+   question frontier is empty and record that source. Do not write a round from
+   a summary.
 6. Present the phase-boundary gate: the problem, the constraints, the rule
    changes, the file scope, the flow, the frontier, its stack order, and its cap,
    and what implementation unlocks. Wait for the owner's words.
@@ -196,6 +199,7 @@ missing decision.
 | Classify | `router` | scope and flow | Scope and understanding | grill |
 | Map | `wayfinder` | decision map | Decision gates | spec or research |
 | Research | `research` | cited markdown | Scope and understanding | spec or implement |
+| Architecture survey | `improve-codebase-architecture` | HTML report and candidate index | Scope and understanding | grill |
 | Grill | `grilling` and `domain-modeling` with docs; `grilling` without | shared understanding, GLOSSARY, ADR when warranted | Scope and understanding | spec or implement |
 | Prototype | `prototype` | answer to a runnable question | Scope and understanding | spec or implement |
 | Spec | `to-spec` | spec | Spec | tickets |
@@ -211,6 +215,7 @@ remains the standalone shortcut for a user who wants to start a grill outside a
 mission.
 
 Optional detours: `research` when facts are missing,
+`improve-codebase-architecture` when the work is a full architecture pass,
 `prototype` when a question needs runnable code,
 `domain-modeling` when a decision is hard to reverse,
 `diagnosing-bugs` when the cause is unclear.
@@ -331,9 +336,9 @@ At each phase:
 - show the top references for the current phase;
 - at session start, check each path or URL and mark stale entries.
 
-The `research` output and the `domain-modeling` ADRs are references. The
-handoff prompt carries the work item issue title and team, plus the next
-phase's top references.
+The `research` output, the `improve-codebase-architecture` report and candidate
+index, and the `domain-modeling` ADRs are references. The handoff prompt carries
+the work item issue title and team, plus the next phase's top references.
 
 ## Output contract
 
