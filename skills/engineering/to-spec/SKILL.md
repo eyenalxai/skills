@@ -1,6 +1,6 @@
 ---
 name: to-spec
-description: "Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you have already discussed."
+description: "Turn the current conversation into a spec and publish it to the project issue tracker (after the gate in a mission): no interview, just synthesis of what you have already discussed."
 disable-model-invocation: true
 ---
 
@@ -28,17 +28,21 @@ If not, ask the owner for the tracker.
 2. Sketch the seams at which the feature will be tested. Prefer an existing seam
    to a new one, and use the highest seam possible. If a new seam is needed,
    propose it at the highest point you can. The fewer seams across the codebase,
-   the better; the ideal number is one. Why: every new seam is a new place the
-   implementation can drift from the spec.
+   the better; the ideal number is one. Put the seams in Testing Decisions. The
+   owner approves them at the scope and spec gate; do not ask for a separate seam
+   approval. Why: every new seam is a new place the implementation can drift from
+   the spec, and the gate is the approval that covers it.
 
-   Check with the owner that the seams match their expectations. Why: a seam the
-   owner does not expect becomes a test the owner did not approve, and the owner
-   sees it first at the PR.
-
-3. Write the spec using the template below, then publish it to the project issue
-   tracker. Apply the `ready-for-agent` triage label; no additional triage is
-   needed. Why: the spec is the gate document, so it must be in the tracker
-   before the ticket graph is cut.
+3. Write the spec using the template below. Inside a mission, the spec is a draft
+   until the scope and spec gate is approved. Present it with the scope in the
+   conversation. Do not publish it before the gate. After approval, publish it to
+   the project issue tracker and apply the `ready-for-agent` triage label; no
+   additional triage is needed. When the mission uses the spec as its record, add
+   the record sections from the mission template to the same issue; do not create
+   a second issue. On a fog, the map is the record: publish the spec as a
+   separate issue and link it from the map. Why: the spec is a draft until the
+   scope and spec gate, and it is the gate document. Standalone, the owner's
+   request to write and publish the spec is the approval.
 
 ## The spec template
 
@@ -108,9 +112,10 @@ Anything else the implementer needs.
   with its reason. Why: a rejected option that is only in chat comes back in the
   tickets.
 
-Publish the spec, then create the tickets with `to-tickets`. The owner approves
-the spec at the Spec gate before the tickets are cut. Why: a ticket graph cut
-from an unapproved spec multiplies the unapproved decision.
+Inside a mission, the owner approves the spec at the scope and spec gate.
+Publish it after approval, then create the tickets with `to-tickets`. The owner
+approves the ticket graph at the ticket gate before the build. Why: a ticket
+graph cut from an unapproved spec multiplies the unapproved decision.
 
 ## Pushback
 

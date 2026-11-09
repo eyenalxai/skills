@@ -13,9 +13,14 @@ The issue tracker should have been provided to you. If not, ask the owner for
 the tracker.
 
 The goal is the frontier implemented as one PR per ticket, stacked by blocking
-edge, or one integration PR when the owner asks. This skill is the crew chief:
-it claims the ready tickets, runs one worker subagent per ticket, reviews each
-PR, and reports the stack bottom-up. The owner merges.
+edge, or one integration PR when the owner asks. This skill runs the crew chief
+role: it claims the ready tickets, runs one worker subagent per ticket, reviews
+each PR, and reports the stack bottom-up. The owner merges.
+
+The mission session loads this skill and acts as the crew chief. A fresh session
+is needed only when the work travels or the current context cannot continue. A
+subagent is a worker inside the session, not a handoff. Why: the workers already provide the context
+isolation, and a handoff forces a copied prompt and a new gate confirmation.
 
 The tickets are not a list of steps. They are a task graph with blocking
 relationships. There is a frontier of tickets that are ready to be grabbed,
@@ -33,9 +38,10 @@ out of another.
 ## Gate check
 
 Before the first edit, read the mission document and the gate decision. If the
-spec gate or the ticket gate is pending, stop and ask. A feature has both gates;
-a draft spec or a proposed ticket graph is not an approval. Why: the feature
-path multiplies one unapproved decision across every ticket.
+scope and spec gate or the ticket gate is pending, stop and ask. A feature has
+both gates; a draft spec or a proposed ticket graph is not an approval. On a fog
+path, the decision gates must also be approved. Why: the feature path multiplies
+one unapproved decision across every ticket.
 
 ## Steps
 
@@ -95,9 +101,10 @@ path multiplies one unapproved decision across every ticket.
 
 ## After the merge
 
-In the next crew chief session, retarget the next layer to `main` and rebase it
-on the merge commit. Run `/mission continue` when a merge unblocks a new
-frontier. If the owner asks the crew chief to merge, use a merge commit.
+After a merge, retarget the next layer to `main` and rebase it on the merge
+commit. Continue in the current session when the context holds. Run
+`/mission continue` when a merge unblocks a new frontier. If the owner asks the
+crew chief to merge, use a merge commit.
 
 When every ticket is merged, close the spec with a comment that points at the
 stack. Why: the spec is the parent issue, and the stack's PRs close the tickets,

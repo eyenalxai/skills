@@ -19,7 +19,8 @@ reference is ambiguous, ask.
 
 ## Check the gate before the first edit
 
-Read the mission document and the gate decision.
+Read the mission document and the gate decision. On a fog path, the decision
+gates must also be approved.
 
 - If the gate is pending, stop and ask. Do not start with a "small" edit; a small
   edit is still a build.
