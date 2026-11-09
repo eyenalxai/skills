@@ -113,10 +113,11 @@ Tool preference:
 
 ## Phase 5: Fix + regression test
 
-Before the fix, read the mission document and the gate decision. The bug path
-has the scope gate: the repro and the fix direction. If the gate is pending,
-stop and ask. A diagnosis is not an approval. Why: the prior session diagnosed a
-bug and then built before the owner approved the fix direction.
+Before the fix, read the issue and the gate decision. The bug path has the
+scope and understanding gate: the repro and the fix direction. If the mission
+record does not exist yet, the conversation holds the gate. If the gate is
+pending, stop and ask. A diagnosis is not an approval. Why: the prior session
+diagnosed a bug and then built before the owner approved the fix direction.
 
 Write the regression test **before the fix**, but only if there is a **correct seam** for it.
 

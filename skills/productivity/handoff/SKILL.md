@@ -13,9 +13,15 @@ can continue the work. Save it to the temporary directory of the owner's OS
 the document is a scratch artifact, not a deliverable; the repo should not carry
 session transport.
 
-Inside a mission, the mission skill uses this contract automatically at planned
-session boundaries. When a mission is active, the mission output contract owns
-the reply around the prompt.
+Inside a mission, the mission skill uses this contract at planned session
+boundaries. When a mission is active, the mission output contract owns the reply
+around the prompt.
+
+A handoff is for travel, not for a phase change. When the next step stays in the
+current session, use a subagent when the work is parallel or isolated, and keep
+the mission session as the crew chief. A subagent is a worker inside the session,
+not a handoff. Why: the worker keeps the approved context, and a handoff forces a
+copied prompt and a new gate confirmation.
 
 A stack handback reports the stack's open PRs and stops. The next frontier waits
 until merges unblock it. A stacked ticket may start when its blocker's branch
@@ -53,20 +59,24 @@ approve, and the next agent treats the record as authority.
 The prompt may say that a gate was approved, pending, or not used. It reports
 the decision, never the words, never the user, and never the name of the person
 who decided. It may not turn that decision into a new approval. The next
-session presents the gate and waits for the owner's words, unless the owner
-explicitly says the earlier approval carries. Why: the prompt is written by the
-agent; if a prompt can grant a gate, the agent can approve its own work.
+session presents the gate with its recorded status and waits for the owner's
+words. The owner may confirm the earlier decision in their own words; the agent
+never assumes it. Why: the prompt is written by the agent; if a prompt can grant
+a gate, the agent can approve its own work.
 
-An approval does not survive a handoff. There is no exception. A fresh session
-is a fresh conversation, and the owner's words in the old conversation are not
-the owner's words in the new one. Mark the gate `pending` in the new session,
-state the decision to be made, and ask. Do not carry the old approval or the old
-words. Why: a prompt that says the earlier approval carries is still the agent's
-words, and the owner did not speak them in the new conversation.
+An approval does not carry on its own. A fresh session is a fresh conversation,
+and the owner's words in the old conversation are not the owner's words in the
+new one. If the record says a gate is approved, present it that way and ask the
+owner to confirm it still holds. If the gate is pending, state the decision to be
+made and ask. Do not write "the scope is approved" as a fact, and do not carry
+the old words. Why: a prompt that says the earlier approval carries is still the
+agent's words, and the owner did not speak them in the new conversation.
 
-If the gate is pending, say `Open gate: pending` and name the decision. Do not
-write "the scope is approved" or "decide this first." The first is a false
-record; the second is the agent delegating the owner's decision to itself.
+If the gate is pending, say `Open gate: pending` and name the decision. If the
+gate is approved, say `Open gate: approved, confirm it still holds` and name the
+decision. Do not write "the scope is approved" as a fact, and do not write
+"decide this first." The first is a false record; the second is the agent
+delegating the owner's decision to itself.
 
 ## What the prompt carries
 

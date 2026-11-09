@@ -11,27 +11,30 @@ metadata:
 
 ## The authorizing gate
 
-Before writing the body, read the mission document and the gate decision.
+Before writing the body, read the mission document and the gate decision. On a
+feature or fog path, the authorizing gates are the scope and spec gate and the
+ticket gate. On a fog path, the decision gates also authorize the build. State
+each decision, or say which are pending.
 
-- If the gate is approved, state the decision in neutral, general language.
-  Never reproduce the words, mention the user, or name who decided. The merge is
-  the approval.
-- If the gate is pending, open the PR as a draft and say it is a proposal, not a
-  decision. Do not write "approved" anywhere.
+- If every authorizing gate is approved, state the decisions in neutral, general
+  language. Never reproduce the words, mention the user, or name who decided.
+  The merge is the approval.
+- If an authorizing gate is pending, open the PR as a draft and say it is a
+  proposal, not a decision. Do not write "approved" anywhere.
 - If the scope is a rule plus a file pattern, the body names the rule and the
   pattern, not a per-file list.
 - State the current problem, the route, and the alternative rejected. Do not
   carry history of the issue or mission.
 
 Why: the prior PR looked approved because the body said so. The body cannot grant
-the gate; it can only make the decision visible.
+a gate; it can only make the decision visible.
 
 Use this template for writing the PR body:
 
 ```markdown
 ## Why
 
-<the problem, the route taken, and the alternative rejected. State the authorizing gate and the decision in neutral language, or say the gate is pending and this is a proposal. Never quote or mention the user, and never name who decided. Do not add history.>
+<the problem, the route taken, and the alternative rejected. State the authorizing gates and the decisions in neutral language, or say which gates are pending and that this is a proposal. Never quote or mention the user, and never name who decided. Do not add history.>
 
 ## Summary
 
@@ -66,9 +69,9 @@ Skip all preambles and keep prose brief. Use the project's domain language from 
 State the problem in plain terms, the route taken, and the alternative
 rejected. When there was no real alternative, write `no alternative: <reason>`
 in one clause. Link the originating issue or mission document. State the
-authorizing gate and the decision in neutral language, or say the gate is pending
-and the PR is a proposal. Never quote or mention the user, and never name who
-decided. Do not add history.
+authorizing gates and the decisions in neutral language, or say which gates are
+pending and that the PR is a proposal. Never quote or mention the user, and never
+name who decided. Do not add history.
 
 ### Summary
 
@@ -208,10 +211,10 @@ Describe whether it's a one-way or two-way door. You can walk back through two-w
 
 The blast radius is the potential impact or scope of the changes introduced by this PR. Consider all possibilities. Examples are layout shift, breakages for consumers, mobile responsiveness, etc.
 
-State the gate risk in the merge danger. If the gate is pending, the merge is a
-decision, not a review. If the gate is approved, the merge is the second
-approval. Why: the owner reads the merge danger to decide, and a hidden pending
-gate turns a review into an unapproved build.
+State the gate risk in the merge danger. If any authorizing gate is pending, the
+merge is a decision, not a review. If every authorizing gate is approved, the
+merge is the second approval. Why: the owner reads the merge danger to decide,
+and a hidden pending gate turns a review into an unapproved build.
 
 ## Handback
 

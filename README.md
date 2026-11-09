@@ -24,10 +24,12 @@ The mission:
 
 - classifies the scope with `router`;
 - runs the grill with `grilling` and `domain-modeling`;
-- gates scope and understanding, spec, tickets, and the PR on your approval;
+- gates the scope with the spec on a feature or fog, the fog decisions, the tickets, and the PR on your approval;
 - computes the ready frontier at every phase and runs up to ten tickets, stacking
   dependent tickets by blocking edge;
-- plans the sessions and hands off with a prompt you can copy;
+- plans the sessions, runs a frontier's build in the mission session with one
+  subagent worker per ticket where the harness allows it, and hands off only
+  when the work travels or the context cannot carry it;
 - keeps one work item record and its reference index across sessions, updated
   only at boundaries;
 - records current state in neutral language, without quotes, names, or history;
@@ -45,7 +47,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Mission
 
-- **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, frontier plan, references, and automatic handoffs.
+- **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, frontier plan, references, and handoffs when the work travels.
 - **router**: Name the skill or flow that fits, check the state when asked what's next, including a stack's bottom PR, and return the next step. The mission calls it to classify.
 
 ### Flow
@@ -60,7 +62,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 - **to-spec**: Record the agreed spec without re-interviewing.
 - **to-tickets**: Cut a spec into tickets with surface ownership and blocking edges.
 - **implement**: Build one ticket and drive `tdd` at the agreed seams.
-- **implement-spec**: Run the ticket frontier as a crew chief: one worker per ticket, one PR per ticket, stacked by blocking edge.
+- **implement-spec**: Run the ticket frontier as a crew chief: one worker per ticket where the harness allows it, one PR per ticket, stacked by blocking edge.
 - **tdd**: The red-green-refactor loop used by `implement`.
 - **code-review**: Two-axis review of a diff, or of each layer in a stack: Standards and Spec.
 - **pr**: Shape the pull request body, evidence, and merge danger.

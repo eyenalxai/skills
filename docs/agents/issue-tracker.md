@@ -18,7 +18,8 @@ The link is per clone, so every worktree of this repository shares it. When
 ## Conventions
 
 - **One record per mission**: the work item issue is the mission document. Create
-  or claim it after the scope gate. Never a separate `Mission:` issue. Update it
+  or claim it after the first gate; a wayfinder map is created when the fog path
+  starts and becomes the record. Never a separate `Mission:` issue. Update it
   at the gate, at a handoff, on a scope change, or when a false record would
   mislead, not after each decision. Why: a second issue duplicates the work, and
   per-decision updates bury the current state.

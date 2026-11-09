@@ -1,6 +1,6 @@
 ---
 name: mission
-description: Drive one piece of work from a request to reviewable pull requests. Classifies the scope, runs the grill and the owner's approval gate, keeps a durable mission document, recommends the next skill, tracks references across sessions, and hands off to fresh sessions automatically.
+description: Drive one piece of work from a request to reviewable pull requests. Classifies the scope, runs the grill and the owner's approval gates, keeps a durable mission document, recommends the next skill, tracks references across sessions, and hands off automatically when the work travels.
 argument-hint: "<request> | continue | status | handoff | done"
 disable-model-invocation: true
 ---
@@ -16,9 +16,9 @@ every ticket has a pull request the owner can review and merge.
 It does six things:
 
 - the scope decision, made with `router`;
-- the grill and the owner's approval gate;
-- the mission document once the gate creates it; before that, the handoff prompt
-  carries the state;
+- the grill and the owner's approval gates;
+- the mission document once it exists; before that, the handoff prompt carries
+  the state;
 - the frontier, the flow, and the session plan;
 - the reference index and the handoff prompt;
 - the answer-first reply, with the state kept out of it.
@@ -52,9 +52,11 @@ load, stop and say which one failed. Never simulate its output.
 1. Read `AGENTS.md`, the tracker doc, and `router`.
 2. Classify the scope with the table below.
 3. Find an existing work item in the configured tracker. Do not create or update
-   a tracker record before the scope gate. Until the owner approves, the
-   conversation holds the state. After approval, create or claim the one work
-   item issue (see The record).
+   the mission record before the first gate, except for a wayfinder map, which is
+   the fog path's decision artifact and is created by `wayfinder` before its
+   decision gates. Until the owner approves, the conversation holds the state for
+   every other scope. After approval, create or claim the one work item issue
+   (see The record).
 4. Load the grill. Call the Skill tool for `grilling`, and for
    `domain-modeling` when the repo has `GLOSSARY.md` or `docs/adr/`. When the
    work is a full architecture pass, also load `improve-codebase-architecture`.
@@ -65,24 +67,36 @@ load, stop and say which one failed. Never simulate its output.
    instruction already holds the understanding, run a short grill to confirm the
    question frontier is empty and record that source. Do not write a round from
    a summary.
-6. Present the phase-boundary gate: the problem, the constraints, the rule
-   changes, the file scope, the flow, the frontier, its stack order, and its cap,
-   and what implementation unlocks. Wait for the owner's words.
-7. After the owner's approval, create or claim the one work item issue for a
-   change or bug, and write the record from `./mission-template.md`. When
-   claiming an existing issue, keep its problem statement and add the record
-   sections; never replace the report. A feature's record is the spec; a fog's
-   record is the map; a trivial may use its issue or the PR. Never create a
-   separate `Mission:` issue. Update the record only at a boundary.
-8. Route by scope. A change, bug, or trivial goes to `implement`. A feature or
-   fog goes to `to-spec`, then `to-tickets`, then the crew chief. A frontier of
-   one ticket uses `implement`; a frontier of two or more uses `implement-spec`.
-   Do not implement a proposal.
+6. For a fog, load `wayfinder` and work the map until every decision ticket is
+   resolved, across sessions as needed. The map is the record. Then load `to-spec`
+   and draft the spec. For a feature, load `to-spec` and draft the spec. The spec
+   is a proposal until the gate. Do not publish the spec or create a second
+   tracker record yet.
+7. Present the phase-boundary gate: the problem, the constraints, the rule
+   changes, the file scope, the flow, the frontier, its stack order, its cap,
+   and what implementation unlocks. For a feature or a fog whose decisions are
+   resolved, present the spec with the scope: the solution, the user stories,
+   the implementation decisions, the testing seams, and what is out of scope.
+   The spec is the gate document. If a fog still has an open decision, return to
+   `wayfinder`. Wait for the owner's words when a gate is presented.
+8. After the owner's approval, create or claim the one work item issue, or use
+   the fog map, and write the record from `./mission-template.md`. When claiming
+   an existing issue, keep its problem statement and add the record sections;
+   never replace the report. A feature's record is the spec: publish the approved
+   spec and add the record sections to that issue. A fog's record is the map:
+   publish the spec as a separate issue and link it from the map. A change or bug
+   uses its issue; a trivial may use its issue or the PR. Never create a separate
+   `Mission:` issue. Update the record only at a boundary.
+9. Route by scope. A change, bug, or trivial goes to `implement`. A feature or
+   fog goes to `to-tickets`, then the crew chief. A frontier of one ticket uses
+   `implement`; a frontier of two or more uses `implement-spec`. Do not implement
+   a proposal.
 
 The gate opens after the grill, not before it. The owner cannot approve an
-understanding that does not exist yet. Why: the prior flow recorded a scope
-approval before the questions were answered, and the record looked legitimate
-while the understanding was empty.
+understanding that does not exist yet. On a feature or fog, the gate also opens
+after the spec draft, so the scope and the written design are approved together.
+Why: the prior flow recorded a scope approval before the questions were answered,
+and the record looked legitimate while the understanding was empty.
 
 ## The grill
 
@@ -118,8 +132,8 @@ Ask, in order:
 
 | Scope | Signal | Entry | Path | Exit |
 | --- | --- | --- | --- | --- |
-| Fog | destination or key decisions unknown | `wayfinder` plus the grill | map -> decisions -> spec -> tickets -> implement-spec | PRs |
-| Feature | multi-session, shape known | grill, then `to-spec` | grill -> spec -> tickets -> implement-spec | one PR per ticket, stacked by edge |
+| Fog | destination or key decisions unknown | `wayfinder` plus the grill | map -> decisions -> scope and spec gate -> tickets -> implement-spec | PRs |
+| Feature | multi-session, shape known | grill, then `to-spec` | grill -> spec draft -> scope and spec gate -> tickets -> implement-spec | one PR per ticket, stacked by edge |
 | Change | one session, clear outcome | grill, then `implement` | grill -> implement | one PR |
 | Bug | something broken | `diagnosing-bugs` plus the grill | repro -> issue -> implement | one PR |
 | Trivial | one obvious edit | short grill plus the tracker issue | issue -> implement | one PR |
@@ -137,17 +151,22 @@ and the ticket gate did not exist for that path.
 
 | Scope | Gates |
 | --- | --- |
-| Fog | decisions, spec, tickets, PR |
-| Feature | scope and understanding, spec, tickets, PR |
+| Fog | decisions, scope and spec, tickets, PR |
+| Feature | scope and spec, tickets, PR |
 | Change | scope and understanding, PR |
 | Bug | scope and understanding (the repro and the fix direction), PR |
 | Trivial | scope and understanding (the issue), PR |
 
-A feature has the spec gate and the ticket gate because the spec and the ticket
-graph are the design decisions before a multi-session build. A change, bug, or
-trivial has only the scope gate and the PR gate. The issue is the work item, not
-a separate approval. Why: a one-session path has no ticket graph to approve, and
-a ticket gate there stops the work for no decision.
+A feature has the scope and spec gate and the ticket gate because the spec and
+the ticket graph are the design decisions before a multi-session build. The spec
+is the gate document, so the scope and the written design are approved once. A
+change, bug, or trivial has only the scope and understanding gate and the PR
+gate. The issue is the work item, not a separate approval. Why: a one-session
+path has no ticket graph to approve, and a ticket gate there stops the work for
+no decision.
+
+On a fog path, the decision gates come first. The scope and spec gate then
+approves the written design that the decisions produced.
 
 ## Gate integrity
 
@@ -183,9 +202,10 @@ detailed review.
 
 A change, bug, or trivial has one approval at the phase boundary and one at the
 PR. The phase boundary is the end of the grill, when the rule changes and the
-file scope are known. The PR is the second approval. A feature adds the spec gate
-and the ticket gate before the build. Why: per-file approval is a chore, not a
-gate, and a record check cannot replace the owner.
+file scope are known. The PR is the second approval. A feature adds the scope and
+spec gate and the ticket gate before the build. The spec is the gate document, so
+the scope and the written design are one decision. Why: per-file approval is a
+chore, not a gate, and a record check cannot replace the owner.
 
 A gate found skipped reopens. Stop the build, correct the record, and ask the
 owner at the gate. Do not apologize and continue; the next action is the gate,
@@ -194,7 +214,7 @@ missing decision.
 
 ## Phase contracts
 
-| Phase | Skill | Produces | Gate | Next |
+| Phase | Skill | Produces | Approval | Next |
 | --- | --- | --- | --- | --- |
 | Classify | `router` | scope and flow | Scope and understanding | grill |
 | Map | `wayfinder` | decision map | Decision gates | spec or research |
@@ -202,7 +222,7 @@ missing decision.
 | Architecture survey | `improve-codebase-architecture` | HTML report and candidate index | Scope and understanding | grill |
 | Grill | `grilling` and `domain-modeling` with docs; `grilling` without | shared understanding, GLOSSARY, ADR when warranted | Scope and understanding | spec or implement |
 | Prototype | `prototype` | answer to a runnable question | Scope and understanding | spec or implement |
-| Spec | `to-spec` | spec | Spec | tickets |
+| Spec | `to-spec` | spec draft | Scope and spec | tickets |
 | Tickets | `to-tickets` | tickets with blocking edges and surface ownership | Tickets | implement or implement-spec |
 | Implement | `implement` for one ticket, `implement-spec` for the frontier | code and PRs, one per ticket, stacked by edge | PR | code-review |
 | Review | `code-review` | Standards and Spec findings | PR | fix or PR |
@@ -214,6 +234,14 @@ The grill phase loads the two skills that `grill-with-docs` wraps. The wrapper
 remains the standalone shortcut for a user who wants to start a grill outside a
 mission.
 
+The approval column names the gate the phase's output feeds, not the immediate
+next row. On a feature or fog, the scope and understanding approval joins the
+spec at the scope and spec gate; on a change, bug, or trivial, the scope and
+understanding gate is the first gate. The spec is drafted before the combined
+gate and published after approval. The ticket graph is cut only after it. Why:
+the spec is the gate document, and a ticket graph cut from an unapproved spec
+multiplies the unapproved decision.
+
 Optional detours: `research` when facts are missing,
 `improve-codebase-architecture` when the work is a full architecture pass,
 `prototype` when a question needs runnable code,
@@ -223,15 +251,26 @@ Optional detours: `research` when facts are missing,
 ## The session plan
 
 The record holds the session plan once the gate is approved. Before the gate,
-the plan stays in the conversation. A feature runs one session per frontier, not
-one per ticket; a bug or a change has one session. The plan is a table in the
-record:
+the plan stays in the conversation. A feature plans work per frontier, not per
+ticket; a bug or a change has one frontier. The current session carries the
+next frontier when the context holds. The plan is a table in the record:
 
 | Session | Work | Exit |
 | --- | --- | --- |
-| 1 | classify, grill, choose the path | the gate decision |
+| 1 | classify, grill, draft the spec and cut the tickets on a feature or fog, present the gate | the design gate decisions |
 | 2 | implement the frontier as a stack (up to the cap), review each PR | the stack's PRs are open; the owner merges |
 | 3 | after merges unblock it, implement the next frontier | the next stack's PRs are open |
+
+A session is a context boundary, not a phase boundary. The mission session runs
+the build with `implement` for one ticket or `implement-spec` workers for a
+frontier. Hand off only when the context is full, the work moves to a new
+directory or harness, a side task needs its own context, or the owner asks. Why:
+a phase change in the same context does not need a copied prompt or a new
+approval.
+
+For a change, bug, or trivial, session 1 stops at the scope and understanding
+gate. There is no spec draft and no ticket step. Row 3 is conditional: start a
+new session only when the current context cannot carry the next frontier.
 
 A frontier of one ticket is the single-ticket path. The cap is the maximum, not
 a target; a frontier of two runs two. If the owner changes the cap, record it in
@@ -241,20 +280,25 @@ reads the record, not this message.
 Replan when the scope changes. The owner sees the whole flow and where the
 handoffs fall before the work starts.
 
-## Automatic handoff
+## Handoff boundaries
 
 `mission` hands off at the planned boundary without waiting for the
-`/mission handoff` command. A boundary is any of:
+`/mission handoff` command. A boundary is a place where the work travels or the
+current context cannot carry it, not a phase change:
 
-- the tickets are ready and the first frontier starts;
-- a stack's PRs are open and the next frontier waits on merges;
-- a merge unblocks the next frontier and it starts;
-- a gate is pending and the next session should carry it;
-- the context reaches the smart zone;
+- the context is nearly full;
 - a side task needs its own context;
 - the next phase runs in a different harness or directory;
 - the owner asks for a fresh session;
-- the scope changes enough that the current session is the wrong place.
+- the next frontier cannot fit in the current context.
+
+The build does not need a handoff. The mission session loads `implement` for one
+ticket or `implement-spec` for a frontier. For a frontier, it acts as the crew
+chief: it claims the tickets, spawns one worker per ticket, reviews each PR, and
+reports the stack. A handoff is for travel, not for a phase change. If the
+harness cannot isolate checkouts, run the tickets one at a time in the same
+session and say so. Why: a fresh session forces a copied prompt and a new gate
+confirmation, and the workers already provide the context isolation.
 
 At the boundary:
 
@@ -267,14 +311,16 @@ At the boundary:
    or the mission document. The record keeps no log entry.
 4. Stop editing. The new session starts with `/mission continue`.
 
-An approval does not survive a handoff. The new session presents the gate and
-waits for the owner's words. There is no exception. Why: a prompt written by the
-agent cannot grant authority, and an exception in the prompt is still the
-agent's words. The handoff reports the gate, it never grants it.
+An approval does not carry on its own. The new session presents the gate with
+its recorded status and waits for the owner's words. The owner may confirm the
+earlier decision in their own words; the agent never assumes it. Why: a prompt
+written by the agent cannot grant authority, and an exception in the prompt is
+still the agent's words. The handoff reports the gate, it never grants it.
 
-A single-session change or bug stays in one session through the PR. Handoff is
-for travel: a new session, a new frontier, a new directory, a new harness, or a
-side task.
+A mission stays in one session while the context holds. Handoff is for travel: a
+new session, a new directory, a new harness, a side task, or a frontier the
+current context cannot carry. A phase change in the same context stays in the
+session.
 
 ## The handoff prompt
 
@@ -410,7 +456,8 @@ first guess into the final answer.
 ## Handback
 
 A ticket ends with a reviewable PR. In a frontier, the crew chief opens one PR
-per ticket, stacked by blocking edge. Run `code-review` on each and fix the
+per ticket, stacked by blocking edge. The mission session is the crew chief;
+`implement-spec` spawns the workers. Run `code-review` on each and fix the
 findings. Report the stack bottom-up: each PR URL, check state, what changed,
 what it unlocks, and the merge danger. Name the next frontier in plain words.
 The head SHA stays in the PR. The owner reviews and merges bottom-up. A ticket
@@ -445,10 +492,12 @@ change issue, the spec, or the map. A trivial may use its issue or the PR. Never
 create a separate `Mission:` issue. Why: a second issue duplicates the work item
 and doubles the writes.
 
-Create or claim the record after the scope gate. Before the gate, the
-conversation holds the problem, the grill ledger, and the open questions. Why:
-the owner has not approved the work yet, and a record created at Start keeps
-changing through the grill.
+Create or claim the record after the first gate. Before the gate, the
+conversation holds the problem, the grill ledger, and the open questions. A
+wayfinder map is the exception: `wayfinder` creates it before its decision gates
+because the map is the fog path's decision artifact. Why: the owner has not
+approved the work yet, and a record created at Start keeps changing through the
+grill.
 
 The record is a snapshot, not a diary. Write it at the gate, at a handoff, on a
 scope change, or when a false record would mislead. Do not comment after each
@@ -468,9 +517,9 @@ history invites a settled decision to reopen.
 A mission can move between scopes. If a phase reveals fog, add a wayfinder or
 research detour. If the fog clears and the work collapses, reduce the flow to
 a change or a bug. If the work grows past one session, reclassify to a feature
-and add the spec and ticket gates. Update the record to the current scope,
-gates, frontier, and next step. Do not narrate the old scope or the reason for
-the change. Why: the record is current state only.
+and add the scope and spec gate and the ticket gate. Update the record to the
+current scope, gates, frontier, and next step. Do not narrate the old scope or
+the reason for the change. Why: the record is current state only.
 
 When the owner explicitly chooses one PR for work that is larger than one
 session, record that choice and keep the change path. The owner owns the review
@@ -483,8 +532,10 @@ size; the agent does not silently grow the PR.
   session instead of producing a substitute.
 - Every gate is approved by the owner's words, recorded with its decision and
   date, or marked `not used` when the scope does not have it.
-- No tracker record exists before the scope gate, and the record is updated only
-  at a boundary, never after each decision.
+- A feature approves the scope and the spec at one gate, and the ticket gate
+  follows before the build.
+- No mission record exists before the first gate, except a fog map, and the
+  record is updated only at a boundary, never after each decision.
 - No artifact reproduces words from the conversation, names who decided, or
   carries history of the issue or mission.
 - The approved scope is the rule changes and the file scope, not a per-file
@@ -499,5 +550,7 @@ size; the agent does not silently grow the PR.
   reported bottom-up, and the owner merges bottom-up.
 - The flow computes the frontier at every phase and runs up to the cap, or says
   why the work is sequential.
+- The mission session runs the build with `implement` or `implement-spec`, and a
+  handoff happens only for travel or a full context.
 - A handoff prompt appears in chat at the planned boundary, reports the gate
   status, and never grants it.

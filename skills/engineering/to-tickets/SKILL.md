@@ -12,12 +12,15 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 ## Gate check
 
-This skill runs only on the feature path, after the Spec gate is approved. Read
-the mission document and the gate decision. If the spec gate is pending, stop and
-ask. A ticket graph cut from an unapproved spec multiplies the unapproved
-decision. For a change, bug, or trivial, this skill is not used; the issue is the
-work item, not a ticket graph. Why: the prior newsletter thread asked the owner
-to approve a ticket on a bug, and the bug path has no ticket gate.
+This skill runs on a spec. Inside a mission, it runs only on the feature or fog
+path, after the scope and spec gate is approved. Read the mission document and
+the gate decision. If the scope and spec gate is pending, stop and ask. On a fog
+path, the decision gates must also be approved. Standalone, the owner's request
+to cut the tickets is the approval; the published spec is the source. A ticket
+graph cut from an unapproved spec multiplies the unapproved decision. For a
+change, bug, or trivial, this skill is not used; the issue is the work item, not
+a ticket graph. Why: the prior newsletter thread asked the owner to approve a
+ticket on a bug, and the bug path has no ticket gate.
 
 ## Process
 

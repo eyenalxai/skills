@@ -79,11 +79,11 @@ The same check applies before you recommend any phase that starts new work.
    merge commit. A ticket that cannot stack waits for all its blockers' PRs to
    merge.
 4. **Choose the session.** Continue here when the next step stays inside the
-   current frontier or session: a review, a fix, the PR, a pending gate. Hand
-   off when the next step starts a new frontier, a fresh worktree or directory,
-   a new harness, or a side task, or when the context is full. In a multi-ticket
-   effort, each frontier starts in a fresh crew chief session; each worker gets
-   its own subagent context.
+   current frontier or session: a review, a fix, the PR, a pending gate, or the
+   build through `implement` or `implement-spec`. Hand off when the next step
+   needs a different context: a fresh worktree or directory, a new harness, a
+   side task, or a context that is full. A new frontier in the same context stays
+   in the session. Each worker gets its own subagent context.
 5. **Answer once.** Name the gate or PR that decides the step, then one Next
    step line with the why and the unlock. Name a skill to load, not a phase to
    perform. If the choice is handoff, name `/handoff`, not the phase it will
@@ -95,8 +95,8 @@ The same check applies before you recommend any phase that starts new work.
 `mission` drives this flow. The phases below are the underlying map.
 
 1. **The grill and the survey.** Load `grilling`, and `domain-modeling` when the repo has docs, with the Skill tool. They build shared understanding. For a full architecture pass, `improve-codebase-architecture` surveys state machines, invariants, and deepening candidates before the grill. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
-2. **The plan.** Use `to-spec` to record the agreed spec and `to-tickets` to cut it into tickets with blocking edges. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
-3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` is the crew chief for the frontier: it claims the ready tickets, runs one worker per ticket in its own worktree, and opens one PR per ticket, stacked by edge. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges bottom-up.
+2. **The plan.** Draft the spec with `to-spec` and approve it with the scope at one gate. Then use `to-tickets` to cut it into tickets with blocking edges, and approve the ticket graph. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
+3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` is the crew chief for the frontier: it claims the ready tickets, runs one worker per ticket in its own worktree, and opens one PR per ticket, stacked by edge. The mission session is the crew chief; a handoff is not needed to start the build. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges bottom-up.
 
 A single-session change skips the spec and tickets and goes from the grill to `implement`. A bug goes through `diagnosing-bugs` and a short grill before the issue and the PR.
 
@@ -125,7 +125,7 @@ A single-session change skips the spec and tickets and goes from the grill to `i
 
 ## Phase boundary
 
-At a boundary, the options are continue, clear, handoff, subagent, and compact. Continue only when the next step stays inside the current frontier or session. Hand off when the work travels to a new session, a new frontier, a new directory, a new harness, or another agent. `mission` plans the handoff points and produces the prompt in chat. Outside a mission, `handoff` produces it.
+At a boundary, the options are continue, clear, handoff, subagent, and compact. Continue when the next step stays inside the current frontier or session. Use a subagent when the work is parallel or isolated but stays in the session. Hand off when the work travels to a new session, a directory, a harness, or another agent, or when the context is full. A phase change alone is not a handoff. `mission` plans the handoff points and produces the prompt in chat. Outside a mission, `handoff` produces it.
 
 ## Ticket handback
 
