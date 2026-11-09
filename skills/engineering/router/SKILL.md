@@ -94,7 +94,7 @@ The same check applies before you recommend any phase that starts new work.
 
 `mission` drives this flow. The phases below are the underlying map.
 
-1. **The grill.** Load `grilling`, and `domain-modeling` when the repo has docs, with the Skill tool. They build shared understanding. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
+1. **The grill and the survey.** Load `grilling`, and `domain-modeling` when the repo has docs, with the Skill tool. They build shared understanding. For a full architecture pass, `improve-codebase-architecture` surveys state machines, invariants, and deepening candidates before the grill. With no working directory, use `grill-me`. `/grill-with-docs` is the standalone command for the same composition in a repo.
 2. **The plan.** Use `to-spec` to record the agreed spec and `to-tickets` to cut it into tickets with blocking edges. `wayfinder` charts a foggy, multi-session effort as decision tickets first. `research` supplies facts and `prototype` answers a question that needs runnable code.
 3. **The build.** `implement` builds one ticket and drives `tdd` at the agreed seams; `implement-spec` is the crew chief for the frontier: it claims the ready tickets, runs one worker per ticket in its own worktree, and opens one PR per ticket, stacked by edge. Both close with `code-review`. `pr` shapes the body. The owner reviews and merges bottom-up.
 
@@ -104,17 +104,20 @@ A single-session change skips the spec and tickets and goes from the grill to `i
 
 - **Incoming requests and bugs** -> `triage`. It verifies the claim, grills if needed, and writes an agent-ready issue.
 - **Something broken** -> `diagnosing-bugs`. It builds a tight feedback loop before it theorises.
+- **A full architecture pass** -> `improve-codebase-architecture`. It surveys implicit state machines, unenforced invariants, and deepening candidates, then either grills the chosen candidate or hands the candidate index to the mission.
 - **A huge, foggy effort** -> `wayfinder`. It charts a map of decision tickets and hands the clear path back to the flow.
 
 ## Design vocabulary
 
 - `domain-modeling` sharpens the project's language and writes `GLOSSARY.md` and ADRs.
 - `codebase-design` is the deep-module vocabulary for specs, tickets, and implementation seams.
+- `improve-codebase-architecture` applies that vocabulary in a read-only survey and returns state, invariant, and deepening candidates.
 
 ## Standalone
 
 - `grill-me` is the stateless grill for a plan or design with no repo.
 - `grilling` is the interview primitive underneath every grill.
+- `improve-codebase-architecture` surveys a codebase and grills the chosen candidate when used alone.
 - `prototype` answers a design question with throwaway code.
 - `research` investigates a question against primary sources and leaves a cited markdown file.
 - `to-questionnaire` turns a decision someone else holds into a questionnaire.
