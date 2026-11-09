@@ -22,7 +22,7 @@ Run `/setup-agent-skills` once per repo before the first mission. It records the
 
 The mission:
 
-- classifies the scope with `router`;
+- classifies the scope with its scope table;
 - runs the grill with `grilling` and `domain-modeling`;
 - gates the scope with the spec on a feature or fog, the fog decisions, the tickets, and the PR on your approval;
 - computes the ready frontier at every phase and runs up to ten tickets, stacking
@@ -48,7 +48,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 ### Mission
 
 - **mission**: Drive one piece of work from a request to reviewable PRs, with the grill, approval gates, frontier plan, references, and handoffs when the work travels.
-- **router**: Name the skill or flow that fits, check the state when asked what's next, including a stack's bottom PR, and return the next step. The mission calls it to classify.
+- **router**: Name the skill or flow that fits, check the state when asked what's next, including a stack's bottom PR, and return the next step. Use it standalone, or to name the next action when a mission is active.
 
 ### Flow
 
@@ -62,7 +62,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 - **to-spec**: Record the agreed spec without re-interviewing.
 - **to-tickets**: Cut a spec into tickets with surface ownership and blocking edges.
 - **implement**: Build one ticket and drive `tdd` at the agreed seams.
-- **implement-spec**: Run the ticket frontier as a crew chief: one worker per ticket where the harness allows it, one PR per ticket, stacked by blocking edge.
+- **implement-spec**: Run a frontier of two or more tickets as a crew chief: one worker per ticket where the harness allows it, one PR per ticket, stacked by blocking edge. A one-ticket frontier uses `implement`.
 - **tdd**: The red-green-refactor loop used by `implement`.
 - **code-review**: Two-axis review of a diff, or of each layer in a stack: Standards and Spec.
 - **pr**: Shape the pull request body, evidence, and merge danger.
@@ -76,6 +76,7 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 
 ### Utilities
 
+- **pushback**: The shared procedure for a challenge: name the claim and its check, stop on a failed check, and let the owner decide a preference.
 - **improve-codebase-architecture**: Survey a codebase for implicit state machines, unenforced invariants, and deepening opportunities, then grill the chosen candidate or hand the candidates to the mission.
 - **to-questionnaire**: Turn a decision you can't answer alone into a questionnaire for the one person who can fill it in.
 - **wait-what**: Stop and re-pitch the last message: simpler, with the context you were missing.
