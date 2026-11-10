@@ -45,7 +45,7 @@ Repo name, date, and a compact legend: solid box = module, dashed line = seam, r
 
 A small table with the area, the lifecycles audited, the invariants audited, what was not audited, and why. Put it first. It is the completeness claim and tells the owner how far the report can be trusted.
 
-Below it, a test inventory table: category, count, files, keep or delete, and the non-functional checks named as out of scope. The counts show the current suite and the keep and delete split. Why: the owner reviews the deletion before the build, and the counts show whether the suite maps the three behaviors.
+Below it, the test inventory summary: category, count, files, and keep or delete, with the non-functional checks named as out of scope. The deleted tests are itemized in the plan block. Why: the owner reviews the deletion before the build, and the counts show whether the suite maps the three behaviors.
 
 ## State machine section
 
@@ -72,17 +72,16 @@ If the table has more than eight rows, group the rows by family: uniqueness, car
 
 ## Test suite section
 
-The coverage table carries the inventory. This section carries one card for the sweep candidate. If the suite has no deletions, write one line: `No tests outside the policy.` Do not add an empty card. Why: an empty card is a heading with no evidence.
+The coverage table carries the inventory summary. This section carries one card for the test sweep when the deletions cross modules or no module candidate carries them. When a single module carries its deletions, the plan block in that candidate carries them. If the suite has no deletions, write one line: `No tests outside the policy.` Do not add an empty card. Why: an empty card is a heading with no evidence.
 
-The sweep card:
+The test sweep card:
 - **Title**: the suite and the count, for example "Prune 80 tests outside the policy".
 - **Badge row**: recommendation strength, plus a `test` tag.
 - **Evidence**: the inventory's delete count and the test files.
 - **Before and after**: one line, for example `120 tests -> 40 tests`, with the kept category counts.
 - **Problem**: one sentence. The class of tests and why it costs.
 - **Solution**: one sentence. The suite keeps the three categories.
-- **Deletion list**: the files and cases, grouped by module. Each row names the replacement behavior, or `none` when no behavior is lost. This is the centerpiece.
-- **Plan block**: the action block, with the rank.
+- **Plan block**: the action block, with the rank. The plan block carries the tests deleted, grouped by module, with the replacement for each, or `none` when no behavior is lost. This is the centerpiece.
 - **Wins**: bullets, six words or fewer each. For example "Suite maps three behaviors", "Refactors stop rewriting mocks".
 
 Do not write a paragraph of explanation. The deletion list is the detail.
@@ -107,7 +106,7 @@ Do not write paragraphs of explanation. If the diagram needs a paragraph to be u
 
 ## Plan block
 
-Render the action block from the [candidate format](MODEL-AUDIT.md#candidate-format) as one compact bordered block under the finding, with the rank in the same row. Include the tests deleted and the acceptance test's category. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec, and the owner reviews the deletion before the build.
+Render the action block from the [candidate format](MODEL-AUDIT.md#candidate-format) as one compact bordered block under the finding, with the rank in the same row. Include the tests deleted, grouped by module with the replacement for each, and the acceptance test's category, or the test sweep's empty delete count. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec, and the owner reviews the deletion before the build.
 
 ## Top recommendation section
 

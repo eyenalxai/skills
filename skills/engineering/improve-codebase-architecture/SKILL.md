@@ -51,7 +51,7 @@ Apply the **deletion test** to every suspected shallow module. Deleting it eithe
 
 Inventory every behavior test in the scan area. Classify each with the decision tree in [TEST-POLICY.md](TEST-POLICY.md): algorithmic logic, boundary IO, integration flow, or delete. Keep only the three categories. When a test fits more than one, the highest level wins. When a test is ambiguous, delete it, record the reason, and put it in the deletion list the owner reviews. Why: a test that restates the implementation breaks on refactors and hides the seam, and a kept test needs a category.
 
-The plan carries the deletion. A suite with many deletions gets one `test` candidate, sequenced first. A small suite carries its deletions in each candidate's steps. Every candidate's acceptance test names its category, except the test sweep. The coverage section carries the inventory: category, count, files, and keep or delete. [TEST-POLICY.md](TEST-POLICY.md) owns the definitions, the decision tree, the edge cases, and the sweep candidate.
+The plan carries the deletion. A sweep across two or more modules, or a sweep with no module candidate to carry it, gets one `test` candidate, sequenced first. A sweep inside one module with a candidate carries its deletions in that candidate's steps. Why: a cross-module sweep is one reviewable change, and a single-module deletion belongs with the interface change that makes it obsolete. Every candidate's acceptance test names its category, except the test sweep. The coverage section carries the inventory summary: category, count, files, and keep or delete; the test sweep card carries the deleted tests. [TEST-POLICY.md](TEST-POLICY.md) owns the definitions, the decision tree, the edge cases, and the test sweep.
 
 Read [TEST-POLICY.md](TEST-POLICY.md) before the test scan. Why: the categories are the method, and one source keeps two sessions from drawing the line differently.
 
@@ -73,7 +73,7 @@ The report carries, in this order:
 1. **Coverage**: what was audited, what was not, and why. The completeness claim lives here. Include the test inventory: category, count, files, and keep or delete.
 2. **State machines**: one card per lifecycle entity, with the implicit states and transitions, the failure modes, the explicit representation to adopt, the illegal states and transitions it removes, and the acceptance test in one of the three categories. Use a before and after diagram.
 3. **Invariants**: a table with the invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, and evidence. Mark `none` where the code only assumes it. Put the plan block below the table for each invariant.
-4. **Test suite**: the sweep candidate and the before and after counts. The coverage section carries the inventory. Use a test suite card.
+4. **Test suite**: the test sweep and the before and after counts. The coverage section carries the inventory summary. Use a test sweep card.
 5. **Deepening candidates**: one card per candidate, with evidence, problem, solution, the deletion test, the dependency category, and a before and after diagram.
 6. **Sequence and top recommendation**: the full sequence, with the first candidate expanded and the next two candidates named.
 
@@ -112,7 +112,7 @@ The candidate index is a JSON object:
 }
 ```
 
-`kind` is `state`, `invariant`, `deepening`, or `test`. `strength` is the recommendation (`strong`, `worth exploring`, `speculative`); `impact` is the payoff (`high`, `med`, `low`); `confidence` is the evidence (`high`, `med`, `low`); `effort` is `S`, `M`, or `L`; `risk` is `LOW`, `MED`, or `HIGH`. `sequence` is the execution order, one entry per candidate, first to last. `tests_deleted` lists the test files the candidate removes. The acceptance test names one of the three categories. Each coverage entry carries the same completeness claim as the report table. The index is a summary; the report carries the full finding.
+`kind` is `state`, `invariant`, `deepening`, or `test`. `strength` is the recommendation (`strong`, `worth exploring`, `speculative`); `impact` is the payoff (`high`, `med`, `low`); `confidence` is the evidence (`high`, `med`, `low`); `effort` is `S`, `M`, or `L`; `risk` is `LOW`, `MED`, or `HIGH`. `sequence` is the execution order, one entry per candidate, first to last. `tests_deleted` lists the test files the candidate removes. The acceptance test names one of the three categories, or the empty delete count for the test sweep. Each coverage entry carries the same completeness claim as the report table. The index is a summary; the report carries the full finding.
 
 Open the HTML report (`xdg-open`, `open`, or `start`) and tell the owner the absolute path of both files. Then stop; step 7 owns the mode. Do not propose a full interface before the owner picks.
 
@@ -135,7 +135,7 @@ The output is a plan, not a diff. In mission mode, the mission owns the spec, ti
 - No state or invariant is invented. Unknown edges and unenforced facts are marked.
 - Every candidate has evidence at `file:line`, a concrete fix, a plan, and an acceptance test.
 - The test inventory covers the scan area, and every test has one of the three categories or a deletion with a reason and its replacement or `none`.
-- The test sweep is sequenced first when the suite has many deletions, and every other acceptance test names its category.
+- The test sweep is sequenced first when the deletions cross modules or no module candidate carries them, and every other acceptance test names its category.
 - The plan gives one sequence and a top recommendation, not a menu.
 - The planner never edits audited source; standalone mode may update `GLOSSARY.md` and ADRs through `domain-modeling`.
 - The mission composition is explicit, and the plan names the unslop pass.

@@ -51,7 +51,7 @@ Choose the smallest representation that makes illegal states unrepresentable:
 - **A persisted status column plus a check constraint and a transaction**: use it when the state lives in a database. The constraint rejects unknown states; the transaction makes the transition and its side effects atomic.
 - **A workflow engine or statechart library**: use it only when the machine has parallel regions, history, or long-running timers. A library is a cost; do not reach for it for a four-state flow.
 
-Every recommendation names the illegal states it removes, the illegal transitions it rejects, and the test that proves it. Why: a recommendation without a removed state and a test is a preference.
+Every recommendation names the illegal states it removes, the illegal transitions it rejects, and the acceptance test in one of the three categories. Why: a recommendation without a removed state and a test is a preference.
 
 ## 2. Invariants: find the facts the code assumes
 
@@ -133,7 +133,7 @@ Walk the codebase in this order. Each step narrows the next. Why: a free-form wa
 2. **State.** Status fields, boolean clusters, timestamps, queues, sessions, subscriptions. Use section 1.
 3. **Invariants.** Uniqueness, cardinality, ordering, ownership, balance, temporal, referential, idempotency, concurrency, immutability. Use section 2.
 4. **Seams.** Modules, interfaces, adapters, callers, leaked rules. Use section 3 and the deletion test.
-5. **Tests.** Inventory every behavior test in the scan area and classify it with [TEST-POLICY.md](TEST-POLICY.md). Keep only algorithmic logic, boundary IO, and integration flow. The deletions become a `test` candidate or per-candidate steps.
+5. **Tests.** Inventory every behavior test in the scan area and classify it with [TEST-POLICY.md](TEST-POLICY.md). Keep only algorithmic logic, boundary IO, and integration flow. The deletions become a `test` candidate when they cross modules, or per-candidate steps when they stay inside one module.
 6. **Slop.** The structural signals in the catalog. Keep only the patterns that point to a module, a seam, or an invariant.
 7. **Rank and sequence.** Use section 6.
 
@@ -158,7 +158,7 @@ End the model pass with a table the report can carry:
 
 The table is the completeness claim. A repository too large for one pass lists the audited packages and the rest. Why: "all" is a claim about the scope, and an unmarked gap turns a sample into a false promise.
 
-The report also carries the test inventory from [TEST-POLICY.md](TEST-POLICY.md), with the category counts and the keep and delete totals. Why: the completeness claim covers the suite as well as the source.
+The report also carries the test inventory summary from [TEST-POLICY.md](TEST-POLICY.md), with the category counts and the keep and delete totals. Why: the completeness claim covers the suite as well as the source.
 
 ## Candidate format
 
