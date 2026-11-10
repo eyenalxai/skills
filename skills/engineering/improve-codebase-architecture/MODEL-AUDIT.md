@@ -1,6 +1,6 @@
 # Model audit
 
-How to deepen modules, simplify interfaces, find every implicit state machine, find every invariant the code relies on but does not enforce, and rank the plan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
+How to deepen modules, simplify interfaces, find every implicit state machine, find every invariant the code relies on but does not enforce, prune the test suite to the three categories, and rank the plan. This file uses the vocabulary in [SKILL.md](SKILL.md), [TEST-POLICY.md](TEST-POLICY.md), and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
 
 ## Why the model comes first
 
@@ -106,7 +106,7 @@ Use the domain glossary to name the concept. If the code has no name for it, tha
 
 ## 4. Finding catalog
 
-Each smell is a detection heuristic, not a hard violation. A smell becomes a candidate only when the evidence is at `file:line`, the failure mode is concrete, and the fix is concrete: the deletion test for a module, the enforcement layer for an invariant, or the transition table for a state. Why: a pattern match without a failure mode is a style opinion.
+Each smell is a detection heuristic, not a hard violation. A smell becomes a candidate only when the evidence is at `file:line`, the failure mode is concrete, and the fix is concrete: the deletion test for a module, the enforcement layer for an invariant, the transition table for a state, or the inventory for a test. Why: a pattern match without a failure mode is a style opinion.
 
 | Smell | Detection signal | What it costs | Fix shape |
 | --- | --- | --- | --- |
@@ -119,10 +119,11 @@ Each smell is a detection heuristic, not a hard violation. A smell becomes a can
 | Dead module | No references, abandoned scaffolding, a flag that is permanently off | The reader maintains behavior that cannot run | Delete it; version control keeps the history |
 | Versioned replacement | Old and new implementations side by side, `V2`, `New`, or a compatibility shim | The concept has two behaviors and the old one rots | Migrate the callers, delete the old module, and take its name |
 | Hidden failure | Silent fallback, catch theater, an error logged then ignored | The primary path breaks and the fallback keeps the tests green | Fail at the boundary, or make the degraded state explicit and visible |
-| Test gap at the seam | Tests reach past the interface, mocks of internal collaborators, no test at the public seam | Every internal change is a test change, and the public behavior is unverified | Test through the interface; move the seam if the test cannot reach it |
+| Test gap at the seam | Tests reach past the interface, mocks of internal collaborators, no test at the public seam | Every internal change is a test change, and the public behavior is unverified | Test through the interface at one of the three levels; move the seam if the test cannot reach it |
+| Test outside the policy | Component tests, snapshots, mocks of internal collaborators, call-count assertions, private-method tests | The suite breaks on refactors without a behavior change and hides the seam | Delete it, or rewrite it as algorithmic logic, boundary IO, or an integration flow |
 | Slop mask | Comments restating the code, checks for states the type excludes, `as any` at a boundary, a fallback for a caller guarantee | The gap stays hidden and the next reader trusts the mask | The structural fix the mask compensates for, then the unslop pass on the diff |
 
-A slop pattern is a candidate only when it points to a module, a seam, or an invariant. A comment, a log line, a generic name, or a test style stays in the diff-level review. Why: the pass is structural, and the report loses its ranking when style findings sit beside deepening candidates.
+A slop pattern is a candidate only when it points to a module, a seam, or an invariant. A comment, a log line, or a generic name stays in the diff-level review. A test outside the policy is a suite finding, not a style finding. Why: the pass is structural, and the report loses its ranking when style findings sit beside deepening candidates.
 
 ## 5. Scan order
 
@@ -132,8 +133,9 @@ Walk the codebase in this order. Each step narrows the next. Why: a free-form wa
 2. **State.** Status fields, boolean clusters, timestamps, queues, sessions, subscriptions. Use section 1.
 3. **Invariants.** Uniqueness, cardinality, ordering, ownership, balance, temporal, referential, idempotency, concurrency, immutability. Use section 2.
 4. **Seams.** Modules, interfaces, adapters, callers, leaked rules. Use section 3 and the deletion test.
-5. **Slop.** The structural signals in the catalog. Keep only the patterns that point to a module, a seam, or an invariant.
-6. **Rank and sequence.** Use section 6.
+5. **Tests.** Inventory every behavior test in the scan area and classify it with [TEST-POLICY.md](TEST-POLICY.md). Keep only algorithmic logic, boundary IO, and integration flow. The deletions become a `test` candidate or per-candidate steps.
+6. **Slop.** The structural signals in the catalog. Keep only the patterns that point to a module, a seam, or an invariant.
+7. **Rank and sequence.** Use section 6.
 
 ## 6. Rank and sequence
 
@@ -156,9 +158,11 @@ End the model pass with a table the report can carry:
 
 The table is the completeness claim. A repository too large for one pass lists the audited packages and the rest. Why: "all" is a claim about the scope, and an unmarked gap turns a sample into a false promise.
 
+The report also carries the test inventory from [TEST-POLICY.md](TEST-POLICY.md), with the category counts and the keep and delete totals. Why: the completeness claim covers the suite as well as the source.
+
 ## Candidate format
 
-Every state, invariant, and abstraction candidate comes back in this shape:
+Every state, invariant, and abstraction candidate comes back in this shape. The test sweep uses the shape in [TEST-POLICY.md](TEST-POLICY.md).
 
 ### [KIND-NN] Short imperative title
 
@@ -169,7 +173,8 @@ Every state, invariant, and abstraction candidate comes back in this shape:
 - **Interface change**: what the caller stops knowing.
 - **Deletion test**: what happens to the complexity when the module is deleted. Write `not applicable` for a state or invariant finding.
 - **Plan**: the files, the steps at the seam level, and the callers to migrate. Do not write the exact code; the ticket's spec owns the behavior.
-- **Acceptance test**: the test file and the case that proves the new interface or the enforced invariant. Why: a candidate without a test is a preference.
+- **Tests deleted**: the test files and cases this candidate removes, with the replacement for each behavior. Write `none` in the report, or an empty list in the index, when the candidate deletes no tests. Why: the test policy deletes tests as the interface moves, and the owner reviews the list.
+- **Acceptance test**: the category and the test file and case that prove the new interface or the enforced invariant: algorithmic logic, boundary IO, or integration flow. Why: a candidate without a test in one of the three categories reintroduces the tests the policy deletes.
 - **Unslop check**: the fix is done when the `emil-unslop-code` pass is clean on the diff. The ticket copies this into its acceptance criteria, and the build runs the pass before the PR. Why: the structural fix can reintroduce the slop it removed.
 - **Rank**: impact, confidence, effort, and risk, with one line on the risk.
 - **Strength**: `strong` (the evidence is real and the failure mode is consequential; for a deepening, the deletion test passes), `worth exploring` (plausible, and the payoff depends on the direction), or `speculative` (weak evidence).
