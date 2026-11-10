@@ -56,12 +56,14 @@ One card per lifecycle entity:
 - **Problem**: one sentence. The illegal state or transition the code allows.
 - **Recommended form**: typed states plus a pure transition function, a transition table, a persisted status plus a check constraint, or a statechart library. Name the illegal states it removes, the illegal transitions it rejects, and the test that proves it.
 - **Interface change**: one line. What the caller stops knowing when the state machine becomes explicit.
-- **Score**: confidence, effort, and risk, for example `high / M / LOW`.
+- **Plan block**: render the action block below the finding, with the rank.
 - **Wins**: bullets, six words or fewer each. For example "Illegal states become unrepresentable", "One transition table, one test".
 
 ## Invariant section
 
-A table with one row per invariant, using the [model audit's](MODEL-AUDIT.md) invariant columns (invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, evidence) plus a score column. Use a small badge for the current enforcement layer (`type`, `schema`, `database constraint`, `transaction`, `runtime guard`, `test`, `documentation`, `none`). Put `none` in red. Add a `score` cell with strength, confidence, effort, and risk, for example `strong / high / M / LOW`. The table is the centerpiece. Do not turn a one-line invariant into a card.
+A table with one row per invariant, using the [model audit's](MODEL-AUDIT.md) invariant columns (invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, evidence) plus a rank column. Use a small badge for the current enforcement layer (`type`, `schema`, `database constraint`, `transaction`, `runtime guard`, `test`, `documentation`, `none`). Put `none` in red. Add a `rank` cell with impact, confidence, effort, and risk, for example `high / high / M / LOW`. The table is the centerpiece. Do not turn a one-line invariant into a card.
+
+Put the plan block below the table for each invariant. Why: the table carries the finding, and the plan block carries the action without turning every row into a card.
 
 If the table has more than eight rows, group the rows by family: uniqueness, cardinality, ordering, ownership and tenancy, balance and totals, temporal, referential, idempotency, concurrency, immutability. Keep only the families with findings. Do not add an empty family. Why: an empty family is a heading with no evidence.
 
@@ -77,15 +79,19 @@ Each candidate is one `<article>`:
 - **Solution**: one sentence. What changes.
 - **Interface change**: one line. What the caller stops knowing.
 - **Deletion test**: one line. What happens to the complexity when the module is deleted.
-- **Score**: confidence, effort, and risk, for example `high / M / LOW`.
+- **Plan block**: render the action block below the finding, with the rank.
 - **Wins**: bullets, six words or fewer each. For example "Tests hit one interface", "Pricing stops leaking", "Delete four shallow wrappers".
 - **ADR callout** (when applicable): one line in an amber-tinted box.
 
 Do not write paragraphs of explanation. If the diagram needs a paragraph to be understood, redraw the diagram.
 
+## Plan block
+
+Render the action block from the [candidate format](MODEL-AUDIT.md#candidate-format) as one compact bordered block under the finding, with the rank in the same row. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec.
+
 ## Top recommendation section
 
-One larger card. Candidate name, one sentence on why, and the sequence after it: what to do now, what comes next, and what waits. Anchor link to its card. Every card carries an `id` from the candidate index (`state-01`, `invariant-01`, `deepening-01`), so the anchor link resolves. Below the sequence, the before and after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Make one call. The top recommendation is a verdict with the evidence behind it, not a shortlist.
+One larger card. Candidate name, one sentence on why, and the full sequence: the first candidate expanded, the next two candidates named, what must land first, and what waits. Anchor link to its card. Every card carries an `id` from the candidate index (`state-01`, `invariant-01`, `deepening-01`), so the anchor link resolves. Below the sequence, the before and after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Make one call. The top recommendation is a verdict with the evidence behind it, not a shortlist.
 
 ## Diagram patterns
 

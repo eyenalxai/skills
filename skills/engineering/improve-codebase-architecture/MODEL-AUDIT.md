@@ -1,6 +1,6 @@
 # Model audit
 
-How to build the lifecycle, invariant, and abstraction inventories before the deepening scan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
+How to deepen modules, simplify interfaces, find every implicit state machine, find every invariant the code relies on but does not enforce, and rank the plan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
 
 ## Why the model comes first
 
@@ -104,6 +104,49 @@ An abstraction is a named concept with an interface. The model asks three questi
 
 Use the domain glossary to name the concept. If the code has no name for it, that is the missing abstraction. If two glossary terms map to one module, either the glossary is wrong or the module is two modules; resolve the term before the candidate. If one glossary term maps to three modules, either the term is too broad or the module has three shallow faces; resolve the term first.
 
+## 4. Finding catalog
+
+Each smell is a detection heuristic, not a hard violation. A smell becomes a candidate only when the evidence is at `file:line`, the failure mode is concrete, and the fix is concrete: the deletion test for a module, the enforcement layer for an invariant, or the transition table for a state. Why: a pattern match without a failure mode is a style opinion.
+
+| Smell | Detection signal | What it costs | Fix shape |
+| --- | --- | --- | --- |
+| Shallow module | One-call wrappers, pass-through parameters, a module with one caller | Every caller learns the wrapper and the callee | Collapse the wrapper into the callee, or deepen the interface until it carries a rule |
+| Duplicated concept | Repeated validation, formatting, permission checks, or state transitions | One rule changes in N places, and the copies drift | One module owns the concept; callers use its interface |
+| Leaked invariant | Precondition checks at call sites, callers reading a flag before calling | The next caller, job, or webhook bypasses the rule | Move the rule behind the seam and reject invalid input at the boundary |
+| Implicit state machine | Boolean clusters, status strings compared in many places, transitions scattered across handlers | Illegal states are representable and a transition misses a side effect | Typed states plus a pure transition function, or a status column plus a check constraint |
+| Unenforced invariant | Check-then-act, unique values without a constraint, totals computed in two places | Concurrent writes and new callers corrupt the data | Type, schema, database constraint, transaction, or runtime guard, in that order |
+| Speculative abstraction | One implementation, unused options, hooks with no caller | Every reader rules out the unused degrees of freedom | Inline until a second real use; the seam returns when something varies |
+| Dead module | No references, abandoned scaffolding, a flag that is permanently off | The reader maintains behavior that cannot run | Delete it; version control keeps the history |
+| Versioned replacement | Old and new implementations side by side, `V2`, `New`, or a compatibility shim | The concept has two behaviors and the old one rots | Migrate the callers, delete the old module, and take its name |
+| Hidden failure | Silent fallback, catch theater, an error logged then ignored | The primary path breaks and the fallback keeps the tests green | Fail at the boundary, or make the degraded state explicit and visible |
+| Test gap at the seam | Tests reach past the interface, mocks of internal collaborators, no test at the public seam | Every internal change is a test change, and the public behavior is unverified | Test through the interface; move the seam if the test cannot reach it |
+| Slop mask | Comments restating the code, checks for states the type excludes, `as any` at a boundary, a fallback for a caller guarantee | The gap stays hidden and the next reader trusts the mask | The structural fix the mask compensates for, then the unslop pass on the diff |
+
+A slop pattern is a candidate only when it points to a module, a seam, or an invariant. A comment, a log line, a generic name, or a test style stays in the diff-level review. Why: the pass is structural, and the report loses its ranking when style findings sit beside deepening candidates.
+
+## 5. Scan order
+
+Walk the codebase in this order. Each step narrows the next. Why: a free-form walk finds what the reader happens to notice; a fixed order finds the same classes of gap on every run.
+
+1. **Churn and hot spots.** Walk `git log --name-only --oneline` for the files that change most, then count the files and sort by frequency. Then fan-in and fan-out from imports and call sites, then file size. The hot spots are where a deepening pays back, and the fan-in shows the leverage.
+2. **State.** Status fields, boolean clusters, timestamps, queues, sessions, subscriptions. Use section 1.
+3. **Invariants.** Uniqueness, cardinality, ordering, ownership, balance, temporal, referential, idempotency, concurrency, immutability. Use section 2.
+4. **Seams.** Modules, interfaces, adapters, callers, leaked rules. Use section 3 and the deletion test.
+5. **Slop.** The structural signals in the catalog. Keep only the patterns that point to a module, a seam, or an invariant.
+6. **Rank and sequence.** Use section 6.
+
+## 6. Rank and sequence
+
+Rank each candidate on five axes. State the axis, not a single score. Why: a single number hides the tradeoff, and the owner needs the risk and the dependency to decide.
+
+- **Impact**: high, med, low. How many call sites the change collapses, how much complexity moves behind one interface, and how much test surface becomes reachable.
+- **Confidence**: high (read the code), med (strong signal), low (needs investigation).
+- **Effort**: S (hours), M (a day), L (multi-day), including tests.
+- **Risk**: LOW, MED, HIGH, with one line why.
+- **Dependency**: the candidate ids that must land first, or `none`.
+
+Sequence by blocking edges first: a candidate waits for every candidate in `blocked_by`. Within the ready set, order by impact (high, med, low), then effort (S, M, L), then risk (LOW, MED, HIGH). A HIGH-risk candidate waits unless it blocks the rest. Put the first candidate in the top recommendation, with the next two candidates named. Why: the sequence is the decision; a menu is not.
+
 ## Coverage table
 
 End the model pass with a table the report can carry:
@@ -113,9 +156,9 @@ End the model pass with a table the report can carry:
 
 The table is the completeness claim. A repository too large for one pass lists the audited packages and the rest. Why: "all" is a claim about the scope, and an unmarked gap turns a sample into a false promise.
 
-## Finding format
+## Candidate format
 
-Every state, invariant, and abstraction finding comes back in this shape:
+Every state, invariant, and abstraction candidate comes back in this shape:
 
 ### [KIND-NN] Short imperative title
 
@@ -124,9 +167,12 @@ Every state, invariant, and abstraction finding comes back in this shape:
 - **Current enforcement**: type, schema, database constraint, transaction, runtime guard, test, documentation, or none.
 - **Recommended form**: the explicit states or the enforcement layer.
 - **Interface change**: what the caller stops knowing.
+- **Deletion test**: what happens to the complexity when the module is deleted. Write `not applicable` for a state or invariant finding.
+- **Plan**: the files, the steps at the seam level, and the callers to migrate. Do not write the exact code; the ticket's spec owns the behavior.
+- **Acceptance test**: the test file and the case that proves the new interface or the enforced invariant. Why: a candidate without a test is a preference.
+- **Unslop check**: the fix is done when the `emil-unslop-code` pass is clean on the diff. The ticket copies this into its acceptance criteria, and the build runs the pass before the PR. Why: the structural fix can reintroduce the slop it removed.
+- **Rank**: impact, confidence, effort, and risk, with one line on the risk.
 - **Strength**: `strong` (the evidence is real and the failure mode is consequential; for a deepening, the deletion test passes), `worth exploring` (plausible, and the payoff depends on the direction), or `speculative` (weak evidence).
-- **Confidence**: high (read the code), med (strong signal), low (needs investigation).
-- **Fix effort**: S (hours), M (a day), L (multi-day), including tests.
-- **Fix risk**: LOW, MED, or HIGH, with one line why.
+- **Blocked by**: the candidate ids that must land first, or `none`.
 
-The report carries this full format. The candidate index carries the id, kind, title, strength, confidence, effort, risk, evidence, interface change, and anchor.
+The report carries this full format. The candidate index carries the id, kind, title, strength, impact, confidence, effort, risk, evidence, interface change, action, and anchor.
