@@ -29,6 +29,7 @@ The report is a single HTML file in the OS temp directory; the candidate index i
       <section id="coverage">...</section>
       <section id="state-machines" class="space-y-10">...</section>
       <section id="invariants">...</section>
+      <section id="test-suite" class="space-y-10">...</section>
       <section id="candidates" class="space-y-10">...</section>
       <section id="top-recommendation">...</section>
     </main>
@@ -44,6 +45,8 @@ Repo name, date, and a compact legend: solid box = module, dashed line = seam, r
 
 A small table with the area, the lifecycles audited, the invariants audited, what was not audited, and why. Put it first. It is the completeness claim and tells the owner how far the report can be trusted.
 
+Below it, the test inventory summary: category, count, files, and keep or delete, with the non-functional checks named as out of scope. The deleted tests are itemized in the plan block. Why: the owner reviews the deletion before the build, and the counts show whether the suite maps the three behaviors.
+
 ## State machine section
 
 One card per lifecycle entity:
@@ -54,7 +57,7 @@ One card per lifecycle entity:
 - **Evidence**: the `file:line` locations behind the states and guards.
 - **Before / after diagram**: a Mermaid `stateDiagram-v2` of what the code supports now, next to the explicit machine with illegal edges removed. Use dashed edges for unknown or unenforced transitions. This is the centerpiece.
 - **Problem**: one sentence. The illegal state or transition the code allows.
-- **Recommended form**: typed states plus a pure transition function, a transition table, a persisted status plus a check constraint, or a statechart library. Name the illegal states it removes, the illegal transitions it rejects, and the test that proves it.
+- **Recommended form**: typed states plus a pure transition function, a transition table, a persisted status plus a check constraint, or a statechart library. Name the illegal states it removes, the illegal transitions it rejects, and the acceptance test in one of the three categories.
 - **Interface change**: one line. What the caller stops knowing when the state machine becomes explicit.
 - **Plan block**: render the action block below the finding, with the rank.
 - **Wins**: bullets, six words or fewer each. For example "Illegal states become unrepresentable", "One transition table, one test".
@@ -66,6 +69,22 @@ A table with one row per invariant, using the [model audit's](MODEL-AUDIT.md) in
 Put the plan block below the table for each invariant. Why: the table carries the finding, and the plan block carries the action without turning every row into a card.
 
 If the table has more than eight rows, group the rows by family: uniqueness, cardinality, ordering, ownership and tenancy, balance and totals, temporal, referential, idempotency, concurrency, immutability. Keep only the families with findings. Do not add an empty family. Why: an empty family is a heading with no evidence.
+
+## Test suite section
+
+The coverage table carries the inventory summary. This section carries one card for the test sweep when the deletions cross modules or no module candidate carries them. When a single module carries its deletions, the plan block in that candidate carries them. If the suite has no deletions, write one line: `No tests outside the policy.` Do not add an empty card. Why: an empty card is a heading with no evidence.
+
+The test sweep card:
+- **Title**: the suite and the count, for example "Prune 80 tests outside the policy".
+- **Badge row**: recommendation strength, plus a `test` tag.
+- **Evidence**: the inventory's delete count and the test files.
+- **Before and after**: one line, for example `120 tests -> 40 tests`, with the kept category counts.
+- **Problem**: one sentence. The class of tests and why it costs.
+- **Solution**: one sentence. The suite keeps the three categories.
+- **Plan block**: the action block, with the rank. The plan block carries the tests deleted, grouped by module, with the replacement for each, or `none` when no behavior is lost. This is the centerpiece.
+- **Wins**: bullets, six words or fewer each. For example "Suite maps three behaviors", "Refactors stop rewriting mocks".
+
+Do not write a paragraph of explanation. The deletion list is the detail.
 
 ## Deepening candidate card
 
@@ -87,11 +106,11 @@ Do not write paragraphs of explanation. If the diagram needs a paragraph to be u
 
 ## Plan block
 
-Render the action block from the [candidate format](MODEL-AUDIT.md#candidate-format) as one compact bordered block under the finding, with the rank in the same row. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec.
+Render the action block from the [candidate format](MODEL-AUDIT.md#candidate-format) as one compact bordered block under the finding, with the rank in the same row. Include the tests deleted, grouped by module with the replacement for each, and the acceptance test's category, or the test sweep's empty delete count. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec, and the owner reviews the deletion before the build.
 
 ## Top recommendation section
 
-One larger card. Candidate name, one sentence on why, and the full sequence: the first candidate expanded, the next two candidates named, what must land first, and what waits. Anchor link to its card. Every card carries an `id` from the candidate index (`state-01`, `invariant-01`, `deepening-01`), so the anchor link resolves. Below the sequence, the before and after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Make one call. The top recommendation is a verdict with the evidence behind it, not a shortlist.
+One larger card. Candidate name, one sentence on why, and the full sequence: the first candidate expanded, the next two candidates named, what must land first, and what waits. If the test sweep is first, show its deletion count and the kept categories. Anchor link to its card. Every card carries an `id` from the candidate index (`state-01`, `invariant-01`, `deepening-01`, `test-01`), so the anchor link resolves. Below the sequence, the before and after interface sketch: entry points, invariants, ordering, error modes, and what sits behind the seam. Make one call. The top recommendation is a verdict with the evidence behind it, not a shortlist.
 
 ## Diagram patterns
 
@@ -167,7 +186,7 @@ Write plain English. Take the architectural nouns and verbs from the `codebase-d
 
 Use exactly: module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality.
 
-Model terms: state, state machine, lifecycle, transition, invariant. Use these exactly in the model sections. Why: they name the evidence the report is built on.
+Model terms: state, state machine, lifecycle, transition, invariant. Use these exactly in the model sections. Test terms: test suite, test sweep, algorithmic logic, boundary IO, integration flow. Use these exactly in the test suite section. Why: they name the evidence the report is built on.
 
 Never substitute: component, service, or unit for module; API or signature for interface; boundary for seam; layer or wrapper for module when the module is meant.
 
