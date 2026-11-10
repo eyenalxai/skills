@@ -128,7 +128,7 @@ A slop pattern is a candidate only when it points to a module, a seam, or an inv
 
 Walk the codebase in this order. Each step narrows the next. Why: a free-form walk finds what the reader happens to notice; a fixed order finds the same classes of gap on every run.
 
-1. **Churn and hot spots.** Walk `git log --oneline` for the files that change most, then fan-in and fan-out from imports and call sites, then file size. The hot spots are where a deepening pays back, and the fan-in shows the leverage.
+1. **Churn and hot spots.** Walk `git log --name-only --oneline` for the files that change most, then count the files and sort by frequency. Then fan-in and fan-out from imports and call sites, then file size. The hot spots are where a deepening pays back, and the fan-in shows the leverage.
 2. **State.** Status fields, boolean clusters, timestamps, queues, sessions, subscriptions. Use section 1.
 3. **Invariants.** Uniqueness, cardinality, ordering, ownership, balance, temporal, referential, idempotency, concurrency, immutability. Use section 2.
 4. **Seams.** Modules, interfaces, adapters, callers, leaked rules. Use section 3 and the deletion test.
@@ -145,7 +145,7 @@ Rank each candidate on five axes. State the axis, not a single score. Why: a sin
 - **Risk**: LOW, MED, HIGH, with one line why.
 - **Dependency**: the candidate ids that must land first, or `none`.
 
-Sequence by impact per unit of effort, with risk as a cap. A HIGH-risk candidate does not lead unless it blocks the rest. Put the first candidate in the top recommendation, with the next two steps. Why: the sequence is the decision; a menu is not.
+Sequence by blocking edges first: a candidate waits for every candidate in `blocked_by`. Within the ready set, order by impact (high, med, low), then effort (S, M, L), then risk (LOW, MED, HIGH). A HIGH-risk candidate waits unless it blocks the rest. Put the first candidate in the top recommendation, with the next two candidates named. Why: the sequence is the decision; a menu is not.
 
 ## Coverage table
 
@@ -158,7 +158,7 @@ The table is the completeness claim. A repository too large for one pass lists t
 
 ## Candidate format
 
-Every state, invariant, and abstraction finding comes back in this shape:
+Every state, invariant, and abstraction candidate comes back in this shape:
 
 ### [KIND-NN] Short imperative title
 
@@ -169,13 +169,10 @@ Every state, invariant, and abstraction finding comes back in this shape:
 - **Interface change**: what the caller stops knowing.
 - **Deletion test**: what happens to the complexity when the module is deleted. Write `not applicable` for a state or invariant finding.
 - **Plan**: the files, the steps at the seam level, and the callers to migrate. Do not write the exact code; the ticket's spec owns the behavior.
-- **Acceptance test**: the test file and the case that proves the new interface or the enforced invariant.
-- **Unslop check**: the structural patterns the fix is likely to reintroduce, plus the full `emil-unslop-code` pass.
-- **Impact**: high, med, or low.
+- **Acceptance test**: the test file and the case that proves the new interface or the enforced invariant. Why: a candidate without a test is a preference.
+- **Unslop check**: the fix is done when the `emil-unslop-code` pass is clean on the diff. The ticket copies this into its acceptance criteria, and the build runs the pass before the PR. Why: the structural fix can reintroduce the slop it removed.
+- **Rank**: impact, confidence, effort, and risk, with one line on the risk.
 - **Strength**: `strong` (the evidence is real and the failure mode is consequential; for a deepening, the deletion test passes), `worth exploring` (plausible, and the payoff depends on the direction), or `speculative` (weak evidence).
-- **Confidence**: high (read the code), med (strong signal), low (needs investigation).
-- **Effort**: S (hours), M (a day), L (multi-day), including tests.
-- **Risk**: LOW, MED, or HIGH, with one line why.
 - **Blocked by**: the candidate ids that must land first, or `none`.
 
 The report carries this full format. The candidate index carries the id, kind, title, strength, impact, confidence, effort, risk, evidence, interface change, action, and anchor.

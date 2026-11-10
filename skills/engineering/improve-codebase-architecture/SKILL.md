@@ -21,7 +21,7 @@ Read `GLOSSARY.md` and the ADRs in the scan area first. The domain language name
 Decide where to look before looking. YAGNI: a deepening pays back where the code changes.
 
 - If the owner named a direction, take it.
-- Otherwise, walk `git log --oneline` for the hot spots and start there.
+- Otherwise, walk `git log --name-only --oneline` for the hot spots and start there.
 - For the state and invariant pass, the scope is every lifecycle-bearing entity and every invariant in the repository. If the repository is too large for one pass, declare the audited packages and list the rest in the coverage table. Why: "all" and "every" are completeness claims, and a hot-spot sample cannot support them.
 - Write down what is out before the first candidate. Why: an unmarked gap turns a sample into a false completeness claim.
 
@@ -41,15 +41,15 @@ The model is the abstract exercise: name the concepts, then test the code agains
 
 Walk the codebase in the scan order in [MODEL-AUDIT.md](MODEL-AUDIT.md): churn and hot spots, state, invariants, seams, slop. Each step narrows the next. Why: a free-form walk finds what the reader happens to notice, and a fixed order finds the same classes of gap on every run.
 
-The finding catalog names each architectural smell, its detection signal, and its fix shape. A smell becomes a candidate only when it has evidence at `file:line`, a concrete failure mode, and a concrete fix: the deletion test for a module, the enforcement layer for an invariant, or the transition table for a state. A slop pattern is a finding only when it points to a module, a seam, or an invariant; the rest stays in the diff-level review. Why: the pass is structural, and a comment or a log line does not change the structure.
+The finding catalog in [MODEL-AUDIT.md](MODEL-AUDIT.md) names each architectural smell, its detection signal, and its fix shape. Read it before the scan; it decides what becomes a candidate. A finding without evidence at `file:line` and a concrete failure mode stays a note, not a candidate. Why: a pattern match without a failure mode is a style opinion.
 
 Apply the **deletion test** to every suspected shallow module. Deleting it either concentrates complexity behind a smaller interface (deepen) or spreads it across callers (leave it). A candidate that fails the test is not a candidate. Classify a deepening's dependency with the categories in [DEEPENING.md](../codebase-design/DEEPENING.md): in-process, local-substitutable, ports and adapters, or mock.
 
 ### 4. Rank and sequence
 
-Rank every candidate on impact, confidence, effort, risk, and dependency. Order the plan by impact per unit of effort, with risk as a cap: a HIGH-risk candidate does not lead the sequence unless it blocks the rest. The top recommendation is the first candidate in the sequence, with the next two steps named. Why: a menu moves the decision back to the owner, and a rank without a sequence does not say what to do first.
+Rank every candidate on impact, confidence, effort, risk, and dependency. Order by blocking edges first, then by the axes in [MODEL-AUDIT.md](MODEL-AUDIT.md). The top recommendation is the first candidate in the sequence, with the next two candidates named. Why: a menu moves the decision back to the owner, and a rank that ignores a blocking edge produces an order that cannot run.
 
-[MODEL-AUDIT.md](MODEL-AUDIT.md) owns the scale for each axis. State the axes, not a single score. Why: a single number hides the tradeoff the owner needs to decide.
+[MODEL-AUDIT.md](MODEL-AUDIT.md) owns the scale for each axis. Why: the scales are the method, and one source keeps two sessions from ranking the same evidence differently.
 
 ### 5. Write the plan
 
@@ -62,21 +62,11 @@ The report carries, in this order:
 
 1. **Coverage**: what was audited, what was not, and why. The completeness claim lives here.
 2. **State machines**: one card per lifecycle entity, with the implicit states and transitions, the failure modes, the explicit representation to adopt, the illegal states and transitions it removes, and the test that proves it. Use a before and after diagram.
-3. **Invariants**: a table with the invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, and evidence. Mark `none` where the code only assumes it. Put the plan for each invariant in a compact line below the table.
+3. **Invariants**: a table with the invariant, where assumed, current enforcement, failure mode, recommended enforcement, interface change, and evidence. Mark `none` where the code only assumes it. Put the plan block below the table for each invariant.
 4. **Deepening candidates**: one card per candidate, with evidence, problem, solution, the deletion test, the dependency category, and a before and after diagram.
-5. **Sequence and top recommendation**: one candidate first, the next two steps, and what waits.
+5. **Sequence and top recommendation**: the full sequence, with the first candidate expanded and the next two candidates named.
 
-Every candidate carries the finding fields for its kind, plus:
-
-- **Evidence**: `file:line`, repeated for the strongest locations.
-- **Interface change**: what the caller stops knowing.
-- **Plan**: the files, the steps at the seam level, and the callers to migrate. Do not write the exact code. The ticket's spec owns the behavior. Why: the plan is not a second spec, and a step written before the ticket hardens a guess.
-- **Acceptance test**: the test file and the case that proves the new interface or the enforced invariant.
-- **Unslop check**: the structural patterns the fix is likely to reintroduce, plus the full `emil-unslop-code` pass.
-- **Score**: impact, confidence, effort, and risk.
-- **Blocked by**: the candidate ids that must land first, or `none`.
-
-The state, invariant, and deepening sections in [HTML-REPORT.md](HTML-REPORT.md) own the finding fields for each kind. Why: a state machine needs a transition table, an invariant needs an enforcement layer, and a deepening needs a deletion test; one card shape for all three hides the difference.
+Every candidate carries the finding fields for its kind, plus the action block in [MODEL-AUDIT.md](MODEL-AUDIT.md): the files, steps, acceptance test, unslop check, rank, and blocking edges. The action block is the difference between a finding and a ticket. The state, invariant, and deepening sections in [HTML-REPORT.md](HTML-REPORT.md) own the finding fields for each kind. Why: a state machine needs a transition table, an invariant needs an enforcement layer, and a deepening needs a deletion test; one card shape for all three hides the difference.
 
 The candidate index is a JSON object:
 
@@ -84,7 +74,7 @@ The candidate index is a JSON object:
 {
   "run": { "repo": "", "commit": "", "timestamp": "", "report": "" },
   "coverage": [{ "area": "", "lifecycles": [], "invariants": [], "not_audited": [], "why": "" }],
-  "sequence": ["deepening-01", "invariant-01"],
+  "sequence": ["deepening-01"],
   "candidates": [
     {
       "id": "deepening-01",
@@ -110,15 +100,15 @@ The candidate index is a JSON object:
 }
 ```
 
-`kind` is `state`, `invariant`, or `deepening`. `strength` is the recommendation (`strong`, `worth exploring`, `speculative`); `impact` is the payoff (`high`, `med`, `low`); `confidence` is the evidence (`high`, `med`, `low`); `effort` is `S`, `M`, or `L`; `risk` is `LOW`, `MED`, or `HIGH`. `sequence` is the execution order, first to last. Each coverage entry carries the same completeness claim as the report table. The index is a summary; the report carries the full finding.
+`kind` is `state`, `invariant`, or `deepening`. `strength` is the recommendation (`strong`, `worth exploring`, `speculative`); `impact` is the payoff (`high`, `med`, `low`); `confidence` is the evidence (`high`, `med`, `low`); `effort` is `S`, `M`, or `L`; `risk` is `LOW`, `MED`, or `HIGH`. `sequence` is the execution order, one entry per candidate, first to last. Each coverage entry carries the same completeness claim as the report table. The index is a summary; the report carries the full finding.
 
 Open the HTML report (`xdg-open`, `open`, or `start`) and tell the owner the absolute path of both files. Then stop; step 6 owns the mode. Do not propose a full interface before the owner picks.
 
 ### 6. Compose
 
-Ask whether this is a standalone survey or a mission survey when the invocation does not say.
+Ask whether this is a standalone pass or a mission pass when the invocation does not say.
 
-**Mission**: the survey is the first phase of an architecture pass. The plan feeds the mission grill, the gate approves the top candidate or the sequence, `to-tickets` cuts the approved plan, and `implement` builds it. The survey never creates the work item before the gate. Why: the plan is not approved yet, and a record created before the gate hides the missing decision.
+**Mission**: the planning pass is the first phase of an architecture pass. The plan feeds the mission grill, and the gate approves the top candidate or the sequence. In a change, `implement` builds the approved candidate. In a feature or fog, `to-spec` drafts the spec from the approved plan, `to-tickets` cuts it, and `implement` or `implement-spec` builds the frontier. The planner never creates the work item before the gate. Why: the plan is not approved yet, and a record created before the gate hides the missing decision.
 
 **Standalone**: load `grilling` and walk the chosen candidate: constraints, dependencies, the shape of the deepened module, what sits behind the seam, and which tests survive. Load `codebase-design` and use design-it-twice when the candidate has more than one credible interface shape or two or more callers with different needs. Why: a single guess hardens before the alternatives are compared. Name the deepened module from the glossary; add a missing term through `domain-modeling`. Record a rejected candidate with a lasting reason as an ADR through `domain-modeling`. The plan is ready to take into a mission.
 
@@ -131,7 +121,7 @@ The output is a plan, not a diff. In mission mode, the mission owns the spec, ti
 - No state or invariant is invented. Unknown edges and unenforced facts are marked.
 - Every candidate has evidence at `file:line`, a concrete fix, a plan, and an acceptance test.
 - The plan gives one sequence and a top recommendation, not a menu.
-- The planner leaves the source tree untouched.
+- The planner never edits audited source; standalone mode may update `GLOSSARY.md` and ADRs through `domain-modeling`.
 - The mission composition is explicit, and the plan names the unslop pass.
 
 When the owner challenges a finding, a recommendation, or a fact, load `pushback` before you reply.
