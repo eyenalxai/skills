@@ -1,12 +1,12 @@
 ---
 name: improve-codebase-architecture
-description: Survey a codebase for architectural improvements, rank them, and produce an executable plan with steps, acceptance tests, and dependency order, then feed the plan to a mission or a standalone decision. Use when the owner asks to audit architecture, find state machines or invariants, or run an architecture improvement pass.
+description: Deepen modules, simplify interfaces, find implicit state machines, and find every invariant the code relies on but does not enforce; rank the changes and produce an executable plan with steps, acceptance tests, and dependency order, then feed the plan to a mission or a standalone decision. Use when the owner asks to audit architecture, deepen modules, find state machines or invariants, or run an architecture improvement pass.
 disable-model-invocation: true
 ---
 
 # Improve codebase architecture
 
-Find the architectural changes worth making, rank them, and write a plan the mission can gate and execute. The plan names the module, the seam, the steps, the acceptance test, and the unslop check. The aim is testability, locality, and AI-navigability.
+The pass has three headline jobs: deepen modules and simplify interfaces, find every implicit state machine and recommend the explicit form, and find every invariant the code relies on but does not enforce. Then rank the changes and write a plan the mission can gate and execute. The plan names the module, the seam, the steps, the acceptance test, and the unslop check. The aim is testability, locality, and AI-navigability.
 
 The planner reads the source and never edits it. It writes two files to the OS temp directory: a single-file HTML report for the owner and a compact candidate index for the mission. The standalone grill may update `GLOSSARY.md` and ADRs through `domain-modeling`; the build runs through `implement`.
 
@@ -42,6 +42,8 @@ The model is the abstract exercise: name the concepts, then test the code agains
 Walk the codebase in the scan order in [MODEL-AUDIT.md](MODEL-AUDIT.md): churn and hot spots, state, invariants, seams, slop. Each step narrows the next. Why: a free-form walk finds what the reader happens to notice, and a fixed order finds the same classes of gap on every run.
 
 The finding catalog in [MODEL-AUDIT.md](MODEL-AUDIT.md) names each architectural smell, its detection signal, and its fix shape. Read it before the scan; it decides what becomes a candidate. A finding without evidence at `file:line` and a concrete failure mode stays a note, not a candidate. Why: a pattern match without a failure mode is a style opinion.
+
+Deepen modules and simplify interfaces. Ask where understanding one concept requires bouncing between many small modules, where the interface is nearly as complex as the implementation, where a pure function hides the real bugs in its callers (no **locality**), where a seam leaks, which parts are untested or hard to test through the current interface, and which missing abstraction would collapse the most call sites. Ask which interface can lose a parameter, a method, or a flag without losing behavior. Why: a module earns its interface only when the behavior behind it is larger than the surface it exposes.
 
 Apply the **deletion test** to every suspected shallow module. Deleting it either concentrates complexity behind a smaller interface (deepen) or spreads it across callers (leave it). A candidate that fails the test is not a candidate. Classify a deepening's dependency with the categories in [DEEPENING.md](../codebase-design/DEEPENING.md): in-process, local-substitutable, ports and adapters, or mock.
 
@@ -117,7 +119,9 @@ The output is a plan, not a diff. In mission mode, the mission owns the spec, ti
 ## It is working if
 
 - The coverage table names the audited paths and the paths left out.
-- Every lifecycle entity in scope has a state card, and every invariant in scope has a row.
+- Every shallow module has a deepening plan, and every interface change states what the caller stops knowing.
+- Every lifecycle entity in scope has a state card and a recommended explicit form.
+- Every invariant in scope has a row and an enforcement recommendation.
 - No state or invariant is invented. Unknown edges and unenforced facts are marked.
 - Every candidate has evidence at `file:line`, a concrete fix, a plan, and an acceptance test.
 - The plan gives one sequence and a top recommendation, not a menu.

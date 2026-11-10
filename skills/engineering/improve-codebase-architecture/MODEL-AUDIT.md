@@ -1,6 +1,6 @@
 # Model audit
 
-How to build the lifecycle, invariant, and abstraction inventories, find the candidates, and rank the plan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
+How to deepen modules, simplify interfaces, find every implicit state machine, find every invariant the code relies on but does not enforce, and rank the plan. This file uses the vocabulary in [SKILL.md](SKILL.md) and [codebase-design](../codebase-design/SKILL.md): **module**, **interface**, **seam**, **adapter**, **invariant**, plus the model terms **state**, **state machine**, **lifecycle**, and **transition**.
 
 ## Why the model comes first
 

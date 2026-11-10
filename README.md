@@ -77,6 +77,6 @@ Handoff prompts are delivered in chat. A delivered prompt is never pasted into a
 ### Utilities
 
 - **pushback**: The shared procedure for a challenge: name the claim and its check, stop on a failed check, and let the owner decide a preference.
-- **improve-codebase-architecture**: Find architectural improvements with a concrete catalog, rank them, and produce an executable plan with steps, acceptance tests, and dependency order for the mission to gate and ticket.
+- **improve-codebase-architecture**: Deepen modules, simplify interfaces, find implicit state machines and unenforced invariants, rank the changes, and produce an executable plan with steps, acceptance tests, and dependency order for the mission to gate and ticket.
 - **to-questionnaire**: Turn a decision you can't answer alone into a questionnaire for the one person who can fill it in.
 - **wait-what**: Stop and re-pitch the last message: simpler, with the context you were missing.
